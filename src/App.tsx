@@ -1,11 +1,12 @@
 import Calendar from 'react-calendar';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import ReservationManager from './ReservationManager';
-import ClinicPicker from './components/UI/ClinicPicker';
-import DoctorPicker from './components/UI/DoctorPicker';
-import ErrorPage from './components/errorPage/ErrorPage';
-import HomePage from './components/homePage/HomePage';
+import ClinicPicker from './components/ClinicPicker';
+import DoctorPicker from './components/DoctorPicker';
+import ErrorPage from './components/ErrorPage';
+import HomePage from './components/HomePage';
+import ReservationManager from './services/ReservationManager';
+
 const router = createBrowserRouter([
   {
     path: '/',

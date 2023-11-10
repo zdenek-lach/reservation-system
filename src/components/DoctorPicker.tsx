@@ -1,50 +1,103 @@
-import { Box, Button, Grid, Image, Text } from '@chakra-ui/react';
-import React from 'react';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Image,
+  Stack,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext';
-
-import Clinic from '../types/ClinicType';
 import Doctor from '../types/DoctorType';
 
 const DoctorPicker: React.FC = () => {
-  const { setDoctorAndClinic } = useAppContext();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const doctors = useSelector(
+    (state: RootState) => state.DoctorReducer.doctors
+  );
 
+  useEffect(() => {
+    fetch('/api/doctors')
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(setDoctors(data[0].doctors));
+      });
+  }, [dispatch]);
+
+  const navigate = useNavigate();
   const handleButtonClick = (selectedDoctor: Doctor) => {
-    const dummyClinic: Clinic = {
-      id: -1,
-      name: 'temp Clinic',
-      imageUrl: 'x',
-    };
-    setDoctorAndClinic(selectedDoctor, dummyClinic);
+    // dispatch(setDoctors(selectedDoctor));
     navigate('/clinic-picker');
   };
+  function DoctorImage({ pictureId }: { pictureId: number }) {
+    const dispatch: AppDispatch = useDispatch();
+    const doctorImage = useSelector(
+      (state: RootState) => state.DoctorReducer.doctorImages[pictureId]
+    );
+
+    useEffect(() => {
+      const loadImage = async () => {
+        const imageModule = await import(
+          `../../public/assets/doctorPics/${pictureId}.jpg`
+        );
+        dispatch(setDoctorImage({ id: pictureId, url: imageModule.default }));
+      };
+
+      loadImage();
+    }, [dispatch, pictureId]);
+
+    return <Image src={doctorImage} alt={`Doctor ${pictureId}`} w="100%" />;
+  }
+
+  const colorModeValue = useColorModeValue('#151f21', 'gray.900');
+  const colorModeValue2 = useColorModeValue('white', 'gray.800');
 
   return (
-    <Box maxW="container.xl" mx="auto" p={5}>
-      <Text fontSize="3xl" color="teal.500" mb={3}>
-        Zvolte si lékaře
-      </Text>
-      <Grid
-        templateColumns={{ sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
-        gap={6}
-      >
-        {doctors.map((doctor) => (
-          <Box key={doctor.id}>
-            <Image src={doctor.imageUrl} alt={doctor.name} w="100%" />
-            <Text fontSize="lg" color="teal.500" mt={1}>
-              {doctor.name}
-            </Text>
-            <Button
-              colorScheme="teal"
-              onClick={() => handleButtonClick(doctor)}
-            >
-              Zvolit {doctor.name}a
-            </Button>
+    <Center py={6}>
+      <Flex direction="row" overflowX="scroll" py={5}>
+        {doctors.map((doctor: Doctor) => (
+          <Box
+            key={doctor.id}
+            mx={2}
+            maxW={'270px'}
+            w={'full'}
+            bg={colorModeValue2}
+            boxShadow={'2xl'}
+            rounded={'md'}
+            overflow={'hidden'}
+          >
+            <Flex justify={'center'} mt={12}>
+              <DoctorImage pictureId={doctor.pictureId} />
+            </Flex>
+
+            <Box p={6}>
+              <Stack spacing={0} align={'center'} mb={5}>
+                <Text fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
+                  {doctor.firstName} {doctor.lastName}
+                </Text>
+                <Text color={'gray.500'}>{doctor.title}</Text>
+              </Stack>
+              <Button
+                w={'full'}
+                mt={8}
+                bg={colorModeValue}
+                color={'white'}
+                rounded={'md'}
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: 'lg',
+                }}
+                onClick={() => handleButtonClick(doctor)}
+              >
+                Zvolit {doctor.firstName}
+              </Button>
+            </Box>
           </Box>
         ))}
-      </Grid>
-    </Box>
+      </Flex>
+    </Center>
   );
 };
 

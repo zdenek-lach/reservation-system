@@ -1,16 +1,13 @@
 import { Box, Button, Container, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ClinicPicture from '../../assets/clinic-picture.webp';
-import { useAppContext } from '../context/AppContext';
+import ClinicPicture from '../assets/clinic-picture.webp';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { setShowHeader } = useAppContext();
 
   const handleButtonClick = () => {
     navigate('/doctor-picker');
-    setShowHeader(true);
   };
 
   return (

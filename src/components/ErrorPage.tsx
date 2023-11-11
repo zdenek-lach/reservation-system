@@ -1,4 +1,5 @@
 import { Box, Button, Center, Text, VStack } from '@chakra-ui/react';
+import React from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
 
 const ErrorPage: React.FC = () => {

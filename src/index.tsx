@@ -2,7 +2,7 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { App } from './App';
-
+import { AppProvider } from './context/AppContext';
 import * as serviceWorker from './serviceWorker';
 
 const container = document.getElementById('root');
@@ -11,10 +11,12 @@ const root = ReactDOM.createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <ColorModeScript />
-      <App />
-    </ChakraProvider>
+    <AppProvider>
+      <ChakraProvider>
+        <ColorModeScript />
+        <App />
+      </ChakraProvider>
+    </AppProvider>
   </React.StrictMode>
 );
 

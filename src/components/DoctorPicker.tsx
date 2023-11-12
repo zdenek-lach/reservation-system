@@ -1,4 +1,4 @@
-import { Center, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Center, Spinner, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
 import { useDoctors } from '../hooks/useDoctors';
@@ -13,22 +13,24 @@ const DoctorPicker: React.FC = () => {
       return null;
     }
 
-    return doctorList?.map((doctor) => (
-      <DoctorCard key={doctor.id} doctor={doctor} />
-    ));
+    return (
+      <>
+        {doctorList?.map((doctor) => (
+          <DoctorCard key={doctor.id} doctor={doctor} />
+        ))}
+      </>
+    );
   };
 
   return (
     <Center py={6}>
-      <Flex direction="row" overflowX="scroll" py={5}>
-        {loading ? (
-          <Spinner />
-        ) : error ? (
-          <Text>{error}</Text>
-        ) : (
-          renderDoctorCarousel()
-        )}
-      </Flex>
+      {loading ? (
+        <Spinner />
+      ) : error ? (
+        <Text>{error}</Text>
+      ) : (
+        renderDoctorCarousel()
+      )}
     </Center>
   );
 };

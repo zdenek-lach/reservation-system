@@ -1,0 +1,127 @@
+{
+  "uuid": "fb5b02be-6659-407c-a89a-20d66f8ca7b4",
+  "lastMigration": 29,
+  "name": "Reservation System API",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "247b6f4d-5e98-4c11-b85e-8f88b1e83871",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/clinics",
+      "responses": [
+        {
+          "uuid": "a5e7f56a-ef76-43a0-a28c-5350d51094d1",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "DATABUCKET",
+          "filePath": "",
+          "databucketID": "zuoy",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    },
+    {
+      "uuid": "4d0ca3ae-c806-4800-bd83-a8235531e816",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/doctors",
+      "responses": [
+        {
+          "uuid": "4b4a11df-aa7d-4e85-9c67-716d0d65f7eb",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "DATABUCKET",
+          "filePath": "",
+          "databucketID": "cwm3",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id"
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "247b6f4d-5e98-4c11-b85e-8f88b1e83871"
+    },
+    {
+      "type": "route",
+      "uuid": "4d0ca3ae-c806-4800-bd83-a8235531e816"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [
+    {
+      "uuid": "d0a26bec-f3a7-4794-86d7-977fbd9e739f",
+      "id": "zuoy",
+      "name": "Clinics",
+      "documentation": "",
+      "value": "[\r\n    {\r\n      \"id\": \"1\",\r\n        \"name\":\"{{faker 'company.name'}}\",\r\n        \"location\":\"{{faker 'location.city'}}, {{faker 'location.zipCode'}}\",\r\n        \"pictureId\":\"1\"\r\n      },\r\n      {\r\n      \"id\":\"2\",\r\n        \"name\":\"{{faker 'company.name'}}\",\r\n        \"location\":\"{{faker 'location.city'}}, {{faker 'location.zipCode'}}\",\r\n        \"pictureId\":\"2\"\r\n      },\r\n      {\r\n      \"id\":\"3\",\r\n        \"name\":\"{{faker 'company.name'}}\",\r\n        \"location\":\"{{faker 'location.city'}}, {{faker 'location.zipCode'}}\",\r\n        \"pictureId\":\"3\"\r\n      }\r\n]\r\n"
+    },
+    {
+      "uuid": "4a2afbd8-9bd0-4064-b266-1421c9310c81",
+      "id": "cwm3",
+      "name": "Doctors",
+      "documentation": "",
+      "value": "[\r\n  {\r\n    \"id\": \"1\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"1\",\r\n    \"clinics\": [\"1\", \"2\"]\r\n  },\r\n  {\r\n    \"id\": \"2\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"2\",\r\n    \"clinics\": [\"1\"]\r\n  },\r\n  {\r\n    \"id\": \"3\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"3\",\r\n    \"clinics\": [\"3\"]\r\n  },\r\n  {\r\n    \"id\": \"4\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"4\",\r\n    \"clinics\": [\"2\", \"3\"]\r\n  }\r\n]\r\n"
+    }
+  ]
+}

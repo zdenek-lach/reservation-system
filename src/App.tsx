@@ -1,11 +1,11 @@
-import React from 'react';
-import Calendar from 'react-calendar';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import ClinicPicker from './components/ClinicPicker';
-import DoctorPicker from './components/DoctorPicker';
-import ErrorPage from './components/ErrorPage';
-import HomePage from './components/HomePage';
+import AppointmentPage from './components/calendar/AppointmentPage';
+import ClinicPicker from './components/clinicPicker/ClinicPicker';
+import DoctorPicker from './components/doctorPicker/DoctorPicker';
+import ErrorPage from './components/generic/ErrorPage';
+import HomePage from './components/generic/HomePage';
+import Management from './components/management/Management';
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,12 @@ const router = createBrowserRouter([
     element: <DoctorPicker />,
   },
   {
-    path: 'calendar',
-    element: <Calendar />,
+    path: 'appointment-page',
+    element: <AppointmentPage />,
+  },
+  {
+    path: 'management',
+    element: <Management />,
   },
 ]);
 

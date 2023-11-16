@@ -19,7 +19,7 @@ import Time from './Time';
 const AppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { selectedDoctor } = useAppContext();
-  const weekStart = startOfWeek(selectedDate);
+  const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // Start week on Monday
   const weekEnd = addDays(weekStart, 6);
 
   const [isSelected, setIsSelected] = useState(false);
@@ -48,10 +48,12 @@ const AppointmentPage = () => {
 
     return (
       <Box>
-        <Box> {format(date, 'yyyy-MM-dd')}</Box>
+        <Box fontSize="lg" fontWeight="bold" mb={4}>
+          {format(date, 'yyyy-MM-dd')}
+        </Box>
         <CalendarPanel
           dayzedHookProps={{
-            showOutsideDays: true,
+            showOutsideDays: false, // Hide days outside the current month
             onDateSelected: handleOnDateSelected,
             selected: date,
             minDate: subDays(demoDate, 8),
@@ -61,14 +63,15 @@ const AppointmentPage = () => {
             dateFormat: 'yyyy-MM-dd',
             monthNames: Month_Names_Short,
             dayNames: Weekday_Names_Short,
-            firstDayOfWeek: 0,
+            firstDayOfWeek: 1, // Monday as the first day
           }}
         />
       </Box>
     );
   };
+
   const weekGrid = () => {
-    const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+    const days = ['Po', 'Út', 'St', 'Čt', 'Pá']; // Remove weekend days
 
     const generateTimeSlots = () => {
       const startHour = 7;
@@ -104,7 +107,9 @@ const AppointmentPage = () => {
 
   return (
     <Box>
-      <Heading mb={4}>Choose a date</Heading>
+      <Heading as="h1" size="lg" mb={4}>
+        Vyberte si datum
+      </Heading>
       <Flex direction={{ base: 'column', md: 'row' }} mb={4}>
         <Box flex={1} mr={{ md: 4 }}>
           <SingleCalendarDemo />

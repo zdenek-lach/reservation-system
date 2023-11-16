@@ -1,11 +1,19 @@
-import { Box, Button, Container, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Container,
+  Text,
+  VStack,
+  useColorMode,
+} from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClinicPicture from '../../assets/clinic-picture.webp';
+import { ColorModeSwitcher } from '../../utils/ColorModeSwitcher';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-
+  const { colorMode, toggleColorMode } = useColorMode();
   const handleButtonClick = () => {
     navigate('/doctor-picker');
   };
@@ -26,6 +34,8 @@ const HomePage: React.FC = () => {
           <Text fontSize="3xl" color="black" mb={3}>
             Vstoupit do rezervačního systému
           </Text>
+          <Text>Choose your side: </Text>
+          <ColorModeSwitcher />
           <Button colorScheme="teal" onClick={handleButtonClick}>
             Vstoupit
           </Button>

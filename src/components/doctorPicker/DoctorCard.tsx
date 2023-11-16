@@ -16,7 +16,7 @@ import { useAppContext } from '../../context/AppContext';
 import Doctor from '../../types/DoctorType';
 
 const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
-  const { selectedDoctor, setSelectedDoctor } = useAppContext();
+  const { setSelectedDoctor } = useAppContext();
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
 

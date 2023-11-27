@@ -8,10 +8,10 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../context/AppContext';
-import Doctor from '../../types/DoctorType';
+import Doctor from 'types/DoctorType';
 
 const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   const { selectedDoctor, setSelectedDoctor } = useAppContext();

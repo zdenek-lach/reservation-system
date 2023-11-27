@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../context/AppContext';
 
 export const useClinics = () => {
   const { setClinicList } = useAppContext();
@@ -10,7 +10,7 @@ export const useClinics = () => {
   useEffect(() => {
     const fetchClinics = async () => {
       try {
-        const response = await axios.get('/api/clinics');
+        const response = await axios.get('http://localhost:3001/api/clinics');
         setClinicList(response.data);
         setLoading(false);
       } catch (err: any) {

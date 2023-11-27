@@ -111,7 +111,7 @@
     }
   ],
   "proxyMode": false,
-  "proxyHost": "",
+  "proxyHost": "http://localhost:4000/",
   "proxyRemovePrefix": false,
   "tlsOptions": {
     "enabled": false,
@@ -127,6 +127,18 @@
     {
       "key": "Content-Type",
       "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
     }
   ],
   "proxyReqHeaders": [

@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { Props as DayzedHookProps, useDayzed } from 'dayzed';
 import React, { useCallback, useMemo } from 'react';
-import { CalendarConfigs, DatepickerProps } from '../../utils/commonTypes';
-import { ArrowKeysReact } from '../../utils/reactKeysArrow';
+import { CalendarConfigs, DatepickerProps } from 'utils/commonTypes';
+import { ArrowKeysReact } from 'utils/reactKeysArrow';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 

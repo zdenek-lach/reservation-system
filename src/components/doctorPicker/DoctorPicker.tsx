@@ -1,7 +1,9 @@
 import { Center, Spinner, Text } from '@chakra-ui/react';
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { useDoctors } from '../../hooks/useDoctors';
+
+import ErrorPage from 'components/generic/ErrorPage';
+import { useAppContext } from 'context/AppContext';
+import { useDoctors } from 'hooks/useDoctors';
 import DoctorCard from './DoctorCard';
 
 const DoctorPicker: React.FC = () => {
@@ -9,8 +11,8 @@ const DoctorPicker: React.FC = () => {
   const { loading, error } = useDoctors();
 
   const renderDoctorCarousel = () => {
-    if (!doctorList) {
-      return null;
+    if (!Array.isArray(doctorList) || doctorList == null) {
+      return <ErrorPage errorMessage="DoctorList is empty" />;
     }
 
     return (

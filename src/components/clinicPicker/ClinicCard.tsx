@@ -7,10 +7,10 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../context/AppContext';
-import Clinic from '../../types/ClinicType';
+import Clinic from 'types/ClinicType';
 
 const ClinicCard: React.FC<{ clinic: Clinic }> = ({ clinic }) => {
   const { setSelectedClinic } = useAppContext();

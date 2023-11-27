@@ -1,7 +1,7 @@
 import React, { ReactNode, createContext, useContext, useState } from 'react';
-import { AppContextType } from '../types/AppContextType';
-import Clinic from '../types/ClinicType';
-import Doctor from '../types/DoctorType';
+import { AppContextType } from 'types/AppContextType';
+import Clinic from 'types/ClinicType';
+import Doctor from 'types/DoctorType';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 

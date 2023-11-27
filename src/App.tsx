@@ -16,18 +16,22 @@ const router = createBrowserRouter([
   {
     path: 'clinic-picker',
     element: <ClinicPicker />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'doctor-picker',
     element: <DoctorPicker />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'appointment-page',
     element: <AppointmentPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'management',
     element: <Management />,
+    errorElement: <ErrorPage />,
   },
 ]);
 

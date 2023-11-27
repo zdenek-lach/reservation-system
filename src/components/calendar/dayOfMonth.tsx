@@ -1,10 +1,7 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { DateObj, RenderProps } from 'dayzed';
 import React, { useMemo } from 'react';
-import {
-  DatepickerProps,
-  DayOfMonthBtnStyleProps,
-} from '../../utils/commonTypes';
+import { DatepickerProps, DayOfMonthBtnStyleProps } from 'utils/commonTypes';
 
 interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;

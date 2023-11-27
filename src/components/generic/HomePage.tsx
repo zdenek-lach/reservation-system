@@ -6,10 +6,10 @@ import {
   VStack,
   useColorMode,
 } from '@chakra-ui/react';
+import ClinicPicture from 'assets/clinic-picture.webp';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ClinicPicture from '../../assets/clinic-picture.webp';
-import { ColorModeSwitcher } from '../../utils/ColorModeSwitcher';
+import { ColorModeSwitcher } from 'utils/ColorModeSwitcher';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();

@@ -4,6 +4,7 @@ import {
   Month_Names_Short,
   Weekday_Names_Short,
 } from 'chakra-dayzed-datepicker';
+import { useAppContext } from 'context/AppContext';
 import {
   addDays,
   eachHourOfInterval,
@@ -12,7 +13,6 @@ import {
   subDays,
 } from 'date-fns';
 import { useState } from 'react';
-import { useAppContext } from '../../context/AppContext';
 import AppointmentDoctorCard from './AppointmentDoctorCard';
 import Time from './Time';
 

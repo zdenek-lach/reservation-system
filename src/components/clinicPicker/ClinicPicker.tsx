@@ -1,7 +1,7 @@
 import { Center, Flex, Spinner, Text } from '@chakra-ui/react';
+import { useAppContext } from 'context/AppContext';
+import { useClinics } from 'hooks/useClinics';
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { useClinics } from '../../hooks/useClinics'; // Assuming you have a similar hook for clinics
 import ClinicCard from './ClinicCard';
 
 const ClinicPicker: React.FC = () => {

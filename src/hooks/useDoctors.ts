@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../context/AppContext';
 
 export const useDoctors = () => {
   const { setDoctorList } = useAppContext();
@@ -10,7 +10,7 @@ export const useDoctors = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('/api/doctor');
+        const response = await axios.get('http://localhost:3001/api/doctor');
         setDoctorList(response.data);
         setLoading(false);
       } catch (err: any) {

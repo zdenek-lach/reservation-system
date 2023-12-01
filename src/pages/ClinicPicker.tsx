@@ -2,7 +2,7 @@ import { Center, Flex, Spinner, Text } from '@chakra-ui/react';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import React from 'react';
-import ClinicCard from './ClinicCard';
+import ClinicCard from '../components/ClinicCard';
 
 const ClinicPicker: React.FC = () => {
   const { clinicList, selectedDoctor } = useAppContext();

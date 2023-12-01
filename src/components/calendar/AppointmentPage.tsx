@@ -1,4 +1,18 @@
-import { Box, Flex, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Table,
+  Tbody,
+  Td,
+  Tr,
+} from '@chakra-ui/react';
 import {
   CalendarPanel,
   Month_Names_Short,
@@ -111,6 +125,23 @@ const AppointmentPage = () => {
         Vyberte si datum
       </Heading>
       <Flex direction={{ base: 'column', md: 'row' }} mb={4}>
+        <Menu>
+          {({ isOpen }) => (
+            <>
+              <MenuButton
+                isActive={isOpen}
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+              >
+                {isOpen ? 'kekw' : 'Dropdown'}
+              </MenuButton>
+              <MenuList>
+                <MenuItem>Bum</MenuItem>
+                <MenuItem onClick={() => alert('Kagebunshin')}>Magic</MenuItem>
+              </MenuList>
+            </>
+          )}
+        </Menu>
         <Box flex={1} mr={{ md: 4 }}>
           <SingleCalendarDemo />
         </Box>

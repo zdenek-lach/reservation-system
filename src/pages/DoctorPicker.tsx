@@ -1,10 +1,10 @@
 import { Center, Spinner, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import ErrorPage from 'components/generic/ErrorPage';
 import { useAppContext } from 'context/AppContext';
 import { useDoctors } from 'hooks/useDoctors';
-import DoctorCard from './DoctorCard';
+import ErrorPage from 'pages/ErrorPage';
+import DoctorCard from '../components/DoctorCard';
 
 const DoctorPicker: React.FC = () => {
   const { doctorList } = useAppContext();

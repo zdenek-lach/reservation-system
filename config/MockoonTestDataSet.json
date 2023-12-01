@@ -173,7 +173,7 @@
       "id": "xujt",
       "name": "Doctor",
       "documentation": "",
-      "value": "[\r\n  {\r\n    \"id\": \"1\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"1\",\r\n    \"clinics\": [\"1\", \"2\"]\r\n  }\r\n]\r\n"
+      "value": "[\r\n  {\r\n    \"id\": \"1\",\r\n    \"firstName\": \"{{faker 'person.firstName'}}\",\r\n    \"lastName\": \"{{faker 'person.lastName'}}\",\r\n    \"description\":\"{{faker 'lorem.sentences(3)'}}\",\r\n    \"title\":\"{{faker 'person.bio'}}\",\r\n    \"pictureId\":\"1\",\r\n    \"clinics\": [\"1\", \"2\"]\r\n  }\r\n]\r\n"
     }
   ]
 }

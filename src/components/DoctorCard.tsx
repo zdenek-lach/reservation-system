@@ -68,7 +68,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             }}
             onClick={handleButtonClick}
           >
-            Zvolit {doctor.firstName}
+            Zvolit {doctor.title}.{doctor.lastName}
           </Button>
         </CardFooter>
       </Card>

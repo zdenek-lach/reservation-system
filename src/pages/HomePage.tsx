@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const handleButtonClick = () => {
-    navigate('/doctor-picker');
+    navigate('/appointment-page');
   };
 
   return (

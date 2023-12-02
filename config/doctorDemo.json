@@ -1,0 +1,11 @@
+[
+  {
+    "id": "1",
+    "firstName": "Jackie",
+    "lastName": "Chad",
+    "description": "Part time clown 🤡 Professional spaghetti code chef 🍝 ",
+    "title": "Daddy",
+    "pictureId": "1",
+    "clinics": ["1", "2"]
+  }
+]

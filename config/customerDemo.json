@@ -1,0 +1,16 @@
+{
+  "customer": {
+    "id": "1",
+    "firstName": "Fervent",
+    "lastName": "Shamir",
+    "address": {
+      "city": "Ďury v Mostech",
+      "street": "kusek u Třinca",
+      "houseNo": "420/46"
+    },
+    "contactInfo": {
+      "phoneNo": "+420666420699",
+      "email": "bezinternetu@mosty.cz"
+    }
+  }
+}

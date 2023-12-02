@@ -1,8 +1,7 @@
-import DoctorCard from 'components/DoctorCard';
 import RootLayout from 'layouts/RootLayout';
 import { Route, RouterProvider, createRoutesFromElements } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import AppointmentPage from './components/calendar/AppointmentPage';
+import AppointmentPage from './pages/AppointmentPage';
 import ClinicPicker from './pages/ClinicPicker';
 import DoctorPicker from './pages/DoctorPicker';
 import ErrorPage from './pages/ErrorPage';
@@ -17,21 +16,6 @@ const router = createBrowserRouter(
       <Route path="clinic-picker" element={<ClinicPicker />} />
       <Route path="appointment-page" element={<AppointmentPage />} />
       <Route path="management" element={<Management />} />
-      <Route
-        path="doctorCard"
-        element={
-          <DoctorCard
-            doctor={{
-              id: '1',
-              firstName: 'Buck ',
-              lastName: 'Moore',
-              title: 'MuDr',
-              pictureId: 0,
-              clinics: [],
-            }}
-          />
-        }
-      />
     </Route>
   )
 );

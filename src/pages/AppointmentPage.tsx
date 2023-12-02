@@ -19,7 +19,7 @@ import { addDays, eachHourOfInterval, format, startOfWeek } from 'date-fns';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useState } from 'react';
-import AppointmentDoctorCard from '../components/calendar/AppointmentDoctorCard';
+import AppointmentDoctorCard from '../components/AppointmentDoctorCard';
 import Time from '../components/calendar/Time';
 
 const AppointmentPage = () => {
@@ -40,41 +40,6 @@ const AppointmentPage = () => {
   const { loadingClinics, errorClinics } = useClinics();
   const handleSelectingTime = () => {
     setIsSelected((prevState) => !prevState);
-  };
-
-  const weekGrid = () => {
-    const days = ['Po', 'Út', 'St', 'Čt', 'Pá']; // Remove weekend days
-
-    const generateTimeSlots = () => {
-      const startHour = 7;
-      const endHour = 19;
-      const timeSlots = eachHourOfInterval({
-        start: new Date(0, 0, 0, startHour),
-        end: new Date(0, 0, 0, endHour),
-      });
-      return timeSlots.map((time) => format(time, 'HH:mm'));
-    };
-
-    return (
-      <Table variant="striped" colorScheme="teal" size="sm">
-        <Tbody>
-          {days.map((day) => (
-            <Tr key={day}>
-              <Td>{day}</Td>
-              {generateTimeSlots().map((time) => (
-                <Td key={`${day}-${time}`}>
-                  <Time
-                    time={time}
-                    onClick={handleSelectingTime}
-                    isSelected={isSelected}
-                  />
-                </Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    );
   };
 
   const renderDoctorDropdown = () => {
@@ -155,35 +120,78 @@ const AppointmentPage = () => {
     );
   };
 
+  const weekGrid = () => {
+    const days = ['Po', 'Út', 'St', 'Čt', 'Pá']; // Remove weekend days
+
+    const generateTimeSlots = () => {
+      const startHour = 7;
+      const endHour = 19;
+      const timeSlots = eachHourOfInterval({
+        start: new Date(0, 0, 0, startHour),
+        end: new Date(0, 0, 0, endHour),
+      });
+      return timeSlots.map((time) => format(time, 'HH:mm'));
+    };
+
+    return (
+      <Table variant="striped" colorScheme="teal" size="sm">
+        <Tbody>
+          {days.map((day) => (
+            <Tr key={day}>
+              <Td>{day}</Td>
+              {generateTimeSlots().map((time) => (
+                <Td key={`${day}-${time}`}>
+                  <Time
+                    time={time}
+                    onClick={handleSelectingTime}
+                    isSelected={isSelected}
+                  />
+                </Td>
+              ))}
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    );
+  };
+
   return (
-    <Box>
-      <Flex direction={{ base: 'column', md: 'row' }} mb={4}>
-        <Box>
-          {loadingDoctors ? (
-            <Spinner />
-          ) : errorDoctors ? (
-            <Text>{errorDoctors}</Text>
-          ) : (
-            renderDoctorDropdown()
-          )}
+    <Box minH="100vh" bgSize="cover" backgroundPosition="center">
+      <Flex direction={{ base: 'column', md: 'row' }} mb={4} align="stretch">
+        {/* Left Section: Ambulance and Doctor Dropdowns */}
+        <Box
+          bg="rgba(255, 0, 0, 0.4)" // Adjust background color and opacity as needed
+          p={4}
+          flex={{ base: 1, md: 'auto' }}
+        >
+          <Box mb={4}>
+            {loadingDoctors ? (
+              <Spinner />
+            ) : errorDoctors ? (
+              <Text>{errorDoctors}</Text>
+            ) : (
+              renderDoctorDropdown()
+            )}
+          </Box>
+          <Box mb={4}>
+            {loadingClinics ? (
+              <Spinner />
+            ) : errorClinics ? (
+              <Text>{errorClinics}</Text>
+            ) : (
+              renderClinicDropdown()
+            )}
+          </Box>
+          <Box>{weekGrid()}</Box>
         </Box>
-        <Box>
-          {loadingClinics ? (
-            <Spinner />
-          ) : errorClinics ? (
-            <Text>{errorClinics}</Text>
-          ) : (
-            renderClinicDropdown()
-          )}
-        </Box>
-        <Box flex={1} mr={{ md: 4 }}></Box>
+
+        {/* Right Section: Doctor Card */}
         {selectedDoctor != null && (
-          <Box flex={1}>
+          <Box bg="rgba(255, 0, 0, 0.4)" p={4} flex={1} ml={{ md: 4 }}>
             <AppointmentDoctorCard doctor={selectedDoctor} />
           </Box>
         )}
       </Flex>
-      {weekGrid()}
     </Box>
   );
 };

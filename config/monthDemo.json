@@ -1,0 +1,54 @@
+{
+  "preset": {
+    "days": [
+      {
+        "id": "1",
+        "date": "1/1/2024",
+        "timeBlocks": [
+          {
+            "id": "1",
+            "timeFrom": "15:30",
+            "timeTo": "16:30",
+            "reservations": []
+          },
+          {
+            "id": "2",
+            "timeFrom": "16:30",
+            "timeTo": "17:30",
+            "reservations": []
+          },
+          {
+            "id": "3",
+            "timeFrom": "17:30",
+            "timeTo": "18:30",
+            "reservations": []
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "date": "2/1/2024",
+        "timeBlocks": [
+          {
+            "id": "4",
+            "timeFrom": "10:30",
+            "timeTo": "11:30",
+            "reservations": []
+          },
+          {
+            "id": "5",
+            "timeFrom": "11:30",
+            "timeTo": "12:30",
+            "reservations": []
+          },
+          {
+            "id": "6",
+            "timeFrom": "14:30",
+            "timeTo": "15:30",
+            "reservations": []
+          }
+        ]
+      }
+    ]
+  }
+}

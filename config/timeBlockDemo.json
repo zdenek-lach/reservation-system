@@ -1,0 +1,9 @@
+{
+  "timeBlock": {
+    "id": "1",
+
+    "timeFrom": "15:30",
+    "timeTo": "16:30",
+    "reservations": [0, 1, 2, 3]
+  }
+}

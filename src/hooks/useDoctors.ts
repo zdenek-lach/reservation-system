@@ -4,23 +4,23 @@ import { useEffect, useState } from 'react';
 
 export const useDoctors = () => {
   const { setDoctorList } = useAppContext();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loadingDoctors, setLoadingDoctors] = useState(true);
+  const [errorDoctors, setErrorDoctors] = useState('');
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/doctor');
+        const response = await axios.get('http://localhost:3001/api/doctors');
         setDoctorList(response.data);
-        setLoading(false);
+        setLoadingDoctors(false);
       } catch (err: any) {
-        setError(err.message);
-        setLoading(false);
+        setErrorDoctors(err.message);
+        setLoadingDoctors(false);
       }
     };
 
     fetchDoctors();
   }, []);
 
-  return { loading, error };
+  return { loadingDoctors, errorDoctors };
 };

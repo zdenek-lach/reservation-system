@@ -1,0 +1,13 @@
+{
+  "reservation": {
+    "date": {
+      "day": "2",
+      "month": "12",
+      "year": "2023"
+    },
+    "time": "15:30",
+    "customerId": "1",
+    "doctorId": "1",
+    "additionalNotes": "Patient has a history of heart problems."
+  }
+}

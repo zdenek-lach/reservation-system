@@ -33,7 +33,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             {!imageLoaded && <Spinner />}
             <Image
               src={`/assets/doctorPics/${doctor.pictureId}.jpg`}
-              alt={`Doctor ${doctor.firstName + doctor.lastName}`}
+              alt={`Doctor ${doctor.firstName + doctor.surname}`}
               w="100%"
               borderRadius="lg"
               onLoad={() => setImageLoaded(true)}
@@ -49,7 +49,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
               fontFamily={'body'}
               color={'gray.800'}
             >
-              {doctor.firstName} {doctor.lastName}
+              {doctor.firstName} {doctor.surname}
             </Text>
             <Text color={'gray.500'}>{doctor.title}</Text>
           </Stack>
@@ -68,7 +68,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             }}
             onClick={handleButtonClick}
           >
-            Zvolit {doctor.title}.{doctor.lastName}
+            Zvolit {doctor.title}.{doctor.surname}
           </Button>
         </CardFooter>
       </Card>

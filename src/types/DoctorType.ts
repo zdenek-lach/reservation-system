@@ -1,9 +1,11 @@
 type Doctor = {
   id: string;
   firstName: string;
-  lastName: string;
+  surname: string;
   title: string;
+  description: string;
   pictureId: number;
-  clinics: string[];
+  clinics: number[];
 };
+
 export default Doctor;

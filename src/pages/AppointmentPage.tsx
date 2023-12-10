@@ -57,7 +57,7 @@ const AppointmentPage = () => {
                   ' ' +
                   selectedDoctor.firstName +
                   ' ' +
-                  selectedDoctor.lastName
+                  selectedDoctor.surname
                 : 'Doctor'}
             </MenuButton>
             <MenuList>{listDoctorsAsMenuItems()}</MenuList>
@@ -69,18 +69,18 @@ const AppointmentPage = () => {
 
   const listDoctorsAsMenuItems = () => {
     if (!Array.isArray(doctorList) || doctorList.length === 0) {
-      return <MenuItem>DoctorList is empty</MenuItem>;
+      return <MenuItem key="empty">DoctorList is empty</MenuItem>;
     }
 
-    return (
-      <>
-        {doctorList.map((doctor) => (
-          <MenuItem key={doctor.id} onClick={() => setSelectedDoctor(doctor)}>
-            {doctor.title + ' ' + doctor.firstName + ' ' + doctor.lastName}
-          </MenuItem>
-        ))}
-      </>
-    );
+    return doctorList.map((doctor) => {
+      const { id, title, firstName, surname } = doctor;
+
+      return (
+        <MenuItem key={id} onClick={() => setSelectedDoctor(doctor)}>
+          {`${id} ${title} ${firstName} ${surname}`}
+        </MenuItem>
+      );
+    });
   };
 
   const renderClinicDropdown = () => {
@@ -106,14 +106,14 @@ const AppointmentPage = () => {
 
   const listClinicsAsMenuItems = () => {
     if (!Array.isArray(clinicList) || clinicList.length === 0) {
-      return <MenuItem>ClinicList is empty</MenuItem>;
+      return <MenuItem key="empty">ClinicList is empty</MenuItem>;
     }
 
     return (
       <>
         {clinicList.map((clinic) => (
           <MenuItem key={clinic.id} onClick={() => setSelectedClinic(clinic)}>
-            {clinic.name + ' ' + clinic.location}
+            {clinic.id + clinic.name + ' ' + clinic.location}
           </MenuItem>
         ))}
       </>

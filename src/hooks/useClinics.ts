@@ -10,7 +10,7 @@ export const useClinics = () => {
   useEffect(() => {
     const fetchClinics = async () => {
       try {
-        const response = await axios.get(config.clinicsApiUrl);
+        const response = await axios.get(config.api.clinicsApiUrl);
         setClinicList(response.data);
         setLoadingClinics(false);
       } catch (err: any) {

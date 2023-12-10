@@ -1,4 +1,17 @@
 {
-  "doctorsApiUrl": "http://localhost:3001/api/doctors",
-  "clinicsApiUrl": "http://localhost:3001/api/clinics"
+  "api": {
+    "doctorsApiUrl": "http://127.0.0.1:8000/api/doctors",
+    "clinicsApiUrl": "http://127.0.0.1:8000/api/clinics"
+  },
+  "general": {
+    "colorPalette": 1,
+    "addWeekendsToList": true
+  },
+  "reservations": {
+    "reservationsPerTimeBlock": 5,
+    "extraReservationsPerTimeBlock": 0
+  },
+  "employees": {
+    "employeesCanEditReservations": true
+  }
 }

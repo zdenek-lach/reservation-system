@@ -1,0 +1,4 @@
+{
+  "doctorsApiUrl": "http://localhost:3001/api/doctors",
+  "clinicsApiUrl": "http://localhost:3001/api/clinics"
+}

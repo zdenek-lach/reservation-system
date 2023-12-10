@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
-
+import config from '../../config/config.json';
 export const useDoctors = () => {
   const { setDoctorList } = useAppContext();
   const [loadingDoctors, setLoadingDoctors] = useState(true);
@@ -10,7 +10,7 @@ export const useDoctors = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/doctors');
+        const response = await axios.get(config.doctorsApiUrl);
         setDoctorList(response.data);
         setLoadingDoctors(false);
       } catch (err: any) {

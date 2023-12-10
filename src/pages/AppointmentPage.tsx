@@ -14,13 +14,13 @@ import {
   Text,
   Tr,
 } from '@chakra-ui/react';
+import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { addDays, eachHourOfInterval, format, startOfWeek } from 'date-fns';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useState } from 'react';
 import AppointmentDoctorCard from '../components/AppointmentDoctorCard';
-import Time from '../components/calendar/Time';
 
 const AppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -140,13 +140,7 @@ const AppointmentPage = () => {
             <Tr key={day}>
               <Td>{day}</Td>
               {generateTimeSlots().map((time) => (
-                <Td key={`${day}-${time}`}>
-                  <Time
-                    time={time}
-                    onClick={handleSelectingTime}
-                    isSelected={isSelected}
-                  />
-                </Td>
+                <Td key={`${day}-${time}`}>{time}</Td>
               ))}
             </Tr>
           ))}
@@ -164,6 +158,7 @@ const AppointmentPage = () => {
           p={4}
           flex={{ base: 1, md: 'auto' }}
         >
+          <WeekPicker />
           <Box mb={4}>
             {loadingDoctors ? (
               <Spinner />

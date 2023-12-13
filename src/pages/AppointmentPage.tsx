@@ -152,37 +152,60 @@ const AppointmentPage = () => {
   return (
     <Box minH="100vh" bgSize="cover" backgroundPosition="center">
       <Flex direction={{ base: 'column', md: 'row' }} mb={4} align="stretch">
-        {/* Left Section: Ambulance and Doctor Dropdowns */}
+        {/* Left Section: Week, Doctor, and Clinic Dropdowns */}
         <Box
           bg="rgba(255, 0, 0, 0.4)" // Adjust background color and opacity as needed
-          p={4}
+          p={5}
           flex={{ base: 1, md: 'auto' }}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          alignItems="center" // Add this line
+          mt="20px"
+          ml="20px"
+          borderRadius="15px"
         >
-          <WeekPicker />
           <Box mb={4}>
-            {loadingDoctors ? (
-              <Spinner />
-            ) : errorDoctors ? (
-              <Text>{errorDoctors}</Text>
-            ) : (
-              renderDoctorDropdown()
-            )}
+            <WeekPicker />
           </Box>
-          <Box mb={4}>
-            {loadingClinics ? (
-              <Spinner />
-            ) : errorClinics ? (
-              <Text>{errorClinics}</Text>
-            ) : (
-              renderClinicDropdown()
-            )}
-          </Box>
-          <Box>{weekGrid()}</Box>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            justifyContent="center"
+            flexGrow={1}
+          >
+            <Box mb={4} mr={{ md: 4 }}>
+              {loadingDoctors ? (
+                <Spinner />
+              ) : errorDoctors ? (
+                <Text>{errorDoctors}</Text>
+              ) : (
+                renderDoctorDropdown()
+              )}
+            </Box>
+            <Box mb={4}>
+              {loadingClinics ? (
+                <Spinner />
+              ) : errorClinics ? (
+                <Text>{errorClinics}</Text>
+              ) : (
+                renderClinicDropdown()
+              )}
+            </Box>
+          </Flex>
+          <Box backgroundColor="#666">{weekGrid()}</Box>
         </Box>
 
         {/* Right Section: Doctor Card */}
         {selectedDoctor != null && (
-          <Box bg="rgba(255, 0, 0, 0.4)" p={4} flex={1} ml={{ md: 4 }}>
+          <Box
+            bg="rgba(255, 0, 0, 0.4)"
+            p={4}
+            flex={1}
+            mt="20px"
+            ml="20px"
+            mr="20px"
+            borderRadius="15px"
+          >
             <AppointmentDoctorCard doctor={selectedDoctor} />
           </Box>
         )}

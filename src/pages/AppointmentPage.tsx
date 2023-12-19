@@ -14,13 +14,14 @@ import {
   Text,
   Tr,
 } from '@chakra-ui/react';
+import TimeBlock from 'components/TimeBlock';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { addDays, eachHourOfInterval, format, startOfWeek } from 'date-fns';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useState } from 'react';
-import AppointmentDoctorCard from '../components/AppointmentDoctorCard';
+import DoctorCard from '../components/DoctorCard';
 
 const AppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -57,7 +58,7 @@ const AppointmentPage = () => {
                   ' ' +
                   selectedDoctor.firstName +
                   ' ' +
-                  selectedDoctor.surname
+                  selectedDoctor.lastName
                 : 'Doctor'}
             </MenuButton>
             <MenuList>{listDoctorsAsMenuItems()}</MenuList>
@@ -73,11 +74,11 @@ const AppointmentPage = () => {
     }
 
     return doctorList.map((doctor) => {
-      const { id, title, firstName, surname } = doctor;
+      const { id, title, firstName, lastName } = doctor;
 
       return (
         <MenuItem key={id} onClick={() => setSelectedDoctor(doctor)}>
-          {`${id} ${title} ${firstName} ${surname}`}
+          {`${id} ${title} ${firstName} ${lastName}`}
         </MenuItem>
       );
     });
@@ -140,7 +141,9 @@ const AppointmentPage = () => {
             <Tr key={day}>
               <Td>{day}</Td>
               {generateTimeSlots().map((time) => (
-                <Td key={`${day}-${time}`}>{time}</Td>
+                <Td key={`${day}-${time}`}>
+                  <TimeBlock time={time} />
+                </Td>
               ))}
             </Tr>
           ))}
@@ -206,7 +209,7 @@ const AppointmentPage = () => {
             mr="20px"
             borderRadius="15px"
           >
-            <AppointmentDoctorCard doctor={selectedDoctor} />
+            <DoctorCard doctor={selectedDoctor} />
           </Box>
         )}
       </Flex>

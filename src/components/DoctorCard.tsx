@@ -1,78 +1,61 @@
 import {
-  Button,
+  Box,
   Card,
   CardBody,
-  CardFooter,
-  CardHeader,
   Flex,
   Image,
+  ListItem,
   Spinner,
   Stack,
   Text,
+  UnorderedList,
 } from '@chakra-ui/react';
-import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Doctor from 'types/DoctorType';
 
 const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
-  const { setSelectedDoctor } = useAppContext();
-  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleButtonClick = () => {
-    setSelectedDoctor(doctor);
-    navigate('/clinic-picker');
-  };
-
   return (
-    <>
-      <Card maxW="25%">
-        <CardHeader>
-          <Flex justify={'center'} mt={6}>
-            {!imageLoaded && <Spinner />}
-            <Image
-              src={`/assets/doctorPics/${doctor.pictureId}.jpg`}
-              alt={`Doctor ${doctor.firstName + doctor.surname}`}
-              w="100%"
-              borderRadius="lg"
-              onLoad={() => setImageLoaded(true)}
-              style={imageLoaded ? {} : { display: 'none' }}
-            />
-          </Flex>
-        </CardHeader>
-        <CardBody>
-          <Stack spacing={0} align={'center'} mb={5}>
+    <Card borderWidth={1} borderRadius="lg" overflow="hidden">
+      <Flex direction={['column', 'row']}>
+        <Box flex="1">
+          {!imageLoaded && <Spinner />}
+          <Image
+            src={`/assets/doctorPics/${doctor.pictureId}.jpg`}
+            alt={`Doctor ${doctor.firstName + doctor.lastName}`}
+            w="100%"
+            borderRadius="lg"
+            m="20px"
+            p="10px"
+            onLoad={() => setImageLoaded(true)}
+            style={imageLoaded ? {} : { display: 'none' }}
+          />
+        </Box>
+        <Box p={6} flex="1">
+          <Stack spacing={0} align={'start'} mb={5}>
             <Text
               fontSize={'2xl'}
               fontWeight={500}
               fontFamily={'body'}
               color={'gray.800'}
             >
-              {doctor.firstName} {doctor.surname}
+              {doctor.title} {doctor.firstName} {doctor.lastName}
             </Text>
-            <Text color={'gray.500'}>{doctor.title}</Text>
+            <Text color={'gray.500'}>{doctor.description}</Text>
           </Stack>
-        </CardBody>
-        <CardFooter>
-          <Button
-            w={'full'}
-            mt={8}
-            bg={'blue.500'}
-            color={'white'}
-            rounded={'md'}
-            _hover={{
-              bg: 'blue.600',
-              transform: 'translateY(-2px)',
-              boxShadow: 'lg',
-            }}
-            onClick={handleButtonClick}
-          >
-            Zvolit {doctor.title}.{doctor.surname}
-          </Button>
-        </CardFooter>
-      </Card>
-    </>
+        </Box>
+      </Flex>
+      <CardBody>
+        <Box p={6} flex="1">
+          <UnorderedList>
+            {doctor.points.map((point, index) => (
+              <ListItem key={index}>{point}</ListItem>
+            ))}
+          </UnorderedList>
+        </Box>
+      </CardBody>
+    </Card>
   );
 };
 

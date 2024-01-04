@@ -8,16 +8,12 @@ import {
   MenuItem,
   MenuList,
   Spinner,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Tr,
 } from '@chakra-ui/react';
-import TimeBlock from 'components/TimeBlock';
+import WeekGrid from 'components/WeekGrid';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
-import { addDays, eachHourOfInterval, format, startOfWeek } from 'date-fns';
+import { addDays, startOfWeek } from 'date-fns';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useState } from 'react';
@@ -39,6 +35,15 @@ const AppointmentPage = () => {
   const [isSelected, setIsSelected] = useState(false);
   const { loadingDoctors, errorDoctors } = useDoctors();
   const { loadingClinics, errorClinics } = useClinics();
+  const [currentWeek, setCurrentWeek] = useState(() => {
+    const date = new Date();
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust to Monday
+    date.setDate(diff);
+    date.setHours(0, 0, 0, 0); // set time to 00:00:00.000
+    return date;
+  });
+
   const handleSelectingTime = () => {
     setIsSelected((prevState) => !prevState);
   };
@@ -121,37 +126,6 @@ const AppointmentPage = () => {
     );
   };
 
-  const weekGrid = () => {
-    const days = ['Po', 'Út', 'St', 'Čt', 'Pá']; // Remove weekend days
-
-    const generateTimeSlots = () => {
-      const startHour = 7;
-      const endHour = 19;
-      const timeSlots = eachHourOfInterval({
-        start: new Date(0, 0, 0, startHour),
-        end: new Date(0, 0, 0, endHour),
-      });
-      return timeSlots.map((time) => format(time, 'HH:mm'));
-    };
-
-    return (
-      <Table variant="striped" colorScheme="teal" size="sm">
-        <Tbody>
-          {days.map((day) => (
-            <Tr key={day}>
-              <Td>{day}</Td>
-              {generateTimeSlots().map((time) => (
-                <Td key={`${day}-${time}`}>
-                  <TimeBlock time={time} />
-                </Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    );
-  };
-
   return (
     <Box minH="100vh" bgSize="cover" backgroundPosition="center">
       <Flex direction={{ base: 'column', md: 'row' }} mb={4} align="stretch">
@@ -169,7 +143,10 @@ const AppointmentPage = () => {
           borderRadius="15px"
         >
           <Box mb={4}>
-            <WeekPicker />
+            <WeekPicker
+              currentWeek={currentWeek}
+              setCurrentWeek={setCurrentWeek}
+            />
           </Box>
           <Flex
             direction={{ base: 'column', md: 'row' }}
@@ -195,7 +172,9 @@ const AppointmentPage = () => {
               )}
             </Box>
           </Flex>
-          <Box backgroundColor="#666">{weekGrid()}</Box>
+          <Box backgroundColor="#666">
+            <WeekGrid startOfWeek={currentWeek} />
+          </Box>
         </Box>
 
         {/* Right Section: Doctor Card */}

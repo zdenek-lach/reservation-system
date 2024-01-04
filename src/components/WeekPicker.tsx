@@ -1,16 +1,17 @@
-// WeekPicker.tsx
-
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 
+// Updated the interface to include currentWeek and setCurrentWeek
 interface WeekPickerProps {
-  // Add any additional props you might need
+  currentWeek: Date;
+  setCurrentWeek: (date: Date) => void;
 }
 
-const WeekPicker: React.FC<WeekPickerProps> = () => {
-  const [currentWeek, setCurrentWeek] = useState(new Date());
-
+const WeekPicker: React.FC<WeekPickerProps> = ({
+  currentWeek,
+  setCurrentWeek,
+}) => {
   const getFormattedDate = (date: Date): string => {
     return date.toLocaleDateString('cs-CZ', {
       day: '2-digit',
@@ -20,24 +21,26 @@ const WeekPicker: React.FC<WeekPickerProps> = () => {
   };
 
   const handlePrevWeek = () => {
-    const prevWeek = new Date(currentWeek);
-    prevWeek.setDate(currentWeek.getDate() - 7);
+    // Used getTime() to avoid mutating the original date
+    const prevWeek = new Date(currentWeek.getTime());
+    prevWeek.setDate(prevWeek.getDate() - 7);
     setCurrentWeek(prevWeek);
   };
 
   const handleNextWeek = () => {
-    const nextWeek = new Date(currentWeek);
-    nextWeek.setDate(currentWeek.getDate() + 7);
+    // Used getTime() to avoid mutating the original date
+    const nextWeek = new Date(currentWeek.getTime());
+    nextWeek.setDate(nextWeek.getDate() + 7);
     setCurrentWeek(nextWeek);
   };
 
-  const startOfWeek = new Date(currentWeek);
-  const dayOfWeek = startOfWeek.getDay();
-  const diff = (dayOfWeek + 6) % 7;
-  startOfWeek.setDate(startOfWeek.getDate() - diff);
+  // Calculate the start of the week (Monday)
+  const startOfWeek = new Date(currentWeek.getTime());
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
 
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  // Calculate the end of the week (Friday)
+  const endOfWeek = new Date(startOfWeek.getTime());
+  endOfWeek.setDate(endOfWeek.getDate() + 4);
 
   return (
     <Flex

@@ -1,15 +1,7 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-  Text,
-} from '@chakra-ui/react';
 import { useAppContext } from 'context/AppContext';
 import { useDoctors } from 'hooks/useDoctors';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from 'react-bootstrap/Spinner';
 
 const DoctorDropdown = () => {
   const { selectedDoctor, setSelectedDoctor, doctorList } = useAppContext();
@@ -17,49 +9,40 @@ const DoctorDropdown = () => {
 
   const renderDoctorDropdown = () => {
     return (
-      <Menu>
-        {({ isOpen }) => (
-          <>
-            <MenuButton
-              isActive={isOpen}
-              as={Button}
-              rightIcon={<ChevronDownIcon />}
-            >
-              {selectedDoctor != null
-                ? selectedDoctor.title +
-                  ' ' +
-                  selectedDoctor.firstName +
-                  ' ' +
-                  selectedDoctor.lastName
-                : 'Doctor'}
-            </MenuButton>
-            <MenuList>{listDoctorsAsMenuItems()}</MenuList>
-          </>
-        )}
-      </Menu>
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          {selectedDoctor != null
+            ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
+            : 'Doctor'}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>{listDoctorsAsMenuItems()}</Dropdown.Menu>
+      </Dropdown>
     );
   };
 
   const listDoctorsAsMenuItems = () => {
     if (!Array.isArray(doctorList) || doctorList.length === 0) {
-      return <MenuItem key="empty">DoctorList is empty</MenuItem>;
+      return <Dropdown.Item key="empty">DoctorList is empty</Dropdown.Item>;
     }
 
     return doctorList.map((doctor) => {
       const { id, title, firstName, lastName } = doctor;
 
       return (
-        <MenuItem key={id} onClick={() => setSelectedDoctor(doctor)}>
+        <Dropdown.Item key={id} onClick={() => setSelectedDoctor(doctor)}>
           {`${id} ${title} ${firstName} ${lastName}`}
-        </MenuItem>
+        </Dropdown.Item>
       );
     });
   };
 
   return loadingDoctors ? (
-    <Spinner />
+    <Spinner animation="border" role="status">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
   ) : errorDoctors ? (
-    <Text>{errorDoctors}</Text>
+    <div>{errorDoctors}</div> // Adjust this part based on how you want to display errors
   ) : (
     renderDoctorDropdown()
   );

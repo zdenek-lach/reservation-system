@@ -1,4 +1,5 @@
-import { Box, Button, Flex, Heading, Spacer, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import packageJson from '../../package.json';
 
@@ -6,28 +7,20 @@ const NavBar: React.FC = () => {
   let location = useLocation();
   if (location.pathname.includes('splash-screen')) return null;
   return (
-    <>
-      <Flex
-        id="navbar"
-        minWidth="max-content"
-        alignItems="center"
-        gap="2"
-        bg="red.600"
-      >
-        <Box p="2">
-          <Heading size="md">
-            <Text>Rezervační systém Artromedi</Text>
-          </Heading>
-        </Box>
-        <Spacer />
-        <Text color="white" fontWeight="hairline">
-          verze {packageJson.version}
-        </Text>
-        <Button colorScheme="red.600" gap="2" p="1rem">
-          Log In
-        </Button>
-      </Flex>
-    </>
+    <Navbar bg="danger" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand>Rezervační systém Artromedi</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+          <Nav>
+            <Nav.Item className="text-light">
+              verze {packageJson.version}
+            </Nav.Item>
+            <Nav.Link href="/login">Log In</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

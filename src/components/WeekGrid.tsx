@@ -1,5 +1,5 @@
-import { Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { eachHourOfInterval, format } from 'date-fns';
+import { Table } from 'react-bootstrap';
 import TimeBlock from './TimeBlock';
 
 interface WeekGridProps {
@@ -19,8 +19,8 @@ const WeekGrid: React.FC<WeekGridProps> = ({ startOfWeek }) => {
   };
 
   return (
-    <Table variant="striped" colorScheme="teal" size="sm">
-      <Tbody>
+    <Table striped size="sm" className="my-3">
+      <tbody>
         {days.map((day, index) => {
           const dayDate = new Date(
             startOfWeek.getFullYear(),
@@ -32,17 +32,17 @@ const WeekGrid: React.FC<WeekGridProps> = ({ startOfWeek }) => {
             0 // Sets the time to 00:00:00.000
           );
           return (
-            <Tr key={day}>
-              <Td>{day}</Td>
+            <tr key={day} className="bg-light text-dark">
+              <td>{day}</td>
               {generateTimeSlots().map((time) => (
-                <Td key={`${day}-${time}`}>
+                <td key={`${day}-${time}`} className="p-3">
                   <TimeBlock time={time} date={dayDate} />
-                </Td>
+                </td>
               ))}
-            </Tr>
+            </tr>
           );
         })}
-      </Tbody>
+      </tbody>
     </Table>
   );
 };

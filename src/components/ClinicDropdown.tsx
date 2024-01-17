@@ -1,15 +1,7 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Spinner,
-  Text,
-} from '@chakra-ui/react';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from 'react-bootstrap/Spinner';
 
 const ClinicDropdown = () => {
   const { selectedClinic, setSelectedClinic, clinicList } = useAppContext();
@@ -17,45 +9,40 @@ const ClinicDropdown = () => {
 
   const renderClinicDropdown = () => {
     return (
-      <Menu>
-        {({ isOpen }) => (
-          <>
-            <MenuButton
-              isActive={isOpen}
-              as={Button}
-              rightIcon={<ChevronDownIcon />}
-            >
-              {selectedClinic != null
-                ? selectedClinic.name + ' ' + selectedClinic.location
-                : 'Clinic'}
-            </MenuButton>
-            <MenuList>{listClinicsAsMenuItems()}</MenuList>
-          </>
-        )}
-      </Menu>
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          {selectedClinic != null
+            ? `${selectedClinic.name} ${selectedClinic.location}`
+            : 'Clinic'}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>{listClinicsAsMenuItems()}</Dropdown.Menu>
+      </Dropdown>
     );
   };
 
   const listClinicsAsMenuItems = () => {
     if (!Array.isArray(clinicList) || clinicList.length === 0) {
-      return <MenuItem key="empty">ClinicList is empty</MenuItem>;
+      return <Dropdown.Item key="empty">ClinicList is empty</Dropdown.Item>;
     }
 
-    return (
-      <>
-        {clinicList.map((clinic) => (
-          <MenuItem key={clinic.id} onClick={() => setSelectedClinic(clinic)}>
-            {clinic.id + clinic.name + ' ' + clinic.location}
-          </MenuItem>
-        ))}
-      </>
-    );
+    return clinicList.map((clinic) => {
+      const { id, name, location } = clinic;
+
+      return (
+        <Dropdown.Item key={id} onClick={() => setSelectedClinic(clinic)}>
+          {`${id} ${name} ${location}`}
+        </Dropdown.Item>
+      );
+    });
   };
 
   return loadingClinics ? (
-    <Spinner />
+    <Spinner animation="border" role="status">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
   ) : errorClinics ? (
-    <Text>{errorClinics}</Text>
+    <div>{errorClinics}</div> // Adjust this part based on how you want to display errors
   ) : (
     renderClinicDropdown()
   );

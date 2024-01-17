@@ -1,19 +1,6 @@
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react';
 import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
 import ReservationData from 'types/ReservationData';
 
 interface ReservationFormProps {
@@ -27,7 +14,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   date,
   onFormSubmit,
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [show, setShow] = useState(false);
 
   // States for form inputs
   const [firstName, setFirstname] = useState('');
@@ -53,78 +40,80 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       clinic: selectedClinic,
     };
     onFormSubmit(data); // Pass the data up to the parent component
-    onClose(); // Close the modal
+    setShow(false); // Close the modal
   };
 
   return (
     <>
       <Button
-        colorScheme="red"
-        size="md"
-        borderRadius="9999px"
-        onClick={onOpen}
+        style={{
+          borderRadius: '20px',
+        }}
+        variant="danger"
+        onClick={() => setShow(true)}
       >
         {time}
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Rezervace</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl id="selectedDate">
-              <FormLabel>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Rezervace</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="selectedDate">
+              <Form.Label>
                 Vybrané datum: {date.toLocaleDateString('cs-CZ')}
-              </FormLabel>
-              <FormLabel>Vybraný čas: {time}</FormLabel>
-            </FormControl>
-            <FormControl id="firstName">
-              <FormLabel>Jméno</FormLabel>
-              <Input
+              </Form.Label>
+              <br />
+              <Form.Label>Vybraný čas: {time}</Form.Label>
+            </Form.Group>
+            <Form.Group controlId="firstName">
+              <Form.Label>Jméno</Form.Label>
+              <Form.Control
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstname(e.target.value)}
               />
-            </FormControl>
-            <FormControl id="lastName">
-              <FormLabel>Příjmení</FormLabel>
-              <Input
+            </Form.Group>
+            <Form.Group controlId="lastName">
+              <Form.Label>Příjmení</Form.Label>
+              <Form.Control
                 type="text"
                 value={lastName}
                 onChange={(e) => setlastName(e.target.value)}
               />
-            </FormControl>
-            <FormControl id="phone">
-              <FormLabel>Telefon</FormLabel>
-              <Input
+            </Form.Group>
+            <Form.Group controlId="phone">
+              <Form.Label>Telefon</Form.Label>
+              <Form.Control
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
-            </FormControl>
-            <FormControl id="email">
-              <FormLabel>Email</FormLabel>
-              <Input
+            </Form.Group>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-            </FormControl>
-            <FormControl id="comment">
-              <FormLabel>Komentář (dobrovolné)</FormLabel>
-              <Input
+            </Form.Group>
+            <Form.Group controlId="comment">
+              <Form.Label>Komentář (dobrovolné)</Form.Label>
+              <Form.Control
                 type="text"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="green" mr={3} onClick={handleFormSubmit}>
-              Odeslat
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={handleFormSubmit}>
+            Odeslat
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

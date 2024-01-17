@@ -1,10 +1,10 @@
-import { Box, Flex } from '@chakra-ui/react';
 import ClinicDropdown from 'components/ClinicDropdown';
 import DoctorDropdown from 'components/DoctorDropdown';
 import WeekGrid from 'components/WeekGrid';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import DoctorCard from '../components/DoctorCard';
 
 const AppointmentPage = () => {
@@ -20,60 +20,58 @@ const AppointmentPage = () => {
   });
 
   return (
-    <Box minH="100vh" bgSize="cover" backgroundPosition="center">
-      <Flex direction={{ base: 'column', md: 'row' }} mb={4} align="stretch">
+    <Container
+      fluid
+      style={{ minHeight: '100vh', backgroundPosition: 'center' }}
+    >
+      <Row className="mb-4">
         {/* Left Section: Week, Doctor, and Clinic Dropdowns */}
-        <Box
-          bg="rgba(255, 0, 0, 0.4)" // Adjust background color and opacity as needed
-          p={5}
-          flex={{ base: 1, md: 'auto' }}
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          alignItems="center" // Add this line
-          mt="20px"
-          ml="20px"
-          borderRadius="15px"
+        <Col
+          md
+          style={{
+            backgroundColor: 'rgba(255, 0, 0, 0.4)',
+            padding: '20px',
+            borderRadius: '15px',
+            marginTop: '20px',
+            marginLeft: '20px',
+          }}
         >
-          <Box mb={4}>
+          <Row className="justify-content-center mb-4">
             <WeekPicker
               currentWeek={currentWeek}
               setCurrentWeek={setCurrentWeek}
             />
-          </Box>
-          <Flex
-            direction={{ base: 'column', md: 'row' }}
-            justifyContent="center"
-            flexGrow={1}
-          >
-            <Box mb={4} mr={{ md: 4 }}>
+          </Row>
+          <Row className="justify-content-center">
+            <Col className="mb-4 d-flex justify-content-center">
               <DoctorDropdown />
-            </Box>
-            <Box mb={4}>
+            </Col>
+            <Col className="mb-4 d-flex justify-content-center">
               <ClinicDropdown />
-            </Box>
-          </Flex>
-          <Box backgroundColor="#666">
+            </Col>
+          </Row>
+          <Card style={{ backgroundColor: '#666' }}>
             <WeekGrid startOfWeek={currentWeek} />
-          </Box>
-        </Box>
+          </Card>
+        </Col>
 
         {/* Right Section: Doctor Card */}
         {selectedDoctor != null && (
-          <Box
-            bg="rgba(255, 0, 0, 0.4)"
-            p={4}
-            flex={1}
-            mt="20px"
-            ml="20px"
-            mr="20px"
-            borderRadius="15px"
+          <Col
+            style={{
+              backgroundColor: 'rgba(255, 0, 0, 0.4)',
+              padding: '20px',
+              marginTop: '20px',
+              marginLeft: '20px',
+              marginRight: '20px',
+              borderRadius: '15px',
+            }}
           >
             <DoctorCard doctor={selectedDoctor} />
-          </Box>
+          </Col>
         )}
-      </Flex>
-    </Box>
+      </Row>
+    </Container>
   );
 };
 

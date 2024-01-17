@@ -1,5 +1,5 @@
-import { Box, Button, Center, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
+import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import { FaExclamationTriangle } from 'react-icons/fa';
 
 interface ErrorPageProps {
@@ -8,28 +8,47 @@ interface ErrorPageProps {
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ errorMessage }) => {
   return (
-    <Center h="100vh" bgGradient="linear(to-l, black, red)">
-      <VStack spacing={5} p={10} bg="white" boxShadow="xl" rounded="lg">
-        <Box as={FaExclamationTriangle} size="64px" color="red.500" />
-        <Text fontSize="4xl" fontWeight="bold" color="gray.700">
-          Oops! Něco se pokazilo.
-        </Text>
-        <Text fontSize="lg" color="gray.500">
-          Omlouváme se, zdá se, že se někde stala chyba.
-        </Text>
+    <Container
+      style={{
+        background: 'linear-gradient(to right, black, red)',
+        minHeight: '100vh',
+        width: '100%',
+        margin: 'auto',
+        padding: 'auto',
+      }}
+      className="d-flex justify-content-center align-items-center fluid"
+    >
+      <Row className="p-5 bg-white shadow rounded">
+        <Col xs={12} className="text-center">
+          <FaExclamationTriangle size="64px" color="red" />
+        </Col>
+        <Col xs={12} className="text-center">
+          <h1 className="font-weight-bold text-dark">
+            Oops! Něco se pokazilo.
+          </h1>
+        </Col>
+        <Col xs={12} className="text-center">
+          <p className="text-muted">
+            Omlouváme se, zdá se, že se někde stala chyba.
+          </p>
+        </Col>
         {errorMessage && (
-          <Text fontSize="lg" color="red.500">
-            {errorMessage}
-          </Text>
+          <Col xs={12} className="text-center">
+            <Alert variant="danger">{errorMessage}</Alert>
+          </Col>
         )}
-        <Text fontSize="lg" color="gray.500">
-          Prosím zkuste to znovu později něbo kontaktuje podporu.
-        </Text>
-        <Button colorScheme="red" onClick={() => window.location.reload()}>
-          Obnovit stránku
-        </Button>
-      </VStack>
-    </Center>
+        <Col xs={12} className="text-center">
+          <p className="text-muted">
+            Prosím zkuste to znovu později něbo kontaktuje podporu.
+          </p>
+        </Col>
+        <Col xs={12} className="text-center">
+          <Button variant="danger" onClick={() => window.location.reload()}>
+            Obnovit stránku
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

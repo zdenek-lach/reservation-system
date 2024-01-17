@@ -1,61 +1,63 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  Flex,
-  Image,
-  ListItem,
-  Spinner,
-  Stack,
-  Text,
-  UnorderedList,
-} from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Card, CardGroup, ListGroup, Spinner } from 'react-bootstrap';
 import Doctor from 'types/DoctorType';
 
 const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <Card borderWidth={1} borderRadius="lg" overflow="hidden">
-      <Flex direction={['column', 'row']}>
-        <Box flex="1">
+    <>
+      <CardGroup>
+        <Card style={{ width: '18rem' }}>
           {!imageLoaded && <Spinner />}
-          <Image
+          <Card.Img
+            variant="top"
             src={`/assets/doctorPics/${doctor.pictureId}.jpg`}
             alt={`Doctor ${doctor.firstName + doctor.lastName}`}
-            w="100%"
-            borderRadius="lg"
-            m="20px"
-            p="10px"
+            style={{
+              width: '80%', // Make the picture smaller
+              borderRadius: '0.5rem',
+              margin: '20px auto', // Center the image
+              padding: '10px',
+              display: imageLoaded ? 'block' : 'none',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            }}
             onLoad={() => setImageLoaded(true)}
-            style={imageLoaded ? {} : { display: 'none' }}
           />
-        </Box>
-        <Box p={6} flex="1">
-          <Stack spacing={0} align={'start'} mb={5}>
-            <Text
-              fontSize={'2xl'}
-              fontWeight={500}
-              fontFamily={'body'}
-              color={'gray.800'}
-            >
+        </Card>
+        <Card style={{ width: '18rem' }}>
+          <Card.Body>
+            <Card.Title>
               {doctor.title} {doctor.firstName} {doctor.lastName}
-            </Text>
-            <Text color={'gray.500'}>{doctor.description}</Text>
-          </Stack>
-        </Box>
-      </Flex>
-      <CardBody>
-        <Box p={6} flex="1">
-          <UnorderedList>
+            </Card.Title>
+            <Card.Text style={{ color: '#6c757d', lineHeight: '1.6' }}>
+              {doctor.description}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </CardGroup>
+      <CardGroup>
+        <Card style={{ width: '18rem' }}>
+          <ListGroup
+            variant="flush"
+            style={{ margin: '0 20px', borderRadius: '0.5rem' }}
+          >
             {doctor.points.map((point, index) => (
-              <ListItem key={index}>{point}</ListItem>
+              <ListGroup.Item
+                key={index}
+                style={{
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '0.25rem',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                {point}
+              </ListGroup.Item>
             ))}
-          </UnorderedList>
-        </Box>
-      </CardBody>
-    </Card>
+          </ListGroup>
+        </Card>
+      </CardGroup>
+    </>
   );
 };
 

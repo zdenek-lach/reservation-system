@@ -1,6 +1,6 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Flex, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
+import { Button, ButtonGroup, Card } from 'react-bootstrap';
+import { CaretLeftFill, CaretRightFill } from 'react-bootstrap-icons';
 
 // Updated the interface to include currentWeek and setCurrentWeek
 interface WeekPickerProps {
@@ -43,30 +43,38 @@ const WeekPicker: React.FC<WeekPickerProps> = ({
   endOfWeek.setDate(endOfWeek.getDate() + 4);
 
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="space-between"
-      width="350px"
-      margin="20px"
-      borderRadius="8px"
-      backgroundColor="#EDF2F7"
-      padding="10px"
-      textAlign="center"
+    <Card
+      className="text-center"
+      style={{
+        width: '350px',
+        margin: '20px',
+        borderRadius: '8px',
+        backgroundColor: '#EDF2F7',
+        padding: '10px',
+      }}
     >
-      <IconButton
-        icon={<ChevronLeftIcon />}
-        aria-label="Previous Week"
-        onClick={handlePrevWeek}
-      />
-      <Text fontSize="1em" fontWeight="bold" m="10px">
-        {getFormattedDate(startOfWeek)} - {getFormattedDate(endOfWeek)}
-      </Text>
-      <IconButton
-        icon={<ChevronRightIcon />}
-        aria-label="Next Week"
-        onClick={handleNextWeek}
-      />
-    </Flex>
+      <ButtonGroup
+        className="d-flex align-items-center"
+        aria-label="Week navigation"
+      >
+        <Button variant="" onClick={handlePrevWeek}>
+          <CaretLeftFill />
+        </Button>
+        <Card.Text style={{ margin: '10px', fontWeight: 'bold' }}>
+          {getFormattedDate(startOfWeek)} - {getFormattedDate(endOfWeek)}
+        </Card.Text>
+        <Button
+          style={{
+            alignContent: 'right',
+          }}
+          variant=""
+          onClick={handleNextWeek}
+        >
+          <CaretRightFill /> 
+          {/* TODO is missaligned */}
+        </Button>
+      </ButtonGroup>
+    </Card>
   );
 };
 

@@ -1,4 +1,10 @@
 import RootLayout from 'layouts/RootLayout';
+import EmployeeManagement from 'pages/EmployeeManagement';
+import GlobalSettings from 'pages/GlobalSettings';
+import MyProfile from 'pages/MyProfile';
+import MyReservations from 'pages/MyReservations';
+import MyShifts from 'pages/MyShifts';
+import ReservationManagement from 'pages/ReservationManagement';
 import { Route, RouterProvider, createRoutesFromElements } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import AppointmentPage from './pages/AppointmentPage';
@@ -16,12 +22,18 @@ const router = createBrowserRouter(
       <Route path="appointment-page" element={<AppointmentPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="management" element={<Management />} />
-      <Route path="my-profile" element={<Management />} />
-      <Route path="my-shifts" element={<Management />} />
-      <Route path="my-reservations" element={<Management />} />
-      <Route path="reservation-management" element={<Management />} />
-      <Route path="employee-management" element={<Management />} />
-      <Route path="global-settings" element={<Management />} />
+      <Route path="management/my-profile" element={<MyProfile />} />
+      <Route path="management/my-shifts" element={<MyShifts />} />
+      <Route path="management/my-reservations" element={<MyReservations />} />
+      <Route
+        path="management/reservation-management"
+        element={<ReservationManagement />}
+      />
+      <Route
+        path="management/employee-management"
+        element={<EmployeeManagement />}
+      />
+      <Route path="management/global-settings" element={<GlobalSettings />} />
     </Route>
   )
 );

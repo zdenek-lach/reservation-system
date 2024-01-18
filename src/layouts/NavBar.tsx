@@ -1,7 +1,7 @@
 import { useAppContext } from 'context/AppContext';
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import packageJson from '../../package.json';
 
 const NavBar: React.FC = () => {
@@ -12,10 +12,17 @@ const NavBar: React.FC = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+  const navigate = useNavigate();
   return (
     <Navbar bg="danger" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand>Rezervační systém Artromedi</Navbar.Brand>
+        <Navbar.Brand
+          onClick={() => {
+            navigate('appointment-page');
+          }}
+        >
+          Rezervační systém Artromedi
+        </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav>

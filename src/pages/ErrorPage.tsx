@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { FaExclamationTriangle } from 'react-icons/fa';
 
 interface ErrorPageProps {
@@ -8,7 +8,7 @@ interface ErrorPageProps {
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ errorMessage }) => {
   return (
-    <Container
+    <div
       style={{
         background: 'linear-gradient(to right, black, red)',
         minHeight: '100vh',
@@ -18,12 +18,18 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ errorMessage }) => {
       }}
       className="d-flex justify-content-center align-items-center fluid"
     >
-      <Row className="p-5 bg-white shadow rounded">
+      <Row
+        className="p-4 m-2 shadow"
+        style={{
+          backgroundColor: '#222',
+          borderRadius: '20px',
+        }}
+      >
         <Col xs={12} className="text-center">
           <FaExclamationTriangle size="64px" color="red" />
         </Col>
         <Col xs={12} className="text-center">
-          <h1 className="font-weight-bold text-dark">
+          <h1 className="font-weight-bold text-light">
             Oops! Něco se pokazilo.
           </h1>
         </Col>
@@ -48,7 +54,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ errorMessage }) => {
           </Button>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

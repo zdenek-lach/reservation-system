@@ -1,8 +1,15 @@
+import { useAppContext } from 'context/AppContext';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAppContext();
+  const handleLoginButton = () => {
+    //TODO: login logic
+    setIsLoggedIn(true);
+    navigate('/management');
+  };
   return (
     <Container className="mt-5">
       <h2>Login</h2>
@@ -17,11 +24,7 @@ const LoginPage = () => {
           <Form.Control type="password" placeholder="Password" />
         </Form.Group>
 
-        <Button
-          variant="primary"
-          type="submit"
-          onClick={() => navigate('/management')}
-        >
+        <Button variant="primary" type="submit" onClick={handleLoginButton}>
           Login
         </Button>
       </Form>

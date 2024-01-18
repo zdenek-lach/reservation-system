@@ -11,8 +11,6 @@ import {
 import { useNavigate } from 'react-router';
 import { CSSProperties } from 'styled-components';
 
-// const [isHoveredOver, setIsHoveredOver] = useState(false);
-
 const cardStyle: CSSProperties = {
   borderRadius: '15px',
   fontSize: '2em',
@@ -22,100 +20,95 @@ const cardStyle: CSSProperties = {
   textAlign: 'center',
   marginBottom: '20px',
   alignItems: 'center',
+  transition: 'background-color 0.3s ease-in-out',
 };
+
 const globalSettingsStyle: CSSProperties = {
   ...cardStyle,
-  backgroundColor: '#808080', // This is a grey color
+  backgroundColor: '#808080',
 };
+
 const iconStyle: CSSProperties = {
-  transition: 'color 0.3s ease-in-out',
   color: '#ffffff',
   fontSize: '2em',
-};
-const iconStyleHover: CSSProperties = {
   transition: 'color 0.3s ease-in-out',
-  color: 'black',
-  fontSize: '2em',
 };
 
 const Management = () => {
   const navigate = useNavigate();
+
+  const handleCardHover = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.6)';
+  };
+
+  const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.4)';
+  };
+
+  const renderCard = (
+    title: string,
+    icon: JSX.Element,
+    onClick: () => void,
+    altStyle?: CSSProperties
+  ) => (
+    <Col md={4} key={title}>
+      <Card
+        style={cardStyle}
+        onMouseEnter={handleCardHover}
+        onMouseLeave={handleCardLeave}
+        onClick={onClick}
+      >
+        {icon}
+        {title}
+      </Card>
+    </Col>
+  );
+
   return (
     <Container>
       <Row className="mb-4 mt-4">
-        <Col md={4}>
-          <Card
-            style={cardStyle}
-            onClick={() => {
-              navigate('my-profile');
-            }}
-          >
-            <PersonLinesFill
-              // style={isHoveredOver ? iconStyleHover : iconStyle}
-              style={iconStyle}
-            />
-            Můj profil
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card
-            style={cardStyle}
-            onClick={() => {
-              navigate('my-shifts');
-            }}
-          >
-            <CalendarPlusFill style={iconStyle} />
-            Moje směny
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card
-            style={cardStyle}
-            onClick={() => {
-              navigate('my-reservations');
-            }}
-          >
-            <NodePlusFill style={iconStyle} />
-            Moje rezervace
-          </Card>
-        </Col>
+        {renderCard('Můj profil', <PersonLinesFill style={iconStyle} />, () =>
+          navigate('my-profile')
+        )}
+        {renderCard('Moje směny', <CalendarPlusFill style={iconStyle} />, () =>
+          navigate('my-shifts')
+        )}
+        {renderCard('Moje rezervace', <NodePlusFill style={iconStyle} />, () =>
+          navigate('my-reservations')
+        )}
       </Row>
       <Row className="mb-4">
-        <Col md={4}>
-          <Card
-            style={cardStyle}
-            onClick={() => {
-              navigate('reservation-management');
-            }}
-          >
-            <ClipboardCheckFill style={iconStyle} />
-            Správa rezervací
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card
-            style={cardStyle}
-            onClick={() => {
-              navigate('employee-management');
-            }}
-          >
-            <PersonFillGear style={iconStyle} />
-            Správa zaměstnanců
-          </Card>
-        </Col>
-        <Col md={4}>
+        {renderCard(
+          'Správa rezervací',
+          <ClipboardCheckFill style={iconStyle} />,
+          () => navigate('reservation-management')
+        )}
+        {renderCard(
+          'Správa zaměstnanců',
+          <PersonFillGear style={iconStyle} />,
+          () => navigate('employee-management')
+        )}
+        <Col
+          md={4}
+          key={'Globální nastavení'}
+          onClick={() => {
+            navigate('global-settings');
+          }}
+        >
           <Card
             style={globalSettingsStyle}
-            onClick={() => {
-              navigate('global-settings');
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#808080';
             }}
           >
             <GearWide style={iconStyle} />
-            Globální nastaveni
+            Globální nastavení
           </Card>
         </Col>
       </Row>
-      {/* Add more Rows and Cols as needed for other elements */}
     </Container>
   );
 };

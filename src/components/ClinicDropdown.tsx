@@ -38,11 +38,14 @@ const ClinicDropdown = () => {
   };
 
   return loadingClinics ? (
-    <Spinner animation="border" role="status">
-      <span className="sr-only">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : errorClinics ? (
-    <div>{errorClinics}</div> // Adjust this part based on how you want to display errors
+    <div>
+      <strong>
+        {errorClinics == 'Network Error' &&
+          'Chyba při načítání seznamu ordinací'}
+      </strong>
+    </div> // Adjust this part based on how you want to display errors
   ) : (
     renderClinicDropdown()
   );

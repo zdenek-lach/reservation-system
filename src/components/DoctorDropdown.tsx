@@ -38,11 +38,13 @@ const DoctorDropdown = () => {
   };
 
   return loadingDoctors ? (
-    <Spinner animation="border" role="status">
-      <span className="sr-only">Loading...</span>
-    </Spinner>
+    <Spinner animation="border" role="status" />
   ) : errorDoctors ? (
-    <div>{errorDoctors}</div> // Adjust this part based on how you want to display errors
+    <div>
+      <strong>
+        {errorDoctors == 'Network Error' && 'Chyba při načítání seznamu lékařů'}
+      </strong>
+    </div> // Adjust this part based on how you want to display errors
   ) : (
     renderDoctorDropdown()
   );

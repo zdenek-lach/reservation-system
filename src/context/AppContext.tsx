@@ -12,6 +12,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [doctorList, setDoctorList] = useState<Doctor[] | null>(null);
   const [clinicList, setClinicList] = useState<Clinic[] | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const contextValue: AppContextType = {
     doctorList,
@@ -22,6 +23,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     selectedClinic,
     setSelectedDoctor,
     setSelectedClinic,
+    isLoggedIn,
+    setIsLoggedIn,
   };
 
   return (

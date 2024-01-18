@@ -1,7 +1,8 @@
 {
   "api": {
-    "doctorsApiUrl": "http://127.0.0.1:3001/api/doctors",
-    "clinicsApiUrl": "http://127.0.0.1:3001/api/clinics"
+    "doctorsApiUrl": "http://127.0.0.1:8000/api/doctors",
+    "clinicsApiUrl": "http://127.0.0.1:8000/api/clinics",
+    "reservationsApiUrl": "http://127.0.0.1:8000/api/reservations"
   },
   "general": {
     "colorPalette": 1,

@@ -1,7 +1,7 @@
 type Client = {
   id: number;
   firstName: string;
-  surname: string;
+  lastName: string;
   phoneNumber: string;
   email: string;
 };

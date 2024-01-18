@@ -8,6 +8,7 @@ import React, {
 import { AppContextType } from 'types/AppContextType';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
+import Reservation from 'types/ReservationType';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -19,6 +20,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [doctorList, setDoctorList] = useState<Doctor[] | null>(null);
   const [clinicList, setClinicList] = useState<Clinic[] | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [reservationsList, setReservationsList] = useState<Reservation[] | null>(null);
 
   // Load context from local storage on initial mount
   useEffect(() => {
@@ -30,6 +32,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       setSelectedDoctor(parsedContext.selectedDoctor);
       setSelectedClinic(parsedContext.selectedClinic);
       setIsLoggedIn(parsedContext.isLoggedIn);
+      setReservationsList(parsedContext.reservationsList);
     }
   }, []);
 
@@ -41,9 +44,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       selectedDoctor,
       selectedClinic,
       isLoggedIn,
+      reservationsList,
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
-  }, [doctorList, clinicList, selectedDoctor, selectedClinic, isLoggedIn]);
+  }, [doctorList, clinicList, selectedDoctor, selectedClinic, isLoggedIn, reservationsList]);
 
   const contextValue: AppContextType = {
     doctorList,
@@ -56,6 +60,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setSelectedClinic,
     isLoggedIn,
     setIsLoggedIn,
+    reservationsList,
+    setReservationsList,
   };
 
   return (

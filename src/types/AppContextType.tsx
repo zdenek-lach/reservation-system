@@ -1,5 +1,6 @@
 import Clinic from './ClinicType';
 import Doctor from './DoctorType';
+import Reservation from './ReservationType';
 
 export type AppContextType = {
   doctorList: Doctor[] | null;
@@ -12,4 +13,6 @@ export type AppContextType = {
   setClinicList: React.Dispatch<React.SetStateAction<Clinic[] | null>>;
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setReservationsList: React.Dispatch<React.SetStateAction<Reservation[] | null>>;
+  reservationsList: Reservation[] | null;
 };

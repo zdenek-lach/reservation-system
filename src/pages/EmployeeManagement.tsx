@@ -1,41 +1,21 @@
 import { useState } from 'react';
 import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
-
-interface Employee {
-  id: string;
-  title: string;
-  firstName: string;
-  lastName: string;
-  ambulance: string[];
-  role: string[];
-}
-
-const employees: Employee[] = [
-  {
-    id: '#0001',
-    title: 'MUDr.',
-    firstName: 'Jan',
-    lastName: 'Novák',
-    ambulance: ['Ambulance Orlová', 'Ambulance Český Těšín'],
-    role: ['Doktor', 'Správce'],
-  },
-  {
-    id: '#0002',
-    title: 'MUDr.',
-    firstName: 'Ludmila',
-    lastName: 'Černohorská',
-    ambulance: ['Ambulance Český Těšín'],
-    role: ['Doktor'],
-  },
-];
+import { useDoctors } from 'hooks/useDoctors';
+import Doctors from 'types/DoctorType';
+import { useAppContext } from 'context/AppContext';
 
 const EmployeeManagement = () => {
+  
+  const { doctorList } = useAppContext();
+  const employee  = doctorList;
+  const { loadingDoctors, errorDoctors } = useDoctors();
+  
   const [showModal, setShowModal] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+  const [selectedEmployee, setSelectedEmployee] = useState<Doctors | null>(
     null
   );
 
-  const handleShowModal = (employee: Employee) => {
+  const handleShowModal = (employee: Doctors) => {
     setSelectedEmployee(employee);
     setShowModal(true);
   };
@@ -45,7 +25,7 @@ const EmployeeManagement = () => {
     setShowModal(false);
   };
 
-  const handleDeleteEmployee = (employee: Employee) => {
+  const handleDeleteEmployee = (employee: Doctors) => {
     // Add your logic to delete the employee from the data source here
     console.log(`Deleting employee ${employee.id}`);
   };
@@ -55,7 +35,7 @@ const EmployeeManagement = () => {
     console.log('Adding a new employee');
   };
 
-  const handleEditEmployee = (employee: Employee) => {
+  const handleEditEmployee = (employee: Doctors) => {
     // Add your logic to edit the employee in the data source here
     console.log(`Editing employee ${employee.id}`);
   };
@@ -113,14 +93,14 @@ const EmployeeManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
+          {employee != null && employee.map((employee) => (
             <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.title}</td>
               <td>{employee.firstName}</td>
               <td>{employee.lastName}</td>
-              <td>{employee.ambulance.join(', ')}</td>
-              <td>{employee.role.join(', ')}</td>
+              <td>{employee.availableClinics.join(', ')}</td>
+              <td>{employee.title}</td>
               <td>
                 <Button
                   variant="info"
@@ -176,10 +156,10 @@ const EmployeeManagement = () => {
               </p>
               <p>
                 <strong>Ambulance:</strong>{' '}
-                {selectedEmployee.ambulance.join(', ')}
+                {selectedEmployee.availableClinics.join(', ')}
               </p>
               <p>
-                <strong>Role:</strong> {selectedEmployee.role.join(', ')}
+                <strong>Role:</strong> {selectedEmployee.title}
               </p>
             </div>
           )}

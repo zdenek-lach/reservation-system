@@ -1,33 +1,26 @@
 import { useState } from 'react';
 import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
+import { useAppContext } from 'context/AppContext';
+import { useReservations } from 'hooks/useReservations';
+import Reservation from 'types/ReservationType';
 
-interface Reservation {
-  id: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  date: string;
-  time: string;
-  doctor: string;
-  ambulance: string;
-}
-
-const reservations: Reservation[] = [
-  {
-    id: '#0001',
-    firstName: 'Petr',
-    lastName: 'Kovář',
-    phone: '+420 123 456 789',
-    email: 'petrkovar@seznam.cz',
-    date: '8.11.2023',
-    time: '13:00',
-    doctor: 'MUDr. Jan Novák',
-    ambulance: 'Ambulance Orlová',
-  },
-];
+// interface Reservation {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   phone: string;
+//   email: string;
+//   date: string;
+//   time: string;
+//   doctor: string;
+//   ambulance: string;
+// }
 
 const ReservationManagement = () => {
+  const { reservationsList } = useAppContext();
+  const reservations  = reservationsList;
+  const { loadingReservations, errorReservations } = useReservations();
+
   const [showModal, setShowModal] = useState(false);
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
@@ -119,18 +112,18 @@ const ReservationManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {reservations.map((reservation) => (
+          {reservations != null && reservations.map((reservation) => (
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
-              <td>{reservation.firstName}</td>
-              <td>{reservation.lastName}</td>
-              <td>{reservation.phone}</td>
-              <td>{reservation.email}</td>
+              <td>{reservation.client.firstName}</td>
+              <td>{reservation.client.lastName}</td>
+              <td>{reservation.client.phoneNumber}</td>
+              <td>{reservation.client.email}</td>
               <td>
                 {reservation.date} {reservation.time}
               </td>
-              <td>{reservation.doctor}</td>
-              <td>{reservation.ambulance}</td>
+              <td>{reservation.doctor.firstName} {reservation.doctor.lastName}</td>
+              <td>{reservation.clinic.name}</td>
               <td>
                 <Button
                   variant="info"
@@ -176,26 +169,26 @@ const ReservationManagement = () => {
                 <strong>Číslo:</strong> {selectedReservation.id}
               </p>
               <p>
-                <strong>Jméno:</strong> {selectedReservation.firstName}
+                <strong>Jméno:</strong> {selectedReservation.client.firstName}
               </p>
               <p>
-                <strong>Příjmení:</strong> {selectedReservation.lastName}
+                <strong>Příjmení:</strong> {selectedReservation.client.lastName}
               </p>
               <p>
-                <strong>Telefon:</strong> {selectedReservation.phone}
+                <strong>Telefon:</strong> {selectedReservation.client.phoneNumber}
               </p>
               <p>
-                <strong>E-mail:</strong> {selectedReservation.email}
+                <strong>E-mail:</strong> {selectedReservation.client.email}
               </p>
               <p>
                 <strong>Datum a čas:</strong> {selectedReservation.date}{' '}
                 {selectedReservation.time}
               </p>
               <p>
-                <strong>Doktor:</strong> {selectedReservation.doctor}
+                <strong>Doktor:</strong> {selectedReservation.doctor.firstName} + {selectedReservation.doctor.lastName}
               </p>
               <p>
-                <strong>Ambulance:</strong> {selectedReservation.ambulance}
+                <strong>Ambulance:</strong> {selectedReservation.clinic.location}
               </p>
             </div>
           )}

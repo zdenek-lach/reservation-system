@@ -1,6 +1,8 @@
+import Clinic from 'types/ClinicType'
 type DoctorWorkhours = {
   id: number;
-  day: Day;
+  date: Day;
+  clinic: Clinic
   timeFrom: string;
   timeTo: string;
 };

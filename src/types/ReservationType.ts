@@ -7,6 +7,8 @@ type Reservation = {
   doctor: Doctor;
   client: Client;
   note: string;
+  date: string;
+  time: string;
 };
 
 export default Reservation;

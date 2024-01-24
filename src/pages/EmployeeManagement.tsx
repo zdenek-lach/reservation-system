@@ -99,7 +99,9 @@ const EmployeeManagement = () => {
               <td>{employee.title}</td>
               <td>{employee.firstName}</td>
               <td>{employee.lastName}</td>
-              <td>{employee.availableClinics.join(', ')}</td>
+              <td>{
+                employee.availableClinics.map(element => `${element.clinic.name}`).join(', ')
+                }</td>
               <td>{employee.title}</td>
               <td>
                 <Button

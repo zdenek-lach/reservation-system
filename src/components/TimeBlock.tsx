@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ReservationForm from './ReservationForm';
-import ReservationSummary from './ReservationSummary';
 
 import ReservationData from 'types/ReservationData';
 
@@ -20,9 +19,6 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ time, date }) => {
         date={date}
         onFormSubmit={(data) => setReservationData(data)}
       />
-      {ReservationData != null && (
-        <ReservationSummary ReservationData={ReservationData} />
-      )}
     </>
   );
 };

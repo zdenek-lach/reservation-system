@@ -3,25 +3,24 @@ import { Button, Modal } from 'react-bootstrap';
 import ReservationData from 'types/ReservationData';
 
 interface ReservationSummaryProps {
-  ReservationData: ReservationData;
+  ReservationData: ReservationData | null;
+  ShowSummary: boolean;
+  SetSummary: (value:boolean) => void;
 }
 
 const ReservationSummary: React.FC<ReservationSummaryProps> = ({
-  ReservationData,
+  ReservationData, ShowSummary, SetSummary
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+  const handleModalClose = () => SetSummary(false);
 
   return (
     <>
-      <Modal show={modalOpen} onHide={handleModalClose}>
+      <Modal show={ShowSummary} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Summary</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {ReservationData && (
+          {ReservationData?.doctor != null && ReservationData.clinic != null && (
             <>
               <p>Vybrané datum: {ReservationData.date}</p>
               <p>Vybraný čas: {ReservationData.time}</p>

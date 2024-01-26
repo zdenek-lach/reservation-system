@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ReservationForm from './ReservationForm';
-
 import ReservationData from 'types/ReservationData';
+import ReservationSummary from './ReservationSummary';
 
 interface TimeBlockProps {
   time: string;
@@ -11,6 +11,11 @@ interface TimeBlockProps {
 const TimeBlock: React.FC<TimeBlockProps> = ({ time, date }) => {
   const [ReservationData, setReservationData] =
     useState<ReservationData | null>(null);
+  const [showSummary, setShowSummary] = useState(false);
+  const onShowSummary = useCallback( () =>
+  {
+    setShowSummary(true);
+  }, [showSummary]);
 
   return (
     <>
@@ -18,7 +23,11 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ time, date }) => {
         time={time}
         date={date}
         onFormSubmit={(data) => setReservationData(data)}
+        onShowSummary={onShowSummary}
       />
+      {(
+        <ReservationSummary ReservationData={ReservationData} ShowSummary={showSummary} SetSummary={setShowSummary}/>
+      )}
     </>
   );
 };

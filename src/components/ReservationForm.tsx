@@ -2,21 +2,21 @@ import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import ReservationData from 'types/ReservationData';
-import ReservationSummary from './ReservationSummary';
 
 interface ReservationFormProps {
   time: string;
   date: Date;
   onFormSubmit: (data: ReservationData) => void;
+  onShowSummary: () => void;
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({
   time,
   date,
   onFormSubmit,
+  onShowSummary,
 }) => {
   const [show, setShow] = useState(false);
-  const [showSummary, setShowSummary] = useState(false);
 
   // States for form inputs
   const [firstName, setFirstname] = useState('');
@@ -43,19 +43,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     };
     onFormSubmit(data); // Pass the data up to the parent component
     setShow(false); // Close the modal
-    setShowSummary(true);
-  };
-
-  const data: ReservationData = {
-    date: date.toLocaleDateString('cs-CZ'),
-    time: time,
-    firstName: firstName,
-    lastName: lastName,
-    phone: phone,
-    email: email,
-    comment: comment,
-    doctor: selectedDoctor,
-    clinic: selectedClinic,
+    onShowSummary();
   };
 
   return (
@@ -130,9 +118,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           </Button>
         </Modal.Footer>
       </Modal>
-      {(
-        <ReservationSummary ReservationData={data} ShowSummary={showSummary} SetSummary={setShowSummary}/>
-      )}
     </>
   );
 };

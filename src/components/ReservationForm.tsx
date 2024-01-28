@@ -7,12 +7,14 @@ interface ReservationFormProps {
   time: string;
   date: Date;
   onFormSubmit: (data: ReservationData) => void;
+  onShowSummary: () => void;
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({
   time,
   date,
   onFormSubmit,
+  onShowSummary,
 }) => {
   const [show, setShow] = useState(false);
 
@@ -41,6 +43,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     };
     onFormSubmit(data); // Pass the data up to the parent component
     setShow(false); // Close the modal
+    onShowSummary();
   };
 
   return (

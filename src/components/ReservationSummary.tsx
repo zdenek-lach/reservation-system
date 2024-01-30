@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import ReservationData from 'types/ReservationData';
+import {addDataToDB} from 'hooks/database/addReservation';
 
 interface ReservationSummaryProps {
   ReservationData: ReservationData | null;
@@ -39,15 +40,9 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
                 {ReservationData.clinic.location}
               </p>
               <Button
-                variant=''
+                variant='success'
                 onClick={() => {
-                  alert(
-                    'Rezervaci jsem poslal Markovi, snad to dobře dopadne, pokud jo, přijde ti mail a' +
-                      ReservationData.date +
-                      ' naklusej v ' +
-                      ReservationData.time +
-                      'do ordinace'
-                  );
+                  addDataToDB(ReservationData)
                 }}
               >
                 Odeslat

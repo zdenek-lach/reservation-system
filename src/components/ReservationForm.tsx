@@ -1,6 +1,8 @@
+import { log } from 'console';
 import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import ReservationData from 'types/ReservationData';
 
 interface ReservationFormProps {
@@ -8,6 +10,15 @@ interface ReservationFormProps {
   date: Date;
   onFormSubmit: (data: ReservationData) => void;
   onShowSummary: () => void;
+}
+
+class WorkDateTime {
+  date: Date = new Date();
+  time: string = "";
+  constructor(date: Date, time: string){
+    this.date = date;
+    this.time = time;
+  }
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -46,16 +57,33 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     onShowSummary();
   };
 
+  enum ButtonType {
+    Enabled = "success",
+    Disabled = "danger",
+  }
+
+  var enabledButton: ButtonType = ButtonType.Disabled;
+  const work = selectedDoctor?.availableClinics.filter((x) => x.clinic.name == selectedClinic?.name);
+  var workDateTimeList: WorkDateTime[] = [];
+
+  work?.forEach(entry => {
+    workDateTimeList.push(new WorkDateTime(entry.date, entry.timeFrom))
+  });
+  if(work != undefined && work.length > 0)
+  {
+    enabledButton = ButtonType.Enabled;
+  }
+
   return (
     <>
       <Button
         style={{
           borderRadius: '20px',
         }}
-        variant="danger"
+        variant={enabledButton}
         onClick={() => setShow(true)}
       >
-        {time}
+        {time} [{JSON.stringify(date)}] = {JSON.stringify(workDateTimeList)}
       </Button>
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>

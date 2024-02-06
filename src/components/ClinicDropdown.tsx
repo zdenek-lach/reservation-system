@@ -13,7 +13,7 @@ const ClinicDropdown = () => {
         <Dropdown.Toggle variant="success" id="dropdown-basic">
           {selectedClinic != null
             ? `${selectedClinic.name} ${selectedClinic.location}`
-            : 'Clinic'}
+            : 'Vyberte Kliniku'}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>{listClinicsAsMenuItems()}</Dropdown.Menu>

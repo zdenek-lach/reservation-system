@@ -63,7 +63,19 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   }
 
   var enabledButton: ButtonType = ButtonType.Disabled;
-  const work = selectedDoctor?.availableClinics.filter((x) => x.clinic.name == selectedClinic?.name);
+  const work = selectedDoctor?.availableClinics.filter((x) => {
+    if (x.clinic.name == selectedClinic?.name)
+    {
+      var dateCopy = new Date((x.date as string));
+      var csDateCopy =  dateCopy.toLocaleDateString('cs-CZ');
+      var csDate = date.toLocaleDateString('cs-CZ')
+      if( csDate == csDateCopy)
+      {
+        return true;
+      }
+    }
+    return false
+  });
   var workDateTimeList: WorkDateTime[] = [];
 
   work?.forEach(entry => {
@@ -83,7 +95,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         variant={enabledButton}
         onClick={() => setShow(true)}
       >
-        {time} [{JSON.stringify(date)}] = {JSON.stringify(workDateTimeList)}
+        {time}
       </Button>
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>

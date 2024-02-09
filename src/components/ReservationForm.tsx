@@ -63,24 +63,45 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   }
 
   var enabledButton: ButtonType = ButtonType.Disabled;
+  //work - List of shifts from selected doctor, where the date is the same as the date of timeblock
   const work = selectedDoctor?.availableClinics.filter((x) => {
     if (x.clinic.name == selectedClinic?.name)
     {
-      var dateCopy = new Date((x.date as string));
-      var csDateCopy =  dateCopy.toLocaleDateString('cs-CZ');
+      var dateCopy = new Date((x.date as unknown) as string);
+      var csDateCopy = dateCopy.toLocaleDateString('cs-CZ');
       var csDate = date.toLocaleDateString('cs-CZ')
+      var shiftTimeStartArray = x.timeFrom.split(':')
+      var shiftTimeEndArray = x.timeTo.split(':')
+      var timeblockTimeArray = time.split(':')
+      var doesTimeMatchInShift = false;
+      if(shiftTimeStartArray != undefined && shiftTimeStartArray != null && shiftTimeStartArray.length >= 2)
+      {
+        if(shiftTimeEndArray != undefined && shiftTimeEndArray != null && shiftTimeEndArray.length >= 2)
+        {
+          if(timeblockTimeArray != undefined && timeblockTimeArray != null && timeblockTimeArray.length >= 2)
+          {
+            var shiftTimeStartHour = (shiftTimeStartArray[0] as unknown) as number;
+            //var shiftTimeStartMinute = (shiftTimeStartArray[1] as unknown) as number;
+            var shiftTimeEndHour = (shiftTimeEndArray[0] as unknown) as number;
+            //var shiftTimeEndMinute = (shiftTimeEndArray[1] as unknown) as number;
+            var timeblockTimeHour = (timeblockTimeArray[0] as unknown) as number;
+            //var timeblockTimeMinute = (timeblockTimeArray[1] as unknown) as number;
+            if(timeblockTimeHour >= shiftTimeStartHour && timeblockTimeHour < shiftTimeEndHour)
+            {
+              doesTimeMatchInShift = true;
+            }
+
+          }
+        }
+      }
       if( csDate == csDateCopy)
       {
-        return true;
+        return true && doesTimeMatchInShift;
       }
     }
     return false
   });
-  var workDateTimeList: WorkDateTime[] = [];
-
-  work?.forEach(entry => {
-    workDateTimeList.push(new WorkDateTime(entry.date, entry.timeFrom))
-  });
+  //Check if there is any shift with the date same as the date of this timeblock (which is one level up from this)
   if(work != undefined && work.length > 0)
   {
     enabledButton = ButtonType.Enabled;

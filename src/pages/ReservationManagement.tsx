@@ -50,51 +50,6 @@ const ReservationManagement = () => {
 
   return (
     <div>
-      {/* <div className="d-flex justify-content-between align-items-center mb-3">
-        <div className="d-flex">
-          <Dropdown className="mr-2">
-            <Dropdown.Toggle variant="secondary" id="ambulance-dropdown">
-              Ambulance
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Ambulance Orlová</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">
-                Ambulance Český Těšín
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Ambulance Ostrava</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <Dropdown className="mr-2">
-            <Dropdown.Toggle variant="secondary" id="doctor-dropdown">
-              Doktor
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">MUDr. Jan Novák</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">
-                MUDr. Ludmila Černohorská
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">MUDr. Petr Dvořák</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <Form>
-            <Form.Control type="date" className="mr-sm-2" />
-            <Form.Control type="date" className="mr-sm-2" />
-          </Form>
-        </div>
-
-        <Form>
-          <Form.Control
-            type="text"
-            placeholder="Vyhledat"
-            className="mr-sm-2"
-          />
-        </Form>
-      </div> */}
-
       <Table striped bordered hover>
         <thead>
           <tr>

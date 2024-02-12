@@ -1,31 +1,35 @@
 import ClinicDropdown from 'components/ClinicDropdown';
+import DoctorCard from 'components/DoctorCard';
 import DoctorDropdown from 'components/DoctorDropdown';
+import MessageToast from 'components/MessageToast';
 import WeekGrid from 'components/WeekGrid';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import DoctorCard from '../components/DoctorCard';
 
 const AppointmentPage = () => {
-  const { selectedDoctor } = useAppContext();
-
+  const { selectedDoctor, showMessageToast, setShowMessageToast } =
+    useAppContext();
   const [currentWeek, setCurrentWeek] = useState(() => {
     const date = new Date();
     const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust to Monday
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
     date.setDate(diff);
-    date.setHours(0, 0, 0, 0); // set time to 00:00:00.000
+    date.setHours(0, 0, 0, 0);
     return date;
   });
-
   return (
     <Container
       fluid
       style={{ minHeight: '100vh', backgroundPosition: 'center' }}
     >
+      {showMessageToast && (
+        <div>
+          <MessageToast message="Rezervace úspěšně vytvořena!" />
+        </div>
+      )}
       <Row className="mb-4">
-        {/* Left Section: Week, Doctor, and Clinic Dropdowns */}
         <Col
           md
           style={{
@@ -54,8 +58,7 @@ const AppointmentPage = () => {
             <WeekGrid startOfWeek={currentWeek} />
           </Card>
         </Col>
-
-        {/* Right Section: Doctor Card */}
+        {}
         {selectedDoctor != null && (
           <Col
             style={{
@@ -74,5 +77,4 @@ const AppointmentPage = () => {
     </Container>
   );
 };
-
 export default AppointmentPage;

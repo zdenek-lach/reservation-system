@@ -1,24 +1,13 @@
-import { useState } from 'react';
-import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
+import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import { useReservations } from 'hooks/useReservations';
+import { useState } from 'react';
+import { Button, Modal, Table } from 'react-bootstrap';
 import Reservation from 'types/ReservationType';
-
-// interface Reservation {
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   phone: string;
-//   email: string;
-//   date: string;
-//   time: string;
-//   doctor: string;
-//   ambulance: string;
-// }
+import config from '../../config/config.json';
 
 const ReservationManagement = () => {
   const { reservationsList } = useAppContext();
-  const reservations  = reservationsList;
   const { loadingReservations, errorReservations } = useReservations();
 
   const [showModal, setShowModal] = useState(false);
@@ -36,8 +25,17 @@ const ReservationManagement = () => {
   };
 
   const handleDeleteReservation = (reservation: Reservation) => {
-    // Add your logic to delete the reservation from the data source here
-    console.log(`Deleting reservation ${reservation.id}`);
+    const deleteUrl = config.api.reservationsApi.delete + `/${reservation.id}`;
+
+    axios
+      .delete(deleteUrl)
+      .then((response) => {
+        console.log(`Successfully deleted reservation ${reservation.id}`);
+        console.log(response.status);
+      })
+      .catch((error) => {
+        console.error(`Error deleting reservation ${reservation.id}:`, error);
+      });
   };
 
   const handleAddReservation = () => {
@@ -52,7 +50,7 @@ const ReservationManagement = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      {/* <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="d-flex">
           <Dropdown className="mr-2">
             <Dropdown.Toggle variant="secondary" id="ambulance-dropdown">
@@ -95,62 +93,65 @@ const ReservationManagement = () => {
             className="mr-sm-2"
           />
         </Form>
-      </div>
+      </div> */}
 
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>Číslo</th>
-            <th>Jméno</th>
+            {/* <th>Jméno</th> */}
             <th>Příjmení</th>
-            <th>Telefon</th>
-            <th>E-mail</th>
+            {/* <th>Telefon</th> */}
+            {/* <th>E-mail</th> */}
             <th>Datum a čas</th>
             <th>Doktor</th>
             <th>Ambulance</th>
-            <th>Akce</th>
+            {/* <th>Akce</th> */}
           </tr>
         </thead>
         <tbody>
-          {reservations != null && reservations.map((reservation) => (
-            <tr key={reservation.id}>
-              <td>{reservation.id}</td>
-              <td>{reservation.client.firstName}</td>
-              <td>{reservation.client.lastName}</td>
-              <td>{reservation.client.phoneNumber}</td>
-              <td>{reservation.client.email}</td>
-              <td>
-                {reservation.date} {reservation.time}
-              </td>
-              <td>{reservation.doctor.firstName} {reservation.doctor.lastName}</td>
-              <td>{reservation.clinic.name}</td>
-              <td>
-                <Button
-                  variant="info"
-                  size="sm"
-                  className="mr-1"
-                  onClick={() => handleShowModal(reservation)}
-                >
-                  i
-                </Button>
-                <Button
-                  variant="warning"
-                  size="sm"
-                  className="mr-1"
-                  onClick={() => handleEditReservation(reservation)}
-                >
-                  ✏️
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDeleteReservation(reservation)}
-                >
-                  🗑️
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {reservationsList != null &&
+            reservationsList.map((reservation) => (
+              <tr key={reservation.id}>
+                <td>{reservation.id}</td>
+                {/* <td>{reservation.client.firstName}</td> */}
+                <td>{reservation.client.lastName}</td>
+                {/* <td>{reservation.client.phoneNumber}</td> */}
+                {/* <td>{reservation.client.email}</td> */}
+                <td>
+                  {reservation.date} {reservation.time}
+                </td>
+                <td>
+                  {reservation.doctor.firstName} {reservation.doctor.lastName}
+                </td>
+                <td>{reservation.clinic.name}</td>
+                <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    className="mr-1"
+                    onClick={() => handleShowModal(reservation)}
+                  >
+                    i
+                  </Button>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    className="mr-1"
+                    onClick={() => handleEditReservation(reservation)}
+                  >
+                    ✏️
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDeleteReservation(reservation)}
+                  >
+                    🗑️
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
 
@@ -175,20 +176,23 @@ const ReservationManagement = () => {
                 <strong>Příjmení:</strong> {selectedReservation.client.lastName}
               </p>
               <p>
-                <strong>Telefon:</strong> {selectedReservation.client.phoneNumber}
+                <strong>Telefon:</strong>
+                {selectedReservation.client.phoneNumber}
               </p>
               <p>
                 <strong>E-mail:</strong> {selectedReservation.client.email}
               </p>
               <p>
-                <strong>Datum a čas:</strong> {selectedReservation.date}{' '}
+                <strong>Datum a čas:</strong> {selectedReservation.date}
                 {selectedReservation.time}
               </p>
               <p>
-                <strong>Doktor:</strong> {selectedReservation.doctor.firstName} + {selectedReservation.doctor.lastName}
+                <strong>Doktor:</strong> {selectedReservation.doctor.firstName}+{' '}
+                {selectedReservation.doctor.lastName}
               </p>
               <p>
-                <strong>Ambulance:</strong> {selectedReservation.clinic.location}
+                <strong>Ambulance:</strong>
+                {selectedReservation.clinic.name}
               </p>
             </div>
           )}

@@ -1,9 +1,24 @@
 {
   "api": {
-    "doctorsApiUrl": "http://127.0.0.1:8000/api/doctors",
-    "clinicsApiUrl": "http://127.0.0.1:8000/api/clinics",
-    "reservationsApiUrl": "http://127.0.0.1:8000/api/reservations",
-    "addReservationApiUrl": "http://127.0.0.1:8000/api/add/reservation"
+    "doctorsApi": {
+      "list": "http://127.0.0.1:8000/api/doctors",
+      "detail": "http://127.0.0.1:8000/api/doctor",
+      "add": "http://127.0.0.1:8000/api/add/doctor",
+      "edit": "http://127.0.0.1:8000/api/edit/doctor",
+      "delete": "http://127.0.0.1:8000/api/delete/doctor"
+    },
+    "clinicsApi": {
+      "list": "http://127.0.0.1:8000/api/clinics",
+      "add": "http://127.0.0.1:8000/api/add/clinic",
+      "edit": "http://127.0.0.1:8000/api/edit/clinic",
+      "delete": "http://127.0.0.1:8000/api/delete/clinic"
+    },
+    "reservationsApi": {
+      "list": "http://127.0.0.1:8000/api/reservations",
+      "add": "http://127.0.0.1:8000/api/add/reservation",
+      "edit": "http://127.0.0.1:8000/api/edit/reservation",
+      "delete": "http://127.0.0.1:8000/api/delete/reservation"
+    }
   },
   "general": {
     "colorPalette": 1,

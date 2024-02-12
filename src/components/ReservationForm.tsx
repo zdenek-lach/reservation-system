@@ -10,15 +10,6 @@ interface ReservationFormProps {
   onShowSummary: () => void;
 }
 
-class WorkDateTime {
-  date: Date = new Date();
-  time: string = '';
-  constructor(date: Date, time: string) {
-    this.date = date;
-    this.time = time;
-  }
-}
-
 const ReservationForm: React.FC<ReservationFormProps> = ({
   time,
   date,
@@ -36,6 +27,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     comment: '',
   });
 
+  const [validationError, setValidationError] = useState('');
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -46,21 +39,59 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   // Get selected doctor and clinic from context
   const { selectedDoctor, selectedClinic } = useAppContext();
 
-  const handleFormSubmit = () => {
-    // Collect the form data
-    const data: ReservationData = {
-      date: date.toLocaleDateString('cs-CZ'),
-      time,
-      doctor: selectedDoctor,
-      clinic: selectedClinic,
-      ...formData,
-    };
+  const validateForm = () => {
+    const { firstName, lastName, phone, email } = formData;
 
-    onFormSubmit(data); // Pass the data up to the parent component
-    setShow(false); // Close the modal
-    onShowSummary();
+    if (!firstName) {
+      setValidationError('Prosím vyplňte své jméno.');
+      return false;
+    }
+
+    if (!lastName) {
+      setValidationError('Prosím vyplňte své příjmení.');
+      return false;
+    }
+
+    if (!phone || !email) {
+      setValidationError('Prosím vyplňte všechny požadované údaje.');
+      return false;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationError('Prosím vložte email ve správném formátu.');
+      return false;
+    }
+
+    // Basic phone number validation
+    const phoneRegex = /^\d{9}$/; // Adjust this regex based on your phone number format
+    if (!phoneRegex.test(phone)) {
+      setValidationError('Prosím vložte platné telefonní číslo.');
+      return false;
+    }
+
+    // Clear any previous validation errors
+    setValidationError('');
+    return true;
   };
 
+
+  const handleFormSubmit = () => {
+    if (validateForm()) {
+      const data: ReservationData = {
+        date: date.toLocaleDateString('cs-CZ'),
+        time,
+        doctor: selectedDoctor,
+        clinic: selectedClinic,
+        ...formData,
+      };
+
+      onFormSubmit(data);
+      setShow(false);
+      onShowSummary();
+    }
+  };
   enum ButtonType {
     Enabled = 'success',
     Disabled = 'danger',
@@ -119,7 +150,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     enabledButton = ButtonType.Enabled;
   }
 
-  return (
+   return (
     <>
       <Button
         style={{
@@ -143,6 +174,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               <br />
               <Form.Label>Vybraný čas: {time}</Form.Label>
             </Form.Group>
+            {/* Display validation error if present */}
+            {validationError && (
+              <div style={{ color: 'red', marginBottom: '10px' }}>
+                {validationError}
+              </div>
+            )}
             <Form.Group controlId="firstName">
               <Form.Label>Jméno</Form.Label>
               <Form.Control

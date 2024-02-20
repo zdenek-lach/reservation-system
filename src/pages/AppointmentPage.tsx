@@ -1,7 +1,7 @@
-import ClinicDropdown from 'components/ClinicDropdown';
 import DoctorCard from 'components/DoctorCard';
-import DoctorDropdown from 'components/DoctorDropdown';
 import MessageToast from 'components/MessageToast';
+import ReservationClinicDropdown from 'components/ReservationClinicDropdown';
+import ReservationDoctorDropdown from 'components/ReservationDoctorDropdown';
 import WeekGrid from 'components/WeekGrid';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
@@ -48,10 +48,10 @@ const AppointmentPage = () => {
           </Row>
           <Row className="justify-content-center">
             <Col className="mb-4 d-flex justify-content-center">
-              <DoctorDropdown />
+              <ReservationDoctorDropdown />
             </Col>
             <Col className="mb-4 d-flex justify-content-center">
-              <ClinicDropdown />
+              <ReservationClinicDropdown />
             </Col>
           </Row>
           <Card style={{ backgroundColor: '#666' }}>

@@ -3,11 +3,11 @@ import { useClinics } from 'hooks/useClinics';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Spinner from 'react-bootstrap/Spinner';
 
-const ClinicDropdown = () => {
+const ReservationClinicDropdown = () => {
   const { selectedClinic, setSelectedClinic, clinicList } = useAppContext();
   const { loadingClinics, errorClinics } = useClinics();
 
-  const renderClinicDropdown = () => {
+  const renderReservationClinicDropdown = () => {
     return (
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -47,8 +47,8 @@ const ClinicDropdown = () => {
       </strong>
     </div> // Adjust this part based on how you want to display errors
   ) : (
-    renderClinicDropdown()
+    renderReservationClinicDropdown()
   );
 };
 
-export default ClinicDropdown;
+export default ReservationClinicDropdown;

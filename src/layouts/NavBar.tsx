@@ -14,7 +14,7 @@ const NavBar: React.FC = () => {
   };
   const navigate = useNavigate();
   return (
-    <Navbar bg="danger" variant="dark" expand="lg">
+    <Navbar bg="danger" variant="dark" expand="lg" className="p-3">
       <Container>
         <Navbar.Brand
           onClick={() => {
@@ -27,7 +27,7 @@ const NavBar: React.FC = () => {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav>
-            <Nav.Item className="text-light d-flex align-items-center">
+            <Nav.Item className="text-light p-2 d-flex align-items-center">
               verze {packageJson.version}
             </Nav.Item>
 

@@ -17,9 +17,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
-  const [doctorList, setDoctorList] = useState<Doctor[] | null>(null);
-  const [clinicList, setClinicList] = useState<Clinic[] | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [doctorList, setDoctorList] = useState(() => {
+    const storedContext = localStorage.getItem('appContext');
+    return storedContext ? JSON.parse(storedContext).doctorList : null;
+  });
+
+  const [clinicList, setClinicList] = useState(() => {
+    const storedContext = localStorage.getItem('appContext');
+    return storedContext ? JSON.parse(storedContext).clinicList : null;
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const storedContext = localStorage.getItem('appContext');
+    return storedContext ? JSON.parse(storedContext).isLoggedIn : false;
+  });
   const [reservationsList, setReservationsList] = useState<
     Reservation[] | null
   >(null);
@@ -30,8 +41,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     const storedContext = localStorage.getItem('appContext');
     if (storedContext) {
       const parsedContext = JSON.parse(storedContext);
-      setDoctorList(parsedContext.doctorList);
-      setClinicList(parsedContext.clinicList);
       setSelectedDoctor(parsedContext.selectedDoctor);
       setSelectedClinic(parsedContext.selectedClinic);
       setIsLoggedIn(parsedContext.isLoggedIn);

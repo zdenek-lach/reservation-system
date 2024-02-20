@@ -1,7 +1,7 @@
 import DoctorWorkhours from "./DoctorWorkhoursType";
 
 type Doctor = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   description: string;

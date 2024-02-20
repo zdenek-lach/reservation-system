@@ -25,6 +25,7 @@ const ReservationManagement = () => {
   const [editedEmail, setEditedEmail] = useState('');
   const [editedDate, setEditedDate] = useState('');
   const [editedTime, setEditedTime] = useState('');
+  const [editedNote, setEditedNote] = useState('');
   const [editedAmbulance, setEditedAmbulance] = useState<Clinic | null>(null);
   const [editedDoctor, setEditedDoctor] = useState<Doctor | null>(null);
 
@@ -47,6 +48,7 @@ const ReservationManagement = () => {
     setEditedEmail(reservation.client.email);
     setEditedDate(reservation.date);
     setEditedTime(reservation.time);
+    setEditedNote(reservation.note);
     setEditedAmbulance(reservation.clinic);
     setEditedDoctor(reservation.doctor);
 
@@ -101,6 +103,9 @@ const ReservationManagement = () => {
   const handleEditTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedTime(event.target.value);
   };
+  const handleEditNote = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedNote(event.target.value);
+  }
 
   const handleSaveChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -109,9 +114,9 @@ const ReservationManagement = () => {
         config.api.reservationsApi.edit + `/${selectedReservation.id}`;
 
       const updatedReservation = {
-        ...selectedReservation,
+        id: selectedReservation.id,
         client: {
-          ...selectedReservation.client,
+          id: selectedReservation.client.id,
           firstName: editedFirstName,
           lastName: editedLastName,
           email: editedEmail,
@@ -120,13 +125,14 @@ const ReservationManagement = () => {
         date: editedDate,
         time: editedTime,
         clinic: {
-          ...selectedReservation.clinic,
-          name: editedAmbulance,
+          id: editedAmbulance?.id,
+          ...editedAmbulance,
         },
         doctor: {
-          ...selectedReservation.doctor,
-          firstName: editedDoctor,
+          id: editedDoctor?.id,
+          ...editedDoctor,
         },
+        note: editedNote,
       };
 
       axios
@@ -161,6 +167,7 @@ const ReservationManagement = () => {
         <thead>
           <tr>
             <th>Číslo</th>
+            <th>Jméno</th>
             <th>Příjmení</th>
             <th>Datum a čas</th>
             <th>Doktor</th>
@@ -172,6 +179,7 @@ const ReservationManagement = () => {
             reservationsList.map((reservation) => (
               <tr key={reservation.id}>
                 <td>{reservation.id}</td>
+                <td>{reservation.client.firstName}</td>
                 <td>{reservation.client.lastName}</td>
                 <td>
                   {reservation.date} {reservation.time}
@@ -298,6 +306,10 @@ const ReservationManagement = () => {
           <label>
             Čas:
             <input type="text" value={editedTime} onChange={handleEditTime} />
+          </label>
+          <label>
+            Poznámka:
+            <input type="text" value={editedNote} onChange={handleEditNote} />
           </label>
           <label>
             Doktor:

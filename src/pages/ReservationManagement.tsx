@@ -102,7 +102,7 @@ const ReservationManagement = () => {
     setEditedTime(event.target.value);
   };
 
-  const handleSaveChanges = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleSaveChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (selectedReservation) {
       const editUrl =

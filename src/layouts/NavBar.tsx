@@ -27,9 +27,10 @@ const NavBar: React.FC = () => {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav>
-            <Nav.Item className="text-light">
+            <Nav.Item className="text-light d-flex align-items-center">
               verze {packageJson.version}
             </Nav.Item>
+
             {isLoggedIn ? (
               <>
                 <Button
@@ -47,7 +48,9 @@ const NavBar: React.FC = () => {
                 </Nav.Link>
               </>
             ) : (
-              <Nav.Link href="/login">Log In</Nav.Link>
+              <Nav.Link className="d-flex align-items-center" href="/login">
+                Log In
+              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

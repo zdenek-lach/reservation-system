@@ -1,6 +1,6 @@
 import { useAppContext } from 'context/AppContext';
 import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import packageJson from '../../package.json';
 
@@ -20,6 +20,7 @@ const NavBar: React.FC = () => {
           onClick={() => {
             navigate('appointment-page');
           }}
+          className="d-flex align-items-center"
         >
           Rezervační systém Artromedi
         </Navbar.Brand>
@@ -30,9 +31,21 @@ const NavBar: React.FC = () => {
               verze {packageJson.version}
             </Nav.Item>
             {isLoggedIn ? (
-              <Nav.Link href="/" onClick={handleLogout}>
-                Log Out
-              </Nav.Link>
+              <>
+                <Button
+                  variant="secondary"
+                  onClick={() => navigate('/management')}
+                >
+                  Management
+                </Button>
+                <Nav.Link
+                  href="/"
+                  onClick={handleLogout}
+                  className="d-flex align-items-center"
+                >
+                  Log Out
+                </Nav.Link>
+              </>
             ) : (
               <Nav.Link href="/login">Log In</Nav.Link>
             )}

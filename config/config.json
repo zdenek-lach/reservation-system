@@ -19,7 +19,7 @@
       "edit": "http://127.0.0.1:8000/api/edit/reservation",
       "delete": "http://127.0.0.1:8000/api/delete/reservation"
     },
-    "login":"http://127.0.0.1:8000/api/login"
+    "login":"http://127.0.0.1:8000/api/token"
   },
   "general": {
     "colorPalette": 1,

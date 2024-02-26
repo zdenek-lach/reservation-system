@@ -15,6 +15,7 @@ import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import Reservation from 'types/ReservationType';
 import Doctor from './../types/DoctorType';
+import DoctorFaker from 'components/DoctorFaker';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -50,30 +51,7 @@ const MyReservations = () => {
 
   return (
     <StyledContainer>
-      <Container>
-        <label>
-          Jsem: Doktor:
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              {loggedUser != null
-                ? `${loggedUser.title} ${loggedUser.firstName} ${loggedUser.lastName}`
-                : 'Vyberte Doktora'}
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {doctorList &&
-                doctorList.map((doctor) => (
-                  <Dropdown.Item
-                    key={doctor.id}
-                    onClick={() => setLoggedUser(doctor)}
-                  >
-                    {`${doctor.title} ${doctor.firstName} ${doctor.lastName}`}
-                  </Dropdown.Item>
-                ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </label>
-      </Container>
+      <DoctorFaker loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
       <Container>
         <Table striped bordered hover>
           <thead>
@@ -167,7 +145,6 @@ const MyReservations = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-      
       </Container>
     </StyledContainer>
   );

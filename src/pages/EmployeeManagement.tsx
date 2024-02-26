@@ -1,15 +1,15 @@
+import { useAppContext } from 'context/AppContext';
+import { useDoctors } from 'hooks/useDoctors';
 import { useState } from 'react';
 import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
-import { useDoctors } from 'hooks/useDoctors';
+import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
 import Doctors from 'types/DoctorType';
-import { useAppContext } from 'context/AppContext';
 
 const EmployeeManagement = () => {
-  
   const { doctorList } = useAppContext();
-  const employee  = doctorList;
+  const employee = doctorList;
   const { loadingDoctors, errorDoctors } = useDoctors();
-  
+
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Doctors | null>(
     null
@@ -93,43 +93,46 @@ const EmployeeManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {employee != null && employee.map((employee) => (
-            <tr key={employee.id}>
-              <td>{employee.id}</td>
-              <td>{employee.title}</td>
-              <td>{employee.firstName}</td>
-              <td>{employee.lastName}</td>
-              <td>{
-                employee.availableClinics.map(element => `${element.clinic.name}`).join(', ')
-                }</td>
-              <td>{employee.title}</td>
-              <td>
-                <Button
-                  variant="info"
-                  size="sm"
-                  className="mr-1"
-                  onClick={() => handleShowModal(employee)}
-                >
-                  i
-                </Button>
-                <Button
-                  variant="warning"
-                  size="sm"
-                  className="mr-1"
-                  onClick={() => handleEditEmployee(employee)}
-                >
-                  ✏️
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDeleteEmployee(employee)}
-                >
-                  🗑️
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {employee != null &&
+            employee.map((employee) => (
+              <tr key={employee.id}>
+                <td>{employee.id}</td>
+                <td>{employee.title}</td>
+                <td>{employee.firstName}</td>
+                <td>{employee.lastName}</td>
+                <td>
+                  {employee.availableClinics
+                    .map((element) => `${element.clinic.name}`)
+                    .join(', ')}
+                </td>
+                <td>{employee.title}</td>
+                <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    className="mr-1"
+                    onClick={() => handleShowModal(employee)}
+                  >
+                    <InfoCircle />
+                  </Button>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    className="mr-1"
+                    onClick={() => handleEditEmployee(employee)}
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDeleteEmployee(employee)}
+                  >
+                    <Trash3Fill />
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
 

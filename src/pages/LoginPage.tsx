@@ -3,58 +3,64 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import axios from 'axios';
-import { FormEventHandler } from 'react';
+import { useState } from 'react';
+import { login } from './../security/AuthService';
+import ApiTester from 'components/ApiTester';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useAppContext();
-  const handleLoginButton = (e:Event) => {
-    //TODO: login logic
-    e.preventDefault()
-      const editUrl =
-        config.api.login;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-      const username = e.target[0].value;
-      const password = e.target[1].value;
+  const handleLoginButton = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
 
     const loginData = {
-      "username": username,
-      "password": password,
+      username: username,
+      password: password,
     };
 
     axios
-      .post(editUrl, loginData)
+      .post(config.api.authApi.getToken, loginData)
       .then((response) => {
-        console.log(
-          `Successfully logged in`
-        );
+        console.log(`Successfully logged in`);
         console.log(response.status);
+        setIsLoggedIn(true);
+        login(username,password);
+        navigate('/management');
       })
       .catch((error) => {
-        console.error(
-          `Error while logging in:`,
-          error
-        );
+        console.error(`Error while logging in:`, error);
       });
-
-    setIsLoggedIn(true);
-    navigate('/management');
   };
+
   return (
     <Container className="mt-5">
       <h2>Login</h2>
+      <ApiTester/>
       <Form id="loginForm" onSubmit={handleLoginButton}>
         <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Label>Uživatelské jméno</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Uživatelské jméno"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
+          <Form.Label>Heslo</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="TajneHeslo123"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" onClick={handleLoginButton}>
           Login
         </Button>
       </Form>

@@ -177,7 +177,15 @@ const ReservationManagement = () => {
   };
 
   return (
-    <Container>
+    <Container
+      style={{
+        backgroundColor: 'rgba(255, 0, 0, 0.4)',
+        padding: '20px',
+        borderRadius: '15px',
+        marginTop: '20px',
+        marginLeft: '20px',
+      }}
+    >
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -189,7 +197,15 @@ const ReservationManagement = () => {
             <th>Ambulance</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody
+          style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '15px',
+            marginTop: '20px',
+            marginLeft: '20px',
+          }}
+        >
           {reservationsList != null &&
             reservationsList.map((reservation) => (
               <tr key={reservation.id}>

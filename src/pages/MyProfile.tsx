@@ -1,23 +1,14 @@
-import ApiTester from 'components/ApiTester';
 import DoctorFaker from 'components/DoctorFaker';
 import WeekGrid2 from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
-import { useEffect, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
-
-const StyledContainer = styled(Container)`
-  margin-top: 20px;
-`;
-
-const StyledForm = styled(Form)`
-  margin-bottom: 20px;
-`;
 
 const MyProfile = () => {
   const [loggedUser, setLoggedUser] = useState<Doctor | null>(null);
@@ -75,16 +66,33 @@ const MyProfile = () => {
       console.log(config.api.doctorsApi.edit);
     }
   };
+  const submitDoctorWorkHours: FormEventHandler<HTMLFormElement> | undefined = (
+    e
+  ) => {
+    e.preventDefault();
+  };
+
+  const StyledContainer = styled(Container)`
+    margin-top: 20px;
+    // margin-left: 2rem;
+    background-color: rgba(255, 0, 0, 0.4);
+    padding: 2rem;
+            borderRadius: 15px,
+            marginTop: 20px,
+            marginLeft: 20px,
+  `;
 
   return (
     <StyledContainer>
-      <ApiTester />
-
       <Row>
-        <Col>
+        <Col md={2}>
+          {/* This will take up 4 out of 12 columns on medium and larger screens */}
           <h2>Můj profil</h2>
           <DoctorFaker loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
-          <StyledForm onSubmit={submitDoctorProfileChanges}>
+          <Form onSubmit={submitDoctorProfileChanges}>
+            <Form.Label>
+              <h3>Profil lékaře</h3>
+            </Form.Label>
             <Form.Group>
               <Form.Label>Titul</Form.Label>
               <Form.Control
@@ -145,8 +153,19 @@ const MyProfile = () => {
                 <PlusCircle />
               </Button>
             </Form.Group>
+
+            <Button variant="primary" type="submit">
+              Uložit změny
+            </Button>
+          </Form>
+        </Col>
+        <Col md={8}>
+          {/* This will take up 8 out of 12 columns on medium and larger screens */}
+          <Form onSubmit={submitDoctorWorkHours}>
             <Form.Group>
-              <Form.Label>Pracovní hodiny</Form.Label>
+              <Form.Label>
+                <h3>Pracovní hodiny</h3>
+              </Form.Label>
 
               <WeekPicker
                 currentWeek={currentWeek}
@@ -157,10 +176,9 @@ const MyProfile = () => {
             <Button variant="primary" type="submit">
               Uložit změny
             </Button>
-          </StyledForm>
+          </Form>
         </Col>
       </Row>
-      <Row></Row>
     </StyledContainer>
   );
 };

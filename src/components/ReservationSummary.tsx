@@ -103,5 +103,4 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
     </>
   );
 };
-
 export default ReservationSummary;

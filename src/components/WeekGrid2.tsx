@@ -38,7 +38,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({ startOfWeek }) => {
   };
 
   return (
-    <Table striped size="sm" className="my-3">
+    <Table striped size="md" md={8}>
       <tbody>
         {days.map((day, index) => {
           const dayDate = new Date(

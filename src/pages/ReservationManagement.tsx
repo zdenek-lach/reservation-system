@@ -7,7 +7,7 @@ import { useReservations } from 'hooks/useReservations';
 import { useState } from 'react';
 import { Button, Container, Dropdown, Modal, Table } from 'react-bootstrap';
 import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
-import authHeader from 'security/AuthHeader.ts';
+import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';

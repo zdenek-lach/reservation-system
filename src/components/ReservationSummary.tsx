@@ -2,10 +2,10 @@ import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { authHeader } from 'security/AuthService';
 import ReservationData from 'types/ReservationData';
 import ReservationDto from 'types/ReservationDtoType';
 import config from '../../config/config.json';
-import authHeader from 'security/AuthHeader.ts';
 
 interface ReservationSummaryProps {
   ReservationData: ReservationData | null;

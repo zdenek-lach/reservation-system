@@ -13,6 +13,7 @@ import {
   createRoutesFromElements,
 } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
+import { refreshCheck } from 'security/AuthService';
 import AppointmentPage from './pages/AppointmentPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
@@ -20,9 +21,11 @@ import LoginPage from './pages/LoginPage';
 import Management from './pages/Management';
 
 export const App = () => {
-  const {
-    isLoggedIn,
-  } = useAppContext();
+  const { isLoggedIn } = useAppContext();
+
+  let theRunner = setInterval(function () {
+    refreshCheck();
+  }, 1000 * 10);
 
   const router = createBrowserRouter(
     createRoutesFromElements(

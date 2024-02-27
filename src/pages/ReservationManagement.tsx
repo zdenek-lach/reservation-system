@@ -13,7 +13,8 @@ import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
 
 const ReservationManagement = () => {
-  const { reservationsList, doctorList, clinicList } = useAppContext();
+  const { reservationsList, setReservationsList, doctorList, clinicList } =
+    useAppContext();
   const { loadingReservations, errorReservations } = useReservations();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -69,6 +70,14 @@ const ReservationManagement = () => {
       .then((response) => {
         console.log(`Successfully deleted reservation ${reservation.id}`);
         console.log(response.status);
+
+        if (reservationsList) {
+          // Update the reservationsList state after successful deletion
+          const updatedReservations = reservationsList.filter(
+            (res) => res.id !== reservation.id
+          );
+          setReservationsList(updatedReservations);
+        }
       })
       .catch((error) => {
         console.error(`Error deleting reservation ${reservation.id}:`, error);
@@ -105,7 +114,7 @@ const ReservationManagement = () => {
   };
   const handleEditNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedNote(event.target.value);
-  }
+  };
 
   const handleSaveChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();

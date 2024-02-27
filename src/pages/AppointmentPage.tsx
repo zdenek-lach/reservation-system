@@ -19,6 +19,8 @@ const AppointmentPage = () => {
     date.setHours(0, 0, 0, 0);
     return date;
   });
+
+  
   return (
     <Container
       fluid

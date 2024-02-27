@@ -76,7 +76,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     return true;
   };
 
-
   const handleFormSubmit = () => {
     if (validateForm()) {
       const data: ReservationData = {
@@ -150,7 +149,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     enabledButton = ButtonType.Enabled;
   }
 
-   return (
+  return (
     <>
       <Button
         style={{

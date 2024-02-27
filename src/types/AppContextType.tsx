@@ -19,4 +19,6 @@ export type AppContextType = {
   >;
   showMessageToast: boolean;
   setShowMessageToast: React.Dispatch<React.SetStateAction<boolean>>;
+  currentWeek: Date;
+  setCurrentWeek: React.Dispatch<React.SetStateAction<Date>>;
 };

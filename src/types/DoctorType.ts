@@ -1,4 +1,4 @@
-import DoctorWorkhours from "./DoctorWorkhoursType";
+import DoctorWorkhours from './DoctorWorkhoursType';
 
 type Doctor = {
   id: number;
@@ -8,7 +8,7 @@ type Doctor = {
   points: string[];
   title: string;
   pictureId: number;
-  availableClinics: DoctorWorkhours[]
+  availableClinics: DoctorWorkhours[];
 };
 
 export default Doctor;

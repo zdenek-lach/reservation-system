@@ -21,6 +21,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     const storedContext = localStorage.getItem('appContext');
     return storedContext ? JSON.parse(storedContext).doctorList : null;
   });
+  const [currentWeek, setCurrentWeek] = useState(() => {
+    const date = new Date();
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    date.setDate(diff);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
 
   const [clinicList, setClinicList] = useState(() => {
     const storedContext = localStorage.getItem('appContext');
@@ -58,7 +66,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       selectedClinic,
       isLoggedIn,
       reservationsList,
-      showMessageToast, // Include it in the stored context
+      showMessageToast,
+      currentWeek,
+      setCurrentWeek,
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
   }, [
@@ -69,6 +79,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     isLoggedIn,
     reservationsList,
     showMessageToast,
+    currentWeek,
+    setCurrentWeek,
   ]);
 
   const contextValue: AppContextType = {
@@ -86,6 +98,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setReservationsList,
     showMessageToast,
     setShowMessageToast,
+    currentWeek,
+    setCurrentWeek,
   };
 
   return (

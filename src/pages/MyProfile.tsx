@@ -1,4 +1,8 @@
+import ApiTester from 'components/ApiTester';
 import DoctorFaker from 'components/DoctorFaker';
+import WeekGrid2 from 'components/WeekGrid2';
+import WeekPicker from 'components/WeekPicker';
+import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
@@ -17,15 +21,15 @@ const StyledForm = styled(Form)`
 
 const MyProfile = () => {
   const [loggedUser, setLoggedUser] = useState<Doctor | null>(null);
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [firstName, setFirstName] = useState<string | null>('');
+  const [lastName, setLastName] = useState<string | null>('');
+  const [description, setDescription] = useState<string | null>('');
   const [points, setPoints] = useState<string[]>([]);
-  const [title, setTitle] = useState<string>('');
-  const [pictureId, setPictureId] = useState<number>(0);
-  const [availableClinics, setAvailableClinics] = useState<DoctorWorkhours[]>(
-    []
-  );
+  const [title, setTitle] = useState<string | null>('');
+  const [pictureId, setPictureId] = useState<number | null>(null);
+  const [availableClinics, setDoctorWorkhours] = useState<
+    DoctorWorkhours[] | null
+  >([]);
 
   useEffect(() => {
     if (loggedUser) {
@@ -35,7 +39,7 @@ const MyProfile = () => {
       setPoints(loggedUser.points);
       setTitle(loggedUser.title);
       setPictureId(loggedUser.pictureId);
-      setAvailableClinics(loggedUser.availableClinics);
+      setDoctorWorkhours(loggedUser.availableClinics);
     }
   }, [loggedUser]);
 
@@ -50,6 +54,8 @@ const MyProfile = () => {
   const updatePoint = (index: number, value: string) => {
     setPoints(points.map((point, i) => (i === index ? value : point)));
   };
+
+  const { currentWeek, setCurrentWeek } = useAppContext();
 
   const submitDoctorProfileChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -72,6 +78,8 @@ const MyProfile = () => {
 
   return (
     <StyledContainer>
+      <ApiTester />
+
       <Row>
         <Col>
           <h2>Můj profil</h2>
@@ -82,7 +90,7 @@ const MyProfile = () => {
               <Form.Control
                 type="text"
                 placeholder="MuDr."
-                value={title}
+                value={title || ''}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Group>
@@ -91,7 +99,7 @@ const MyProfile = () => {
               <Form.Control
                 type="text"
                 placeholder="Jan"
-                value={firstName}
+                value={firstName || ''}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </Form.Group>
@@ -100,7 +108,7 @@ const MyProfile = () => {
               <Form.Control
                 type="text"
                 placeholder="Novák"
-                value={lastName}
+                value={lastName || ''}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
@@ -113,7 +121,7 @@ const MyProfile = () => {
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={description}
+                value={description || ''}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
@@ -137,12 +145,22 @@ const MyProfile = () => {
                 <PlusCircle />
               </Button>
             </Form.Group>
+            <Form.Group>
+              <Form.Label>Pracovní hodiny</Form.Label>
+
+              <WeekPicker
+                currentWeek={currentWeek}
+                setCurrentWeek={setCurrentWeek}
+              />
+              <WeekGrid2 startOfWeek={currentWeek} />
+            </Form.Group>
             <Button variant="primary" type="submit">
               Uložit změny
             </Button>
           </StyledForm>
         </Col>
       </Row>
+      <Row></Row>
     </StyledContainer>
   );
 };

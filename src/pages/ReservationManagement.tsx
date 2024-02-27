@@ -7,6 +7,7 @@ import { useReservations } from 'hooks/useReservations';
 import { useState } from 'react';
 import { Button, Container, Dropdown, Modal, Table } from 'react-bootstrap';
 import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
+import authHeader from 'security/AuthHeader.ts';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
@@ -145,7 +146,12 @@ const ReservationManagement = () => {
       };
 
       axios
-        .put(editUrl, updatedReservation)
+        .put(editUrl, updatedReservation, {
+          headers: {
+            ...authHeader(),
+            'Content-Type': 'application/json',
+          },
+        })
         .then((response) => {
           console.log(
             `Successfully updated reservation ${selectedReservation.id}`
@@ -265,6 +271,10 @@ const ReservationManagement = () => {
               <p>
                 <strong>Ambulance:</strong>
                 {selectedReservation.clinic.name}
+              </p>
+              <p>
+                <strong>Poznámka:</strong>
+                {selectedReservation.note}
               </p>
             </div>
           )}

@@ -1,10 +1,13 @@
 import axios from "axios";
+import config from '../../config/config.json'
 
 const ApiTester = () => {
   const apiUrls = {
     doctorsApi: 'http://127.0.0.1:8000/api/doctors',
     clinicsApi: 'http://127.0.0.1:8000/api/clinics',
     reservationsApi: 'http://127.0.0.1:8000/api/reservations',
+    authApi: config.api.authApi.getToken,
+    authRefresh: config.api.authApi.refreshToken,
   };
 
   const testApi = async (apiName: string, apiUrl: string) => {

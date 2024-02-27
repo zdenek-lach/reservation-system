@@ -10,7 +10,7 @@ export const useReservations = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get(config.api.reservationsApi.list);
+        const response = (await axios.get(config.api.reservationsApi.list));
         setReservationsList(response.data);
         setLoadingReservations(false);
       } catch (err: any) {

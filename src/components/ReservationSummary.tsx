@@ -5,6 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import ReservationData from 'types/ReservationData';
 import ReservationDto from 'types/ReservationDtoType';
 import config from '../../config/config.json';
+import authHeader from 'security/AuthHeader.ts';
 
 interface ReservationSummaryProps {
   ReservationData: ReservationData | null;
@@ -42,6 +43,7 @@ const ReservationSummary: React.FC<ReservationSummaryProps> = ({
         reservationToAdd,
         {
           headers: {
+            ...authHeader(),
             'Content-Type': 'application/json',
           },
         }

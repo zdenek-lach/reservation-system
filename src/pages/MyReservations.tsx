@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
+import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
@@ -28,8 +29,14 @@ import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
 
 const MyReservations = () => {
-  const { reservationsList, setReservationsList, doctorList, clinicList } =
-    useAppContext();
+  const {
+    reservationsList,
+    setReservationsList,
+    doctorList,
+    clinicList,
+    currentWeek,
+    setCurrentWeek,
+  } = useAppContext();
   const { loadingReservations, errorReservations } = useReservations();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -46,6 +53,8 @@ const MyReservations = () => {
   const [editedDoctor, setEditedDoctor] = useState<Doctor | null>(null);
   const [filterDoctor, setFilterDoctor] = useState<Doctor | null>(null);
   const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
+  const [isWeekFilterEnabled, setIsWeekFilterEnabled] = useState(false);
+
   const { loadingDoctors, errorDoctors } = useDoctors();
   const { loadingClinics, errorClinics } = useClinics();
 
@@ -192,6 +201,17 @@ const MyReservations = () => {
       handleCloseModal();
     }
   };
+  const startOfWeek = (date: Date) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() - result.getDay() + 1);
+    return result;
+  };
+
+  const endOfWeek = (date: Date) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() - result.getDay() + 7);
+    return result;
+  };
 
   return (
     <Container
@@ -203,30 +223,44 @@ const MyReservations = () => {
         marginLeft: '20px',
       }}
     >
-      <Form.Control
-        type="text"
-        placeholder="Vyhledat"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <DoctorSelector
-        selectedDoctor={filterDoctor}
-        setSelectedDoctor={setFilterDoctor}
-      />
-      <ClinicSelector
-        selectedClinic={filterClinic}
-        setSelectedClinic={setFilterClinic}
-      />
-      <Button
-        variant="danger"
-        onClick={() => {
-          setSearchTerm('');
-          setFilterDoctor(null);
-          setFilterClinic(null);
-        }}
-      >
-        <ArrowCounterclockwise />
-      </Button>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          placeholder="Vyhledat"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <DoctorSelector
+          selectedDoctor={filterDoctor}
+          setSelectedDoctor={setFilterDoctor}
+        />
+        <ClinicSelector
+          selectedClinic={filterClinic}
+          setSelectedClinic={setFilterClinic}
+        />
+        <Button
+          variant="danger"
+          onClick={() => {
+            setSearchTerm('');
+            setFilterDoctor(null);
+            setFilterClinic(null);
+          }}
+        >
+          <ArrowCounterclockwise />
+        </Button>
+        <Form.Check
+          type="checkbox"
+          label="Filtrovat dle týdnu"
+          checked={isWeekFilterEnabled}
+          onChange={(e) => setIsWeekFilterEnabled(e.target.checked)}
+        />
+        {isWeekFilterEnabled && (
+          <WeekPicker
+            currentWeek={currentWeek}
+            setCurrentWeek={setCurrentWeek}
+          />
+        )}
+      </Form.Group>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -275,6 +309,13 @@ const MyReservations = () => {
                   filterClinic == null ||
                   reservation.clinic.id === filterClinic.id
               )
+              .filter(
+                (reservation) =>
+                  !isWeekFilterEnabled ||
+                  (new Date(reservation.date) >= startOfWeek(currentWeek) &&
+                    new Date(reservation.date) <= endOfWeek(currentWeek))
+              )
+
               .map((reservation) => (
                 <tr key={reservation.id}>
                   <td>{reservation.id}</td>
@@ -418,7 +459,7 @@ const MyReservations = () => {
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {editedDoctor != null
                   ? `${editedDoctor.title} ${editedDoctor.firstName} ${editedDoctor.lastName}`
-                  : 'Vyberte Doktora'}
+                  : 'Vyberte přihlášeného doktora :)'}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>

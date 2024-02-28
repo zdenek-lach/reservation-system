@@ -93,7 +93,9 @@ const MyReservations = () => {
     const deleteUrl = config.api.reservationsApi.delete + `/${reservation.id}`;
 
     axios
-      .delete(deleteUrl)
+      .delete(deleteUrl, {
+        headers: { ...authHeader() },
+      })
       .then((response) => {
         console.log(`Successfully deleted reservation ${reservation.id}`);
         console.log(response.status);

@@ -37,7 +37,30 @@ const MyProfile = () => {
     DoctorWorkhours[] | null
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
-
+  const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
+  useEffect(() => {
+    // Fetch shifts from the backend
+    axios
+      .get(config.api.shiftApi.list, {
+        headers: {
+          ...authHeader(),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        // Convert the shifts to the TimeSlot format
+        let shifts = response.data.map(
+          (shift: { date: string | number | Date; time: any }) => ({
+            day: new Date(shift.date),
+            time: shift.time,
+          })
+        );
+        setInitialShifts(shifts);
+      })
+      .catch((error) => {
+        console.error(`Error fetching shifts`, error);
+      });
+  }, [selectedDoctor, selectedClinic]);
   useEffect(() => {
     if (selectedDoctor) {
       setFirstName(selectedDoctor.firstName);
@@ -113,7 +136,7 @@ const MyProfile = () => {
       clinic: selectedClinic,
       shifts: shifts,
     };
-    
+
     console.warn(data);
     axios
       .post(config.api.shiftApi.add, data, {
@@ -227,6 +250,7 @@ const MyProfile = () => {
               <WeekGrid2
                 startOfWeek={currentWeek}
                 setClickedButtons={setClickedButtons}
+                initialShifts={initialShifts}
               />
             </Form.Group>
             <Button variant="primary" type="submit">

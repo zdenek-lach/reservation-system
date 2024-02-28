@@ -5,7 +5,14 @@ import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
 import { useState } from 'react';
-import { Button, Container, Dropdown, Modal, Table } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Dropdown,
+  Form,
+  Modal,
+  Table,
+} from 'react-bootstrap';
 import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
@@ -36,6 +43,8 @@ const ReservationManagement = () => {
 
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
+
+  const [searchTerm, setSearchTerm] = useState(''); // Add this line
 
   const handleShowInfoModal = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -186,6 +195,13 @@ const ReservationManagement = () => {
         marginLeft: '20px',
       }}
     >
+      <Form.Control
+        type="text"
+        placeholder="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />{' '}
+      {/* Add this line */}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -207,52 +223,61 @@ const ReservationManagement = () => {
           }}
         >
           {reservationsList != null &&
-            reservationsList.map((reservation) => (
-              <tr key={reservation.id}>
-                <td>{reservation.id}</td>
-                <td>{reservation.client.firstName}</td>
-                <td>{reservation.client.lastName}</td>
-                <td>
-                  {reservation.date} {reservation.time}
-                </td>
-                <td>
-                  {reservation.doctor.firstName} {reservation.doctor.lastName}
-                </td>
-                <td>{reservation.clinic.name}</td>
-                <td>
-                  <Button
-                    variant="info"
-                    size="lg"
-                    className="mr-1"
-                    onClick={() => handleShowInfoModal(reservation)}
-                  >
-                    <InfoCircle />
-                  </Button>
-                  <Button
-                    variant="warning"
-                    size="lg"
-                    className="mr-1"
-                    onClick={() => handleShowEditModal(reservation)}
-                  >
-                    <Pencil />
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="lg"
-                    onClick={() => handleDeleteReservation(reservation)}
-                  >
-                    <Trash3Fill />
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            reservationsList
+              .filter(
+                (reservation) =>
+                  reservation.client.phoneNumber.includes(searchTerm) || 
+                  reservation.client.firstName
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) || 
+                  reservation.client.lastName
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) // TODO Add more lines with possible filters?
+              )
+              .map((reservation) => (
+                <tr key={reservation.id}>
+                  <td>{reservation.id}</td>
+                  <td>{reservation.client.firstName}</td>
+                  <td>{reservation.client.lastName}</td>
+                  <td>
+                    {reservation.date} {reservation.time}
+                  </td>
+                  <td>
+                    {reservation.doctor.firstName} {reservation.doctor.lastName}
+                  </td>
+                  <td>{reservation.clinic.name}</td>
+                  <td>
+                    <Button
+                      variant="info"
+                      size="lg"
+                      className="mr-1"
+                      onClick={() => handleShowInfoModal(reservation)}
+                    >
+                      <InfoCircle />
+                    </Button>
+                    <Button
+                      variant="warning"
+                      size="lg"
+                      className="mr-1"
+                      onClick={() => handleShowEditModal(reservation)}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="lg"
+                      onClick={() => handleDeleteReservation(reservation)}
+                    >
+                      <Trash3Fill />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </Table>
-
       <Button variant="success" onClick={handleAddReservation}>
         Přidat novou rezervaci
       </Button>
-
       <Modal show={showInfoModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Informace o rezervaci</Modal.Title>

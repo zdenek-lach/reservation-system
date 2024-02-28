@@ -116,7 +116,7 @@ const MyProfile = () => {
     
     console.warn(data);
     axios
-      .post(config.api.shiftApi.addShift, data, {
+      .post(config.api.shiftApi.add, data, {
         headers: {
           ...authHeader(),
           'Content-Type': 'application/json',

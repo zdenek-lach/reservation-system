@@ -33,7 +33,14 @@ export const refreshCheck = () => {
 
   if (user && user.access) {
     // Check if the token is expired
-    const tokenExpiration = jwtDecode(user.access).exp;
+    const decodedToken = jwtDecode(user.access);
+
+    if (!decodedToken || !decodedToken.exp) {
+      console.error('Invalid token or expiration date');
+      return;
+    }
+
+    const tokenExpiration = decodedToken.exp;
     const currentTimestamp = Math.floor(Date.now() / 1000);
 
     if (tokenExpiration < currentTimestamp) {

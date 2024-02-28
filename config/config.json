@@ -28,6 +28,9 @@
     "colorPalette": 1,
     "addWeekendsToList": true
   },
+  "security": {
+    "refreshPeriodInSeconds": 60
+  },
   "reservations": {
     "reservationsPerTimeBlock": 5,
     "extraReservationsPerTimeBlock": 0

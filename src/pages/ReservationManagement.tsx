@@ -207,6 +207,7 @@ const ReservationManagement = () => {
       handleCloseModal();
     }
   };
+  
   const startOfWeek = (date: Date) => {
     const result = new Date(date);
     result.setDate(result.getDate() - result.getDay() + 1);

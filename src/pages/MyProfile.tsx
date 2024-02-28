@@ -1,3 +1,4 @@
+import axios from 'axios';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekGrid2 from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
@@ -9,6 +10,7 @@ import { styled } from 'styled-components';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
+import { authHeader } from 'security/AuthService';
 
 const MyProfile = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
@@ -60,11 +62,27 @@ const MyProfile = () => {
         title,
         pictureId,
         availableClinics,
-      }; //fixme it works, but shows error.. idk how to fix this :)
-      console.log(updatedDoctor);
-      console.log(config.api.doctorsApi.edit);
+      };
+
+      const editUrl = config.api.doctorsApi.edit + `/${selectedDoctor.id}`;
+
+      axios
+        .put(editUrl, updatedDoctor, {
+          headers: {
+            ...authHeader(),
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log(`Successfully updated doctor ${selectedDoctor.id}`);
+          // You can update your state here if necessary
+        })
+        .catch((error) => {
+          console.error(`Error updating doctor ${selectedDoctor.id}:`, error);
+        });
     }
   };
+
   const submitDoctorWorkHours: FormEventHandler<HTMLFormElement> | undefined = (
     e
   ) => {

@@ -60,8 +60,7 @@ const MyProfile = () => {
         title,
         pictureId,
         availableClinics,
-      };
-      // Here you would send the updatedDoctor object to the server
+      }; //fixme it works, but shows error.. idk how to fix this :)
       console.log(updatedDoctor);
       console.log(config.api.doctorsApi.edit);
     }

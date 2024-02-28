@@ -1,4 +1,4 @@
-import DoctorFaker from 'components/DoctorFaker';
+import DoctorSelector from 'components/DoctorSelector';
 import WeekGrid2 from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
@@ -11,7 +11,7 @@ import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
 
 const MyProfile = () => {
-  const [loggedUser, setLoggedUser] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [firstName, setFirstName] = useState<string | null>('');
   const [lastName, setLastName] = useState<string | null>('');
   const [description, setDescription] = useState<string | null>('');
@@ -23,16 +23,16 @@ const MyProfile = () => {
   >([]);
 
   useEffect(() => {
-    if (loggedUser) {
-      setFirstName(loggedUser.firstName);
-      setLastName(loggedUser.lastName);
-      setDescription(loggedUser.description);
-      setPoints(loggedUser.points);
-      setTitle(loggedUser.title);
-      setPictureId(loggedUser.pictureId);
-      setDoctorWorkhours(loggedUser.availableClinics);
+    if (selectedDoctor) {
+      setFirstName(selectedDoctor.firstName);
+      setLastName(selectedDoctor.lastName);
+      setDescription(selectedDoctor.description);
+      setPoints(selectedDoctor.points);
+      setTitle(selectedDoctor.title);
+      setPictureId(selectedDoctor.pictureId);
+      setDoctorWorkhours(selectedDoctor.availableClinics);
     }
-  }, [loggedUser]);
+  }, [selectedDoctor]);
 
   const addPoint = () => {
     setPoints([...points, '']);
@@ -50,9 +50,9 @@ const MyProfile = () => {
 
   const submitDoctorProfileChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    if (loggedUser) {
+    if (selectedDoctor) {
       const updatedDoctor: Doctor = {
-        ...loggedUser,
+        ...selectedDoctor,
         firstName,
         lastName,
         description,
@@ -88,7 +88,10 @@ const MyProfile = () => {
         <Col md={2}>
           {/* This will take up 4 out of 12 columns on medium and larger screens */}
           <h2>Můj profil</h2>
-          <DoctorFaker loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
+          <DoctorSelector
+            selectedDoctor={selectedDoctor}
+            setSelectedDoctor={setSelectedDoctor}
+          />
           <Form onSubmit={submitDoctorProfileChanges}>
             <Form.Label>
               <h3>Profil lékaře</h3>

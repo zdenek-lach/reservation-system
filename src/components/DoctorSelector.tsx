@@ -3,14 +3,14 @@ import { Dispatch, SetStateAction } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import Doctor from 'types/DoctorType';
 
-interface DoctorFakerProps {
-  loggedUser: Doctor | null;
-  setLoggedUser: Dispatch<SetStateAction<Doctor | null>>;
+interface DoctorSelectorProps {
+  selectedDoctor: Doctor | null;
+  setSelectedDoctor: Dispatch<SetStateAction<Doctor | null>>;
 }
 
-const DoctorFaker: React.FC<DoctorFakerProps> = ({
-  loggedUser,
-  setLoggedUser,
+const DoctorSelector: React.FC<DoctorSelectorProps> = ({
+  selectedDoctor,
+  setSelectedDoctor,
 }) => {
   const { doctorList } = useAppContext();
   return (
@@ -18,8 +18,8 @@ const DoctorFaker: React.FC<DoctorFakerProps> = ({
       Jsem: Doktor:
       <Dropdown>
         <Dropdown.Toggle variant="success">
-          {loggedUser != null
-            ? `${loggedUser.title} ${loggedUser.firstName} ${loggedUser.lastName}`
+          {selectedDoctor != null
+            ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
             : 'Vyberte Doktora'}
         </Dropdown.Toggle>
 
@@ -28,7 +28,7 @@ const DoctorFaker: React.FC<DoctorFakerProps> = ({
             doctorList.map((doctor) => (
               <Dropdown.Item
                 key={doctor.id}
-                onClick={() => setLoggedUser(doctor)}
+                onClick={() => setSelectedDoctor(doctor)}
               >
                 {`${doctor.title} ${doctor.firstName} ${doctor.lastName}`}
               </Dropdown.Item>
@@ -39,4 +39,4 @@ const DoctorFaker: React.FC<DoctorFakerProps> = ({
   );
 };
 
-export default DoctorFaker;
+export default DoctorSelector;

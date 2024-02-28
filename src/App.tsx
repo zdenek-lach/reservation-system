@@ -23,7 +23,7 @@ import Management from './pages/Management';
 export const App = () => {
   const { isLoggedIn } = useAppContext();
 
-  let theRunner = setInterval(function () {
+  let theRunner = setInterval(function () { //TODO just an idea to fix the multiplication spam .. perhaps there is a clear for interval?
     refreshCheck();
   }, 1000 * config.security.refreshPeriodInSeconds);
 

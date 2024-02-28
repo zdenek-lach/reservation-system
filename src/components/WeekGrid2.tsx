@@ -4,6 +4,7 @@ import { Badge, Button, Table } from 'react-bootstrap';
 
 interface WeekGrid2Props {
   startOfWeek: Date;
+  setClickedButtons: React.Dispatch<React.SetStateAction<TimeSlot[]>>;
 }
 
 const startHour = 7;
@@ -13,12 +14,15 @@ const timeSlots = eachHourOfInterval({
   end: new Date(0, 0, 0, endHour),
 }).map((time) => format(time, 'HH:mm'));
 
-interface TimeSlot {
+export interface TimeSlot {
   day: Date;
   time: string;
 }
 
-const WeekGrid2: React.FC<WeekGrid2Props> = ({ startOfWeek }) => {
+const WeekGrid2: React.FC<WeekGrid2Props> = ({
+  startOfWeek,
+  setClickedButtons,
+}) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
   const [selectedTimes, setSelectedTimes] = useState<TimeSlot[]>([]);
@@ -31,14 +35,14 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({ startOfWeek }) => {
     );
 
     if (index === -1) {
-      setSelectedTimes((prevTimes) => [...prevTimes, { day: dayDate, time }]);
+      setClickedButtons((prevTimes) => [...prevTimes, { day: dayDate, time }]);
     } else {
-      setSelectedTimes((prevTimes) => prevTimes.filter((_, i) => i !== index));
+      setClickedButtons((prevTimes) => prevTimes.filter((_, i) => i !== index));
     }
   };
 
   return (
-    <Table striped size="md" md={8}>
+    <Table striped size="md">
       <tbody>
         {days.map((day, index) => {
           const dayDate = new Date(
@@ -60,10 +64,11 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({ startOfWeek }) => {
               </td>
               {timeSlots.map((time) => {
                 const isSelected = selectedTimes.some(
-                  (selectedTime) =>
+                  (selectedTime: TimeSlot) =>
                     selectedTime.day.getTime() === dayDate.getTime() &&
                     selectedTime.time === time
                 );
+
                 return (
                   <td key={`${day}-${time}`} className="p-3">
                     <Button
@@ -73,7 +78,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({ startOfWeek }) => {
                       variant={isSelected ? 'primary' : 'secondary'}
                       onClick={() => addOrRemoveSelectedTime(dayDate, time)}
                     >
-                      {time}
+                      {time} {isSelected}
                     </Button>
                   </td>
                 );

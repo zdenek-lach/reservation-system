@@ -1,5 +1,5 @@
 import { eachHourOfInterval, format } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge, Button, Table } from 'react-bootstrap';
 
 interface WeekGrid2Props {
@@ -25,21 +25,33 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
+  const [buttonStates, setButtonStates] = useState({});
   const [selectedTimes, setSelectedTimes] = useState<TimeSlot[]>([]);
 
   const addOrRemoveSelectedTime = (dayDate: Date, time: string) => {
-    const index = selectedTimes.findIndex(
-      (selectedTime) =>
-        selectedTime.day.getTime() === dayDate.getTime() &&
-        selectedTime.time === time
-    );
+    const buttonKey = `${dayDate.getTime()}-${time}`;
+    const isSelected = buttonStates[buttonKey];
 
-    if (index === -1) {
-      setClickedButtons((prevTimes) => [...prevTimes, { day: dayDate, time }]);
+    let newButtonStates = { ...buttonStates };
+    let newSelectedTimes = [...selectedTimes];
+
+    if (isSelected) {
+      newButtonStates[buttonKey] = false;
+      newSelectedTimes = newSelectedTimes.filter(
+        (slot) => slot.day.getTime() !== dayDate.getTime() || slot.time !== time
+      );
     } else {
-      setClickedButtons((prevTimes) => prevTimes.filter((_, i) => i !== index));
+      newButtonStates[buttonKey] = true;
+      newSelectedTimes.push({ day: dayDate, time });
     }
+
+    setButtonStates(newButtonStates);
+    setSelectedTimes(newSelectedTimes);
   };
+
+  useEffect(() => {
+    setClickedButtons(selectedTimes);
+  }, [selectedTimes, setClickedButtons]);
 
   return (
     <Table striped size="md">
@@ -63,14 +75,11 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
                 </Badge>
               </td>
               {timeSlots.map((time) => {
-                const isSelected = selectedTimes.some(
-                  (selectedTime: TimeSlot) =>
-                    selectedTime.day.getTime() === dayDate.getTime() &&
-                    selectedTime.time === time
-                );
+                const buttonKey = `${dayDate.getTime()}-${time}`;
+                const isSelected = buttonStates[buttonKey];
 
                 return (
-                  <td key={`${day}-${time}`} className="p-3">
+                  <td key={buttonKey} className="p-3">
                     <Button
                       style={{
                         borderRadius: '20px',
@@ -78,7 +87,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
                       variant={isSelected ? 'primary' : 'secondary'}
                       onClick={() => addOrRemoveSelectedTime(dayDate, time)}
                     >
-                      {time} {isSelected}
+                      {time}
                     </Button>
                   </td>
                 );

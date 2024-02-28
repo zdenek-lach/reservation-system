@@ -3,19 +3,12 @@ import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
 import { useState } from 'react';
-import {
-  Button,
-  Container,
-  Dropdown,
-  Form,
-  Modal,
-  Table,
-} from 'react-bootstrap';
-import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
+import { Button, Container, Form, Modal, Table } from 'react-bootstrap';
+import { InfoCircle } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import Reservation from 'types/ReservationType';
 import Doctor from './../types/DoctorType';
-import DoctorFaker from 'components/DoctorFaker';
+import DoctorSelector from 'components/DoctorSelector';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -34,7 +27,7 @@ const MyReservations = () => {
   const { loadingDoctors, errorDoctors } = useDoctors();
   const { loadingClinics, errorClinics } = useClinics();
 
-  const [loggedUser, setLoggedUser] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
 
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
@@ -51,7 +44,10 @@ const MyReservations = () => {
 
   return (
     <StyledContainer>
-      <DoctorFaker loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
+      <DoctorSelector
+        selectedDoctor={selectedDoctor}
+        setSelectedDoctor={setSelectedDoctor}
+      />
       <Container>
         <Table striped bordered hover>
           <thead>
@@ -68,9 +64,9 @@ const MyReservations = () => {
               reservationsList
                 .filter(
                   (reservation) =>
-                    loggedUser == null ||
+                    selectedDoctor == null ||
                     `${reservation.doctor.title} ${reservation.doctor.firstName} ${reservation.doctor.lastName}` ===
-                      `${loggedUser.title} ${loggedUser.firstName} ${loggedUser.lastName}`
+                      `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
                 )
                 .map((reservation) => (
                   <tr key={reservation.id}>

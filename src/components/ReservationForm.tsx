@@ -1,7 +1,7 @@
-import { useAppContext } from 'context/AppContext';
-import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
-import ReservationData from 'types/ReservationData';
+import { useAppContext } from "context/AppContext";
+import React, { useState } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
+import ReservationData from "types/ReservationData";
 
 interface ReservationFormProps {
   time: string;
@@ -20,14 +20,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   // States for form inputs
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    comment: '',
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    comment: "",
   });
 
-  const [validationError, setValidationError] = useState('');
+  const [validationError, setValidationError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
@@ -43,43 +43,43 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     const { firstName, lastName, phone, email } = formData;
 
     if (!firstName) {
-      setValidationError('Prosím vyplňte své jméno.');
+      setValidationError("Prosím vyplňte své jméno.");
       return false;
     }
 
     if (!lastName) {
-      setValidationError('Prosím vyplňte své příjmení.');
+      setValidationError("Prosím vyplňte své příjmení.");
       return false;
     }
 
     if (!phone || !email) {
-      setValidationError('Prosím vyplňte všechny požadované údaje.');
+      setValidationError("Prosím vyplňte všechny požadované údaje.");
       return false;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setValidationError('Prosím vložte email ve správném formátu.');
+      setValidationError("Prosím vložte email ve správném formátu.");
       return false;
     }
 
     // Basic phone number validation
     const phoneRegex = /^\d{9}$/; // Adjust this regex based on your phone number format
     if (!phoneRegex.test(phone)) {
-      setValidationError('Prosím vložte platné telefonní číslo.');
+      setValidationError("Prosím vložte platné telefonní číslo.");
       return false;
     }
 
     // Clear any previous validation errors
-    setValidationError('');
+    setValidationError("");
     return true;
   };
 
   const handleFormSubmit = () => {
     if (validateForm()) {
       const data: ReservationData = {
-        date: date.toLocaleDateString('cs-CZ'),
+        date: date.toLocaleDateString("cs-CZ"),
         time,
         doctor: selectedDoctor,
         clinic: selectedClinic,
@@ -92,8 +92,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     }
   };
   enum ButtonType {
-    Enabled = 'success',
-    Disabled = 'danger',
+    Enabled = "success",
+    Disabled = "danger",
   }
 
   var enabledButton: ButtonType = ButtonType.Disabled;
@@ -101,11 +101,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const work = selectedDoctor?.availableClinics.filter((x) => {
     if (x.clinic.name == selectedClinic?.name) {
       var dateCopy = new Date(x.date as unknown as string);
-      var csDateCopy = dateCopy.toLocaleDateString('cs-CZ');
-      var csDate = date.toLocaleDateString('cs-CZ');
-      var shiftTimeStartArray = x.timeFrom.split(':');
-      var shiftTimeEndArray = x.timeTo.split(':');
-      var timeblockTimeArray = time.split(':');
+      var csDateCopy = dateCopy.toLocaleDateString("cs-CZ");
+      var csDate = date.toLocaleDateString("cs-CZ");
+      var shiftTimeStartArray = x.timeFrom.split(":");
+      var shiftTimeEndArray = x.timeTo.split(":");
+      var timeblockTimeArray = time.split(":");
       var doesTimeMatchInShift = false;
       if (
         shiftTimeStartArray != undefined &&
@@ -131,7 +131,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             //var timeblockTimeMinute = (timeblockTimeArray[1] as unknown) as number;
             if (
               timeblockTimeHour >= shiftTimeStartHour &&
-              timeblockTimeHour < shiftTimeEndHour
+              timeblockTimeHour <= shiftTimeEndHour
             ) {
               doesTimeMatchInShift = true;
             }
@@ -153,7 +153,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     <>
       <Button
         style={{
-          borderRadius: '20px',
+          borderRadius: "20px",
         }}
         variant={enabledButton}
         onClick={() => setShow(true)}
@@ -168,14 +168,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           <Form>
             <Form.Group controlId="selectedDate">
               <Form.Label>
-                Vybrané datum: {date.toLocaleDateString('cs-CZ')}
+                Vybrané datum: {date.toLocaleDateString("cs-CZ")}
               </Form.Label>
               <br />
               <Form.Label>Vybraný čas: {time}</Form.Label>
             </Form.Group>
             {/* Display validation error if present */}
             {validationError && (
-              <div style={{ color: 'red', marginBottom: '10px' }}>
+              <div style={{ color: "red", marginBottom: "10px" }}>
                 {validationError}
               </div>
             )}

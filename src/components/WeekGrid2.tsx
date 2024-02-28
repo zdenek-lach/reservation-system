@@ -5,6 +5,7 @@ import { Badge, Button, Table } from 'react-bootstrap';
 interface WeekGrid2Props {
   startOfWeek: Date;
   setClickedButtons: React.Dispatch<React.SetStateAction<TimeSlot[]>>;
+  initialShifts?: TimeSlot[];
 }
 
 const startHour = 7;
@@ -22,11 +23,20 @@ export interface TimeSlot {
 const WeekGrid2: React.FC<WeekGrid2Props> = ({
   startOfWeek,
   setClickedButtons,
+  initialShifts,
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
-  const [buttonStates, setButtonStates] = useState({});
-  const [selectedTimes, setSelectedTimes] = useState<TimeSlot[]>([]);
+  const [buttonStates, setButtonStates] = useState(() => {
+    let initialButtonStates = {};
+    initialShifts?.forEach((slot) => {
+      // Use optional chaining here
+      const buttonKey = `${slot.day.getTime()}-${slot.time}`;
+      initialButtonStates[buttonKey] = true;
+    });
+    return initialButtonStates;
+  });
+  const [selectedTimes, setSelectedTimes] = useState(initialShifts || []);
 
   const addOrRemoveSelectedTime = (dayDate: Date, time: string) => {
     const buttonKey = `${dayDate.getTime()}-${time}`;

@@ -1,19 +1,32 @@
 import axios from 'axios';
+import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
-import WeekGrid2 from 'components/WeekGrid2';
+import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
+import { authHeader } from 'security/AuthService';
 import { styled } from 'styled-components';
+import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
-import { authHeader } from 'security/AuthService';
+
+const StyledContainer = styled(Container)`
+    margin-top: 20px;
+    // margin-left: 2rem;
+    background-color: rgba(255, 0, 0, 0.4);
+    padding: 2rem;
+            borderRadius: 15px,
+            marginTop: 20px,
+            marginLeft: 20px,
+  `;
 
 const MyProfile = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [firstName, setFirstName] = useState<string | null>('');
   const [lastName, setLastName] = useState<string | null>('');
   const [description, setDescription] = useState<string | null>('');
@@ -23,6 +36,7 @@ const MyProfile = () => {
   const [availableClinics, setDoctorWorkhours] = useState<
     DoctorWorkhours[] | null
   >([]);
+  const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
 
   useEffect(() => {
     if (selectedDoctor) {
@@ -82,28 +96,45 @@ const MyProfile = () => {
         });
     }
   };
-
   const submitDoctorWorkHours: FormEventHandler<HTMLFormElement> | undefined = (
     e
   ) => {
     e.preventDefault();
-  };
 
-  const StyledContainer = styled(Container)`
-    margin-top: 20px;
-    // margin-left: 2rem;
-    background-color: rgba(255, 0, 0, 0.4);
-    padding: 2rem;
-            borderRadius: 15px,
-            marginTop: 20px,
-            marginLeft: 20px,
-  `;
+    // Build the shifts array from clickedButtons
+    let shifts = clickedButtons.map((slot) => ({
+      date: new Date(slot.day).toISOString().split('T')[0],
+      time: slot.time,
+    }));
+
+    // Build the data object to send to the backend
+    let data = {
+      doctor: selectedDoctor,
+      clinic: selectedClinic,
+      shifts: shifts,
+    };
+    
+    console.warn(data);
+    axios
+      .post(config.api.shiftApi.addShift, data, {
+        headers: {
+          ...authHeader(),
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        console.log(`Successfully added a shift`);
+        // You can update your state here if necessary
+      })
+      .catch((error) => {
+        console.error(`Error adding a shift`, error);
+      });
+  };
 
   return (
     <StyledContainer>
       <Row>
         <Col md={2}>
-          {/* This will take up 4 out of 12 columns on medium and larger screens */}
           <h2>Můj profil</h2>
           <DoctorSelector
             selectedDoctor={selectedDoctor}
@@ -180,18 +211,23 @@ const MyProfile = () => {
           </Form>
         </Col>
         <Col md={8}>
-          {/* This will take up 8 out of 12 columns on medium and larger screens */}
           <Form onSubmit={submitDoctorWorkHours}>
             <Form.Group>
               <Form.Label>
                 <h3>Pracovní hodiny</h3>
               </Form.Label>
-
               <WeekPicker
                 currentWeek={currentWeek}
                 setCurrentWeek={setCurrentWeek}
               />
-              <WeekGrid2 startOfWeek={currentWeek} />
+              <ClinicSelector
+                selectedClinic={selectedClinic}
+                setSelectedClinic={setSelectedClinic}
+              />
+              <WeekGrid2
+                startOfWeek={currentWeek}
+                setClickedButtons={setClickedButtons}
+              />
             </Form.Group>
             <Button variant="primary" type="submit">
               Uložit změny

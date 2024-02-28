@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import ClinicSelector from 'components/ClinicSelector';
+import DoctorSelector from 'components/DoctorSelector';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
@@ -13,7 +15,12 @@ import {
   Modal,
   Table,
 } from 'react-bootstrap';
-import { InfoCircle, Pencil, Trash3Fill } from 'react-bootstrap-icons';
+import {
+  ArrowCounterclockwise,
+  InfoCircle,
+  Pencil,
+  Trash3Fill,
+} from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
@@ -37,7 +44,8 @@ const ReservationManagement = () => {
   const [editedNote, setEditedNote] = useState('');
   const [editedAmbulance, setEditedAmbulance] = useState<Clinic | null>(null);
   const [editedDoctor, setEditedDoctor] = useState<Doctor | null>(null);
-
+  const [filterDoctor, setFilterDoctor] = useState<Doctor | null>(null);
+  const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
   const { loadingDoctors, errorDoctors } = useDoctors();
   const { loadingClinics, errorClinics } = useClinics();
 
@@ -197,11 +205,28 @@ const ReservationManagement = () => {
     >
       <Form.Control
         type="text"
-        placeholder="Search"
+        placeholder="Vyhledat"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-      />{' '}
-      {/* Add this line */}
+      />
+      <DoctorSelector
+        selectedDoctor={filterDoctor}
+        setSelectedDoctor={setFilterDoctor}
+      />
+      <ClinicSelector
+        selectedClinic={filterClinic}
+        setSelectedClinic={setFilterClinic}
+      />
+      <Button
+        variant="danger"
+        onClick={() => {
+          setSearchTerm('');
+          setFilterDoctor(null);
+          setFilterClinic(null);
+        }}
+      >
+        <ArrowCounterclockwise />
+      </Button>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -226,13 +251,29 @@ const ReservationManagement = () => {
             reservationsList
               .filter(
                 (reservation) =>
-                  reservation.client.phoneNumber.includes(searchTerm) || 
+                  reservation.client.phoneNumber.includes(searchTerm) ||
                   reservation.client.firstName
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) || 
+                    .includes(searchTerm.toLowerCase()) ||
                   reservation.client.lastName
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) // TODO Add more lines with possible filters?
+                    .includes(searchTerm.toLowerCase()) ||
+                  reservation.client.email
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                  reservation.note
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+              )
+              .filter(
+                (reservation) =>
+                  filterDoctor == null ||
+                  reservation.doctor.id === filterDoctor.id
+              )
+              .filter(
+                (reservation) =>
+                  filterClinic == null ||
+                  reservation.clinic.id === filterClinic.id
               )
               .map((reservation) => (
                 <tr key={reservation.id}>

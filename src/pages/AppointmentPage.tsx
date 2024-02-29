@@ -7,6 +7,7 @@ import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import '../styles/AppointmentPage.css';
 
 const AppointmentPage = () => {
   const { selectedDoctor, showMessageToast, setShowMessageToast } =
@@ -20,28 +21,15 @@ const AppointmentPage = () => {
     return date;
   });
 
-  
   return (
-    <Container
-      fluid
-      style={{ minHeight: '100vh', backgroundPosition: 'center' }}
-    >
+    <Container fluid className="appointment-container">
       {showMessageToast && (
         <div>
           <MessageToast message="Rezervace úspěšně vytvořena!" />
         </div>
       )}
       <Row className="mb-4">
-        <Col
-          md
-          style={{
-            backgroundColor: 'rgba(255, 0, 0, 0.4)',
-            padding: '20px',
-            borderRadius: '15px',
-            marginTop: '20px',
-            marginLeft: '20px',
-          }}
-        >
+        <Col md className="appointment-col">
           <Row className="justify-content-center mb-4">
             <WeekPicker
               currentWeek={currentWeek}
@@ -56,22 +44,13 @@ const AppointmentPage = () => {
               <ReservationClinicDropdown />
             </Col>
           </Row>
-          <Card style={{ backgroundColor: '#666' }}>
+          <Card className="appointment-card">
             <WeekGrid startOfWeek={currentWeek} />
           </Card>
         </Col>
         {}
         {selectedDoctor != null && (
-          <Col
-            style={{
-              backgroundColor: 'rgba(255, 0, 0, 0.4)',
-              padding: '20px',
-              marginTop: '20px',
-              marginLeft: '20px',
-              marginRight: '20px',
-              borderRadius: '15px',
-            }}
-          >
+          <Col className="appointment-col">
             <DoctorCard doctor={selectedDoctor} />
           </Col>
         )}

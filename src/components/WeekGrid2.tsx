@@ -40,7 +40,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   const [selectedTimes, setSelectedTimes] = useState(initialShifts || []);
 
   const addOrRemoveSelectedTime = (dayDate: Date, time: string) => {
-    const buttonKey = '${dayDate.getTime()}-${time}';
+    const buttonKey = `${dayDate.getTime()}-${time}`;
     const isSelected = buttonStates[buttonKey];
 
     let newButtonStates = { ...buttonStates };

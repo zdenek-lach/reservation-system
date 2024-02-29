@@ -1,5 +1,7 @@
-import axios from "axios";
-import config from '../../config/config.json'
+import axios from 'axios';
+import { Button } from 'react-bootstrap';
+import { refreshCheck } from 'security/AuthService';
+import config from '../../config/config.json';
 
 const ApiTester = () => {
   const apiUrls = {
@@ -27,6 +29,9 @@ const ApiTester = () => {
           Test {apiName}
         </button>
       ))}
+      <Button variant="dark" onClick={refreshCheck}>
+        Manual Token Refresh
+      </Button>
     </div>
   );
 };

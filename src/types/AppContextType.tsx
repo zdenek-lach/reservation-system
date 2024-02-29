@@ -21,4 +21,6 @@ export type AppContextType = {
   setShowMessageToast: React.Dispatch<React.SetStateAction<boolean>>;
   currentWeek: Date;
   setCurrentWeek: React.Dispatch<React.SetStateAction<Date>>;
+  username: string | null;
+  setUsername: React.Dispatch<React.SetStateAction<String>>;
 };

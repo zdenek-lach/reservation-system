@@ -17,6 +17,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const [doctorList, setDoctorList] = useState(() => {
     const storedContext = localStorage.getItem('appContext');
     return storedContext ? JSON.parse(storedContext).doctorList : null;
@@ -42,7 +43,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [reservationsList, setReservationsList] = useState<
     Reservation[] | null
   >(null);
-  const [showMessageToast, setShowMessageToast] = useState(false); // Initialize it with a default value
+  const [showMessageToast, setShowMessageToast] = useState(false);
+  //const [username, setUsername ] = useState('');
 
   // Load context from local storage on initial mount
   useEffect(() => {
@@ -69,6 +71,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       showMessageToast,
       currentWeek,
       setCurrentWeek,
+      username,
+      setUsername,
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
   }, [
@@ -81,6 +85,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     showMessageToast,
     currentWeek,
     setCurrentWeek,
+    username,
+    setUsername,
   ]);
 
   const contextValue: AppContextType = {
@@ -100,6 +106,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setShowMessageToast,
     currentWeek,
     setCurrentWeek,
+    username,
+    setUsername
   };
 
   return (

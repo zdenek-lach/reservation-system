@@ -13,6 +13,7 @@ import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
+import ChangePassword from 'components/ChangePassword';
 
 const StyledContainer = styled(Container)`
     margin-top: 20px;
@@ -39,7 +40,7 @@ const MyProfile = () => {
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
   const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
   useEffect(() => {
-    // Fetch shifts from the backend
+    
     axios
       .get(config.api.shiftApi.list, {
         headers: {
@@ -159,6 +160,7 @@ const MyProfile = () => {
       <Row>
         <Col md={2}>
           <h2>Můj profil</h2>
+          <ChangePassword/>
           <DoctorSelector
             selectedDoctor={selectedDoctor}
             setSelectedDoctor={setSelectedDoctor}

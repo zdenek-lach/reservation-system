@@ -1,23 +1,23 @@
+import axios from 'axios';
+import ApiTester from 'components/ApiTester';
 import { useAppContext } from 'context/AppContext';
+import { useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
-import axios from 'axios';
-import { useState } from 'react';
 import { login } from './../security/AuthService';
-import ApiTester from 'components/ApiTester';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn } = useAppContext();
-  const [username, setUsername] = useState('');
+  const { setIsLoggedIn, username, setUsername } = useAppContext();
+  const [loginUserName, setLoginUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLoginButton = (e: { preventDefault: () => void; }) => {
+  const handleLoginButton = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const loginData = {
-      username: username,
+      username: loginUserName,
       password: password,
     };
 
@@ -27,7 +27,8 @@ const LoginPage = () => {
         console.log(`Successfully logged in`);
         console.log(response.status);
         setIsLoggedIn(true);
-        login(username,password);
+        login(loginUserName, password);
+        setUsername(loginUserName);
         navigate('/management');
       })
       .catch((error) => {
@@ -38,15 +39,15 @@ const LoginPage = () => {
   return (
     <Container className="mt-5">
       <h2>Login</h2>
-      <ApiTester/>
+      <ApiTester />
       <Form id="loginForm" onSubmit={handleLoginButton}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Uživatelské jméno</Form.Label>
           <Form.Control
             type="text"
             placeholder="Uživatelské jméno"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={loginUserName}
+            onChange={(e) => setLoginUserName(e.target.value)}
           />
         </Form.Group>
 

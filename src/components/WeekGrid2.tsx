@@ -6,8 +6,8 @@ interface WeekGrid2Props {
   startOfWeek: Date;
   setClickedButtons: React.Dispatch<React.SetStateAction<TimeSlot[]>>;
   initialShifts?: TimeSlot[];
+  readOnly?: boolean;
 }
-
 const startHour = 7;
 const endHour = 19;
 const timeSlots = eachHourOfInterval({
@@ -24,6 +24,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   startOfWeek,
   setClickedButtons,
   initialShifts,
+  readOnly = false, // Add this line
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
@@ -31,7 +32,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
     let initialButtonStates = {};
     initialShifts?.forEach((slot) => {
       // Use optional chaining here
-      const buttonKey = `${slot.day.getTime()}-${slot.time}`;
+      const buttonKey = '${slot.day.getTime()}-${slot.time}';
       initialButtonStates[buttonKey] = true;
     });
     return initialButtonStates;
@@ -39,7 +40,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   const [selectedTimes, setSelectedTimes] = useState(initialShifts || []);
 
   const addOrRemoveSelectedTime = (dayDate: Date, time: string) => {
-    const buttonKey = `${dayDate.getTime()}-${time}`;
+    const buttonKey = '${dayDate.getTime()}-${time}';
     const isSelected = buttonStates[buttonKey];
 
     let newButtonStates = { ...buttonStates };
@@ -62,7 +63,6 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   useEffect(() => {
     setClickedButtons(selectedTimes);
   }, [selectedTimes, setClickedButtons]);
-
   return (
     <Table striped size="md">
       <tbody>
@@ -85,17 +85,20 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
                 </Badge>
               </td>
               {timeSlots.map((time) => {
-                const buttonKey = `${dayDate.getTime()}-${time}`;
+                const buttonKey = `${dayDate.getTime()}-${time}`; // Use getTime() instead of getDate()
                 const isSelected = buttonStates[buttonKey];
 
                 return (
-                  <td key={buttonKey} className="p-3">
+                  <td key={buttonKey} className="p-2">
                     <Button
                       style={{
                         borderRadius: '20px',
                       }}
                       variant={isSelected ? 'primary' : 'secondary'}
-                      onClick={() => addOrRemoveSelectedTime(dayDate, time)}
+                      onClick={() =>
+                        !readOnly && addOrRemoveSelectedTime(dayDate, time)
+                      }
+                      // disabled={readOnly}
                     >
                       {time}
                     </Button>

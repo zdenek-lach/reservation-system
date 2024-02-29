@@ -107,12 +107,22 @@ const EmployeeManagement = () => {
         console.error('Error deleting doctor ${doctor.id}:', error);
       });
   };
-
+  const fetchDoctors = async () => {
+    const getDoctorsUrl = config.api.doctorsApi.list;
+    try {
+      const response = await axios.get(getDoctorsUrl, {
+        headers: {
+          ...authHeader(),
+        },
+      });
+      setDoctorList(response.data);
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+    }
+  };
   const handleAddDoctor = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     const addUrl = config.api.doctorsApi.add;
-
     const newDoctor = {
       name: newFirstName,
       surname: newLastName,
@@ -122,7 +132,6 @@ const EmployeeManagement = () => {
       pictureId: newPictureId,
       availableClinics: newAvailableClinics,
     };
-
     axios
       .post(addUrl, newDoctor, {
         headers: {
@@ -132,23 +141,11 @@ const EmployeeManagement = () => {
       })
       .then((response) => {
         console.log('Successfully added new doctor');
-        if (doctorList) {
-          const updatedDoctors = [...doctorList, newDoctor];
-          setDoctorList(updatedDoctors);
-        }
-        console.log(response.status);
+        fetchDoctors(); // refresh the doctor list
       })
       .catch((error) => {
         console.error('Error adding new doctor:', error);
-        // Here you can handle the error, show a message to the user, etc.
       });
-
-    console.error(
-      'data sent: ' +
-        Object.entries(newDoctor).forEach((key) => console.error(key))
-    );
-
-    handleCloseModal();
   };
 
   const handleEditFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +176,7 @@ const EmployeeManagement = () => {
   const handleSaveChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (selectedDoctor) {
-      const editUrl = config.api.doctorsApi.edit + '/${selectedDoctor.id}';
+      const editUrl = config.api.doctorsApi.edit + `/${selectedDoctor.id}`;
 
       const updatedDoctor = {
         id: selectedDoctor.id,
@@ -191,7 +188,6 @@ const EmployeeManagement = () => {
         pictureId: editedPictureId,
         availableClinics: editedAvailableClinics,
       };
-
       axios
         .put(editUrl, updatedDoctor, {
           headers: {
@@ -201,24 +197,11 @@ const EmployeeManagement = () => {
         })
         .then((response) => {
           console.log('Successfully updated doctor ${selectedDoctor.id}');
-          if (doctorList) {
-            const updatedDoctors = doctorList.map((doc) =>
-              doc.id === selectedDoctor.id ? updatedDoctor : doc
-            );
-            setDoctorList(updatedDoctors);
-          }
-          console.log(response.status);
+          fetchDoctors(); // refresh the doctor list
         })
         .catch((error) => {
           console.error('Error updating doctor ${selectedDoctor.id}:', error);
         });
-
-      console.error(
-        'data sent: ' +
-          Object.entries(updatedDoctor).forEach((key) => console.error(key))
-      );
-
-      handleCloseModal();
     }
   };
 

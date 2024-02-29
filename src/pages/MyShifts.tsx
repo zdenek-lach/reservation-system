@@ -2,11 +2,12 @@ import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
+
 const StyledContainer = styled(Container)`
   margin-top: 20px;
 `;
@@ -28,6 +29,23 @@ const MyShifts = () => {
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
   const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
+
+  useEffect(() => {
+    if (selectedDoctor) {
+      const shifts = selectedDoctor.availableClinics.map((clinic) => ({
+        day: new Date(clinic.date),
+        time: clinic.timeFrom,
+      }));
+      setInitialShifts(shifts);
+
+      console.warn(
+        selectedDoctor.availableClinics.map((clinic) => ({
+          day: new Date(clinic.date),
+          time: clinic.timeFrom,
+        }))
+      );
+    }
+  }, [selectedDoctor]);
   return (
     <StyledContainer>
       <Row>
@@ -52,7 +70,11 @@ const MyShifts = () => {
           <WeekGrid2
             startOfWeek={currentWeek}
             setClickedButtons={setClickedButtons}
-            initialShifts={initialShifts}
+            initialShifts={selectedDoctor?.availableClinics.map((clinic) => ({
+              day: new Date(clinic.date),
+              time: clinic.timeFrom,
+            }))}
+            readOnly={true}
           />
         </Col>
       </Row>

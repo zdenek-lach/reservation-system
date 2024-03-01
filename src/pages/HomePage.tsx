@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import ClinicPicture from 'assets/clinic-picture.webp';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
@@ -23,8 +23,7 @@ const HomePage = () => {
       <Container>
         <Row className='justify-content-md-center'>
           <Col md='auto'>
-            <h1 className='mb-3'>Vstoupit do rezervačního systému</h1>
-            <p>Choose your side: </p>
+            <h1 className='mb-3 p-3'>Vstoupit do rezervačního systému</h1>
             <Button variant='primary' onClick={handleButtonClick}>
               Vstoupit
             </Button>

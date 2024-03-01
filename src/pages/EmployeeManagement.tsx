@@ -215,7 +215,6 @@ const EmployeeManagement = () => {
         marginLeft: '20px',
       }}
     >
-      <ApiTester />
       <Form.Group>
         <Form.Control
           type="text"

@@ -14,6 +14,8 @@ import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
 import ChangePassword from 'components/ChangePassword';
+import TimeBlock from 'types/TimeBlockType';
+import { endOfWeek, format, parseISO, startOfWeek } from 'date-fns';
 
 const StyledContainer = styled(Container)`
     margin-top: 20px;
@@ -39,8 +41,8 @@ const MyProfile = () => {
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
   const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
+  const [shiftsResponseData, setShiftsResponseData] = useState<any[]>([]);
   useEffect(() => {
-    
     axios
       .get(config.api.shiftApi.list, {
         headers: {
@@ -51,16 +53,24 @@ const MyProfile = () => {
       .then((response) => {
         // Convert the shifts to the TimeSlot format
         let shifts = response.data.map(
-          (shift: { date: string | number | Date; time: any }) => ({
-            day: new Date(shift.date),
-            time: shift.time,
+          (shiftsResponseData: {
+            id: any;
+            doctor: any;
+            clinic: any;
+            shifts: any;
+          }) => ({
+            id: shiftsResponseData.id,
+            doctor: shiftsResponseData.doctor,
+            clinic: shiftsResponseData.clinic,
+            shifts: formatDate(shiftsResponseData.shifts),
           })
         );
-        setInitialShifts(shifts);
+        setShiftsResponseData(shifts);
       })
       .catch((error) => {
         console.error(`Error fetching shifts`, error);
       });
+    setInitialShifts(getInitialShifts());
   }, [selectedDoctor, selectedClinic]);
   useEffect(() => {
     if (selectedDoctor) {
@@ -73,6 +83,16 @@ const MyProfile = () => {
       setDoctorWorkhours(selectedDoctor.availableClinics);
     }
   }, [selectedDoctor]);
+
+  const formatDate = (shifts: any) => {
+    let newShifts: TimeSlot[] = [];
+    for (const shift of shifts) {
+      // shift.date = format(parseISO(shift.date), 'MM/dd/yyyy');
+      shift.date = new Date(shift.date);
+      newShifts.push({ day: shift.date, time: shift.time });
+    }
+    return newShifts;
+  };
 
   const addPoint = () => {
     setPoints([...points, '']);
@@ -125,9 +145,24 @@ const MyProfile = () => {
   ) => {
     e.preventDefault();
 
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    };
+
+    const getFormatedDateAsNeeded = (date: Date, options) => {
+      let dateAndTime = new Date(date)
+        .toLocaleTimeString('en-US', options)
+        .split(',');
+      let dateParts = dateAndTime[0].split('/');
+      return `${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`;
+    };
+
     // Build the shifts array from clickedButtons
     let shifts = clickedButtons.map((slot) => ({
-      date: new Date(slot.day).toISOString().split('T')[0],
+      //date: new Date(slot.day).toISOString().split('T')[0],
+      date: getFormatedDateAsNeeded(slot.day, options),
       time: slot.time,
     }));
 
@@ -155,12 +190,42 @@ const MyProfile = () => {
       });
   };
 
+  const getInitialShifts = (): TimeSlot[] => {
+    if (selectedDoctor && selectedClinic) {
+      let filtered = shiftsResponseData.filter((shiftsResponse) => {
+        return (
+          shiftsResponse.doctor.id == selectedDoctor.id &&
+          shiftsResponse.clinic.id == selectedClinic.id
+        );
+      });
+      let finallyAllShifts: TimeSlot[] = [];
+      filtered.forEach((item) => {
+        for (const shift of item.shifts) {
+          finallyAllShifts.push(shift);
+        }
+      });
+      console.log(finallyAllShifts);
+      // TODO reimplement when colours are functional :)
+      // finallyAllShifts = finallyAllShifts.filter((shift) => {
+      //   return (
+      //     new Date(shift.day) >= startOfWeek(currentWeek.getDay()) &&
+      //     new Date(shift.day) <= endOfWeek(currentWeek.getDay())
+      //   );
+      // });
+      // console.log(finallyAllShifts);
+      //TODO
+      return finallyAllShifts;
+    } else {
+      return [];
+    }
+  };
+
   return (
     <StyledContainer>
       <Row>
         <Col md={2}>
           <h2>Můj profil</h2>
-          <ChangePassword/>
+          <ChangePassword />
           <DoctorSelector
             selectedDoctor={selectedDoctor}
             setSelectedDoctor={setSelectedDoctor}
@@ -172,8 +237,8 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Titul</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="MuDr."
+                type='text'
+                placeholder='MuDr.'
                 value={title || ''}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -181,8 +246,8 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Jméno</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Jan"
+                type='text'
+                placeholder='Jan'
                 value={firstName || ''}
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -190,20 +255,20 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Přijmení</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Novák"
+                type='text'
+                placeholder='Novák'
                 value={lastName || ''}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Obrázek</Form.Label>
-              <Form.Control type="file" disabled />
+              <Form.Control type='file' disabled />
             </Form.Group>
             <Form.Group>
               <Form.Label>Popisek</Form.Label>
               <Form.Control
-                as="textarea"
+                as='textarea'
                 rows={3}
                 value={description || ''}
                 onChange={(e) => setDescription(e.target.value)}
@@ -214,23 +279,23 @@ const MyProfile = () => {
               {points.map((point, index) => (
                 <div key={index}>
                   <Form.Control
-                    type="text"
-                    placeholder="Vložit nový bod"
+                    type='text'
+                    placeholder='Vložit nový bod'
                     value={point}
                     onChange={(e) => updatePoint(index, e.target.value)}
-                    className=""
+                    className=''
                   />
-                  <Button variant="danger" onClick={() => deletePoint(index)}>
+                  <Button variant='danger' onClick={() => deletePoint(index)}>
                     <Trash2Fill />
                   </Button>
                 </div>
               ))}
-              <Button variant="warning" onClick={addPoint}>
+              <Button variant='warning' onClick={addPoint}>
                 <PlusCircle />
               </Button>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant='primary' type='submit'>
               Uložit změny
             </Button>
           </Form>
@@ -255,7 +320,7 @@ const MyProfile = () => {
                 initialShifts={initialShifts}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant='primary' type='submit'>
               Uložit změny
             </Button>
           </Form>

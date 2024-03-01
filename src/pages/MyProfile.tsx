@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ChangePassword from 'components/ChangePassword';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
@@ -13,9 +14,6 @@ import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
-import ChangePassword from 'components/ChangePassword';
-import TimeBlock from 'types/TimeBlockType';
-import { endOfWeek, format, parseISO, startOfWeek } from 'date-fns';
 
 const StyledContainer = styled(Container)`
     margin-top: 20px;
@@ -237,8 +235,8 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Titul</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='MuDr.'
+                type="text"
+                placeholder="MuDr."
                 value={title || ''}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -246,8 +244,8 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Jméno</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='Jan'
+                type="text"
+                placeholder="Jan"
                 value={firstName || ''}
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -255,20 +253,20 @@ const MyProfile = () => {
             <Form.Group>
               <Form.Label>Přijmení</Form.Label>
               <Form.Control
-                type='text'
-                placeholder='Novák'
+                type="text"
+                placeholder="Novák"
                 value={lastName || ''}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Obrázek</Form.Label>
-              <Form.Control type='file' disabled />
+              <Form.Control type="file" disabled />
             </Form.Group>
             <Form.Group>
               <Form.Label>Popisek</Form.Label>
               <Form.Control
-                as='textarea'
+                as="textarea"
                 rows={3}
                 value={description || ''}
                 onChange={(e) => setDescription(e.target.value)}
@@ -279,23 +277,23 @@ const MyProfile = () => {
               {points.map((point, index) => (
                 <div key={index}>
                   <Form.Control
-                    type='text'
-                    placeholder='Vložit nový bod'
+                    type="text"
+                    placeholder="Vložit nový bod"
                     value={point}
                     onChange={(e) => updatePoint(index, e.target.value)}
-                    className=''
+                    className=""
                   />
-                  <Button variant='danger' onClick={() => deletePoint(index)}>
+                  <Button variant="danger" onClick={() => deletePoint(index)}>
                     <Trash2Fill />
                   </Button>
                 </div>
               ))}
-              <Button variant='warning' onClick={addPoint}>
+              <Button variant="warning" onClick={addPoint}>
                 <PlusCircle />
               </Button>
             </Form.Group>
 
-            <Button variant='primary' type='submit'>
+            <Button variant="primary" type="submit">
               Uložit změny
             </Button>
           </Form>
@@ -320,8 +318,8 @@ const MyProfile = () => {
                 initialShifts={initialShifts}
               />
             </Form.Group>
-            <Button variant='primary' type='submit'>
-              Uložit změny
+            <Button variant="primary" type="submit">
+              Uložit směny
             </Button>
           </Form>
         </Col>

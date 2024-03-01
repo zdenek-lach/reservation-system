@@ -60,8 +60,7 @@ const LoginPage = () => {
 
   return (
     <Container className="mt-5">
-      <h2>Login</h2>
-      <ApiTester />
+      <h2>Přihlášení</h2>
       <Form id="loginForm" onSubmit={handleLoginButton}>
         {showLoginError && <Alert variant="danger">{loginError}</Alert>}
         <Form.Group controlId="formUsername">

@@ -22,7 +22,7 @@
     "authApi": {
       "getToken": "http://127.0.0.1:8000/api/token",
       "refreshToken": "http://127.0.0.1:8000/api/token/refresh",
-      "changePassword":"http://127.0.0.1:8000/api/edit/managementUser/"
+      "changePassword": "http://127.0.0.1:8000/api/edit/managementUser/"
     },
     "shiftApi": {
       "add": "http://127.0.0.1:8000/api/add/shift",

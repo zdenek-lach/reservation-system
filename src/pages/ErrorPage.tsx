@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import '../styles/ErrorPage.css';
 
 interface ErrorPageProps {
   errorMessage?: string;
@@ -8,23 +9,8 @@ interface ErrorPageProps {
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ errorMessage }) => {
   return (
-    <div
-      style={{
-        background: 'linear-gradient(to right, black, red)',
-        minHeight: '100vh',
-        width: '100%',
-        margin: 'auto',
-        padding: 'auto',
-      }}
-      className="d-flex justify-content-center align-items-center fluid"
-    >
-      <Row
-        className="p-4 m-2 shadow"
-        style={{
-          backgroundColor: '#222',
-          borderRadius: '20px',
-        }}
-      >
+    <div className="errorPage d-flex justify-content-center align-items-center fluid">
+      <Row className="errorRow p-4 m-2 shadow">
         <Col xs={12} className="text-center">
           <FaExclamationTriangle size="64px" color="red" />
         </Col>

@@ -9,30 +9,30 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   return (
     <>
       <CardGroup>
-        <Card className="card">
+        <Card className='card'>
           {!imageLoaded && <Spinner />}
           <Card.Img
-            variant="top"
-            src={`/assets/doctorPics/${doctor.pictureId}.jpg`}
+            variant='top'
+            src={`/assets/doctorPics/${doctor.pictureId}.png`}
             alt={`Doctor ${doctor.firstName + doctor.lastName}`}
             className={`card-img ${imageLoaded ? '' : 'hidden'}`}
             onLoad={() => setImageLoaded(true)}
           />
         </Card>
-        <Card className="card">
+        <Card className='card'>
           <Card.Body>
             <Card.Title>
               {doctor.title} {doctor.firstName} {doctor.lastName}
             </Card.Title>
-            <Card.Text className="card-text">{doctor.description}</Card.Text>
+            <Card.Text className='card-text'>{doctor.description}</Card.Text>
           </Card.Body>
         </Card>
       </CardGroup>
       <CardGroup>
-        <Card className="card">
-          <ListGroup variant="flush" className="list-group">
+        <Card className='card'>
+          <ListGroup variant='flush' className='list-group'>
             {doctor.points.map((point, index) => (
-              <ListGroup.Item key={index} className="list-group-item">
+              <ListGroup.Item key={index} className='list-group-item'>
                 {point}
               </ListGroup.Item>
             ))}

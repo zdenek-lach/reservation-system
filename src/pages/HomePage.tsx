@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import ClinicPicture from 'assets/clinic-picture.webp';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -12,7 +11,6 @@ const HomePage = () => {
   return (
     <div
       style={{
-        backgroundImage: `url(${ClinicPicture})`,
         backgroundSize: '100% 100%',
         height: '100vh',
         display: 'flex',
@@ -23,11 +21,11 @@ const HomePage = () => {
       }}
     >
       <Container>
-        <Row className="justify-content-md-center">
-          <Col md="auto">
-            <h1 className="mb-3">Vstoupit do rezervačního systému</h1>
+        <Row className='justify-content-md-center'>
+          <Col md='auto'>
+            <h1 className='mb-3'>Vstoupit do rezervačního systému</h1>
             <p>Choose your side: </p>
-            <Button variant="primary" onClick={handleButtonClick}>
+            <Button variant='primary' onClick={handleButtonClick}>
               Vstoupit
             </Button>
           </Col>

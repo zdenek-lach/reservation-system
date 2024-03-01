@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardGroup, ListGroup, Spinner } from 'react-bootstrap';
 import Doctor from 'types/DoctorType';
-import '../styles/DoctorCard.css';
 
 const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -9,30 +8,49 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
   return (
     <>
       <CardGroup>
-        <Card className='card'>
+        <Card style={{ width: '18rem' }}>
           {!imageLoaded && <Spinner />}
           <Card.Img
             variant='top'
             src={`/assets/doctorPics/${doctor.pictureId}.png`}
             alt={`Doctor ${doctor.firstName + doctor.lastName}`}
-            className={`card-img ${imageLoaded ? '' : 'hidden'}`}
+            style={{
+              width: '80%', // Make the picture smaller
+              borderRadius: '0.5rem',
+              margin: '20px auto', // Center the image
+              padding: '10px',
+              display: imageLoaded ? 'block' : 'none',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            }}
             onLoad={() => setImageLoaded(true)}
           />
         </Card>
-        <Card className='card'>
+        <Card style={{ width: '18rem' }}>
           <Card.Body>
             <Card.Title>
               {doctor.title} {doctor.firstName} {doctor.lastName}
             </Card.Title>
-            <Card.Text className='card-text'>{doctor.description}</Card.Text>
+            <Card.Text style={{ color: '#6c757d', lineHeight: '1.6' }}>
+              {doctor.description}
+            </Card.Text>
           </Card.Body>
         </Card>
       </CardGroup>
       <CardGroup>
-        <Card className='card'>
-          <ListGroup variant='flush' className='list-group'>
+        <Card style={{ width: '18rem' }}>
+          <ListGroup
+            variant='flush'
+            style={{ margin: '0 20px', borderRadius: '0.5rem' }}
+          >
             {doctor.points.map((point, index) => (
-              <ListGroup.Item key={index} className='list-group-item'>
+              <ListGroup.Item
+                key={index}
+                style={{
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '0.25rem',
+                  marginBottom: '0.5rem',
+                }}
+              >
                 {point}
               </ListGroup.Item>
             ))}

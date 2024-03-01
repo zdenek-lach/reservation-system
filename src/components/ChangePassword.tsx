@@ -44,7 +44,7 @@ const ChangePassword: React.FC = () => {
         Přihlášený uživatel: <h2>{username}</h2>
       </div>
       <Button variant="primary" onClick={handleShow}>
-        Change Password
+        Změnit heslo
       </Button>
 
       <Modal show={show} onHide={handleClose}>

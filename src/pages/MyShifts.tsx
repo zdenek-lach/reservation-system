@@ -53,6 +53,7 @@ const MyShifts = () => {
             startOfWeek={currentWeek}
             setClickedButtons={setClickedButtons}
             initialShifts={initialShifts}
+            readOnly={true}
           />
         </Col>
       </Row>

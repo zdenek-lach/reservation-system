@@ -38,8 +38,7 @@ const LoginPage = () => {
 
   return (
     <Container className="mt-5">
-      <h2>Login</h2>
-      <ApiTester />
+      <h2>Přihlášení</h2>
       <Form id="loginForm" onSubmit={handleLoginButton}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Uživatelské jméno</Form.Label>

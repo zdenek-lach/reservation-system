@@ -1,8 +1,7 @@
 import axios from 'axios';
-import ApiTester from 'components/ApiTester';
 import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import { Alert, Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import { login } from './../security/AuthService';
@@ -12,6 +11,8 @@ const LoginPage = () => {
   const { setIsLoggedIn, username, setUsername } = useAppContext();
   const [loginUserName, setLoginUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [showLoginError, setShowLoginError] = useState(false);
 
   const handleLoginButton = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -24,15 +25,36 @@ const LoginPage = () => {
     axios
       .post(config.api.authApi.getToken, loginData)
       .then((response) => {
-        console.log(`Successfully logged in`);
-        console.log(response.status);
-        setIsLoggedIn(true);
-        login(loginUserName, password);
-        setUsername(loginUserName);
-        navigate('/management');
+        if (response.status === 200) {
+          console.log(`Successfully logged in`);
+          console.log(response.status);
+          setIsLoggedIn(true);
+          login(loginUserName, password);
+          setUsername(loginUserName);
+          navigate('/management');
+        } else if (response.status === 400) {
+          setLoginError(response.data.message);
+          setShowLoginError(true);
+        }
       })
       .catch((error) => {
         console.error(`Error while logging in:`, error);
+
+        if (error.response) {
+          const statusCode = error.response.status;
+
+          if (statusCode === 400) {
+            setLoginError('Nechybí nějaký údaj?');
+          } else if (statusCode === 401) {
+            setLoginError('Neplatné přihlašovací údaje.');
+          } else {
+            setLoginError('Nastala chyba při přihlášení.');
+          }
+        } else {
+          setLoginError('Nastala chyba při komunikaci se serverem.');
+        }
+
+        setShowLoginError(true);
       });
   };
 
@@ -40,7 +62,8 @@ const LoginPage = () => {
     <Container className="mt-5">
       <h2>Přihlášení</h2>
       <Form id="loginForm" onSubmit={handleLoginButton}>
-        <Form.Group controlId="formBasicEmail">
+        {showLoginError && <Alert variant="danger">{loginError}</Alert>}
+        <Form.Group controlId="formUsername">
           <Form.Label>Uživatelské jméno</Form.Label>
           <Form.Control
             type="text"
@@ -49,8 +72,7 @@ const LoginPage = () => {
             onChange={(e) => setLoginUserName(e.target.value)}
           />
         </Form.Group>
-
-        <Form.Group controlId="formBasicPassword">
+        <Form.Group controlId="formPassword">
           <Form.Label>Heslo</Form.Label>
           <Form.Control
             type="password"
@@ -59,7 +81,6 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-
         <Button variant="primary" type="submit" onClick={handleLoginButton}>
           Login
         </Button>

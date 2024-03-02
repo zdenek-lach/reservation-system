@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import AddReservation from 'components/AddReservation';
+import ApiTester from 'components/ApiTester';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekPicker from 'components/WeekPicker';
@@ -7,7 +9,7 @@ import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Container,
@@ -93,7 +95,11 @@ const ReservationManagement = () => {
     const deleteUrl = config.api.reservationsApi.delete + `/${reservation.id}`;
 
     axios
-      .delete(deleteUrl)
+      .delete(deleteUrl, {
+        headers: {
+          ...authHeader(),
+        },
+      })
       .then((response) => {
         console.log(`Successfully deleted reservation ${reservation.id}`);
         console.log(response.status);
@@ -110,10 +116,6 @@ const ReservationManagement = () => {
       });
   };
 
-  const handleAddReservation = () => {
-    // Add your logic to add a new reservation to the data source here
-    console.log('Adding a new reservation');
-  };
   const handleEditFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedFirstName(event.target.value);
   };
@@ -185,9 +187,10 @@ const ReservationManagement = () => {
             const updatedReservations = reservationsList.map((res) =>
               res.id === selectedReservation.id ? updatedReservation : res
             );
-            
+
             setReservationsList(updatedReservations); //fixme it works, but shows error.. idk how to fix this.. just typescript things :)
           }
+          handleCloseModal();
           console.log(response.status);
         })
         .catch((error) => {
@@ -207,7 +210,7 @@ const ReservationManagement = () => {
       handleCloseModal();
     }
   };
-  
+
   const startOfWeek = (date: Date) => {
     const result = new Date(date);
     result.setDate(result.getDate() - result.getDay() + 1);
@@ -219,6 +222,10 @@ const ReservationManagement = () => {
     result.setDate(result.getDate() - result.getDay() + 7);
     return result;
   };
+
+  useEffect(() => {
+    reservationsList;
+  });
 
   return (
     <Container
@@ -364,9 +371,8 @@ const ReservationManagement = () => {
               ))}
         </tbody>
       </Table>
-      <Button variant="success" onClick={handleAddReservation}>
-        Přidat novou rezervaci
-      </Button>
+      <AddReservation />
+      <ApiTester />
       <Modal show={showInfoModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Informace o rezervaci</Modal.Title>

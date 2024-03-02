@@ -15,7 +15,7 @@ const DoctorSelector: React.FC<DoctorSelectorProps> = ({
   const { doctorList } = useAppContext();
   return (
     <label>
-      Jsem: Doktor:
+      Doktor:
       <Dropdown>
         <Dropdown.Toggle variant="success">
           {selectedDoctor != null

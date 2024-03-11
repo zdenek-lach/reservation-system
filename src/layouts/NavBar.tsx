@@ -1,8 +1,9 @@
 import { useAppContext } from 'context/AppContext';
 import React from 'react';
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import packageJson from '../../package.json';
+import logoText from '../assets/logoText.png';
 
 const NavBar: React.FC = () => {
   let location = useLocation();
@@ -12,7 +13,9 @@ const NavBar: React.FC = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
   const navigate = useNavigate();
+
   return (
     <Navbar bg="danger" variant="dark" expand="lg" className="p-3">
       <Container>
@@ -22,7 +25,9 @@ const NavBar: React.FC = () => {
           }}
           className="d-flex align-items-center"
         >
-          Rezervační systém Artromedi
+          <div className="secondary">
+            <Image src={logoText} width={300} thumbnail />
+          </div>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">

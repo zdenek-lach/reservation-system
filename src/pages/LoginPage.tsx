@@ -76,7 +76,7 @@ const LoginPage = () => {
           <Form.Label>Heslo</Form.Label>
           <Form.Control
             type="password"
-            placeholder="TajneHeslo123"
+            placeholder="Heslo"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

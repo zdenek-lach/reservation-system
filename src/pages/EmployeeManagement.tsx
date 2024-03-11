@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import ApiTester from 'components/ApiTester';
 import ClinicSelector from 'components/ClinicSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';

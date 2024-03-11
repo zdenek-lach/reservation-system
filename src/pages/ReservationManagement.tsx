@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import AddReservation from 'components/AddReservation';
-import ApiTester from 'components/ApiTester';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekPicker from 'components/WeekPicker';
@@ -372,7 +371,6 @@ const ReservationManagement = () => {
         </tbody>
       </Table>
       <AddReservation />
-      <ApiTester />
       <Modal show={showInfoModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Informace o rezervaci</Modal.Title>

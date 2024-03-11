@@ -1,32 +1,32 @@
 {
   "api": {
     "doctorsApi": {
-      "list": "http://127.0.0.1:8080/api/doctors",
-      "detail": "http://127.0.0.1:8080/api/doctor",
-      "add": "http://127.0.0.1:8080/api/add/doctor",
-      "edit": "http://127.0.0.1:8080/api/edit/doctor",
-      "delete": "http://127.0.0.1:8080/api/delete/doctor"
+      "list": "https://rezervace.artromedi.cz:8080/api/doctors",
+      "detail": "https://rezervace.artromedi.cz:8080/api/doctor",
+      "add": "https://rezervace.artromedi.cz:8080/api/add/doctor",
+      "edit": "https://rezervace.artromedi.cz:8080/api/edit/doctor",
+      "delete": "https://rezervace.artromedi.cz:8080/api/delete/doctor"
     },
     "clinicsApi": {
-      "list": "http://127.0.0.1:8080/api/clinics",
-      "add": "http://127.0.0.1:8080/api/add/clinic",
-      "edit": "http://127.0.0.1:8080api/edit/clinic",
-      "delete": "http://127.0.0.1:8080/api/delete/clinic"
+      "list": "https://rezervace.artromedi.cz:8080/api/clinics",
+      "add": "https://rezervace.artromedi.cz:8080/api/add/clinic",
+      "edit": "https://rezervace.artromedi.cz:8080/api/edit/clinic",
+      "delete": "https://rezervace.artromedi.cz:8080/api/delete/clinic"
     },
     "reservationsApi": {
-      "list": "http://127.0.0.1:8080/api/reservations",
-      "add": "http://127.0.0.1:8080/api/add/reservation",
-      "edit": "http://127.0.0.1:8080/api/edit/reservation",
-      "delete": "http://127.0.0.1:8080/api/delete/reservation"
+      "list": "https://rezervace.artromedi.cz:8080/api/reservations",
+      "add": "https://rezervace.artromedi.cz:8080/api/add/reservation",
+      "edit": "https://rezervace.artromedi.cz:8080/api/edit/reservation",
+      "delete": "https://rezervace.artromedi.cz:8080/api/delete/reservation"
     },
     "authApi": {
-      "getToken": "http://127.0.0.1:8080/api/token",
-      "refreshToken": "http://127.0.0.1:8080/api/token/refresh",
-      "changePassword": "http://127.0.0.1:8080/api/edit/managementUser/"
+      "getToken": "https://rezervace.artromedi.cz:8080/api/token",
+      "refreshToken": "https://rezervace.artromedi.cz:8080/api/token/refresh",
+      "changePassword": "https://rezervace.artromedi.cz:8080/api/edit/managementUser/"
     },
     "shiftApi": {
-      "add": "http://127.0.0.1:8080/api/add/shift",
-      "list": "http://127.0.0.1:8080/api/shift"
+      "add": "https://rezervace.artromedi.cz:8080/api/add/shift",
+      "list": "https://rezervace.artromedi.cz:8080/api/shift"
     }
   },
   "general": {

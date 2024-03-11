@@ -10,7 +10,7 @@ const ReservationDoctorDropdown = () => {
   const renderReservationDoctorDropdown = () => {
     return (
       <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
+        <Dropdown.Toggle variant='success' id='dropdown-basic'>
           {selectedDoctor != null
             ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
             : 'Vyberte Doktora'}
@@ -23,7 +23,7 @@ const ReservationDoctorDropdown = () => {
 
   const listDoctorsAsMenuItems = () => {
     if (!Array.isArray(doctorList) || doctorList.length === 0) {
-      return <Dropdown.Item key="empty">DoctorList is empty</Dropdown.Item>;
+      return <Dropdown.Item key='empty'>DoctorList is empty</Dropdown.Item>;
     }
 
     return doctorList.map((doctor) => {
@@ -31,14 +31,14 @@ const ReservationDoctorDropdown = () => {
 
       return (
         <Dropdown.Item key={id} onClick={() => setSelectedDoctor(doctor)}>
-          {`${id} ${title} ${firstName} ${lastName}`}
+          {`${title} ${firstName} ${lastName}`}
         </Dropdown.Item>
       );
     });
   };
 
   return loadingDoctors ? (
-    <Spinner animation="border" role="status" />
+    <Spinner animation='border' role='status' />
   ) : errorDoctors ? (
     <div>
       <strong>

@@ -17,7 +17,7 @@ const DoctorSelector: React.FC<DoctorSelectorProps> = ({
     <label>
       Doktor:
       <Dropdown>
-        <Dropdown.Toggle variant="success">
+        <Dropdown.Toggle variant='success'>
           {selectedDoctor != null
             ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
             : 'Vyberte Doktora'}

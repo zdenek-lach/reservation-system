@@ -18,24 +18,26 @@ import {
 import Reservation from 'types/ReservationType';
 
 interface EditReservationProps{
-  reservation: Reservation;
+  Reservation: Reservation;
+  name: string;
 }
-const AddReservation = () => {
+const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    comment: '',
+    firstName: Reservation.client.firstName,
+    lastName: Reservation.client.lastName,
+    phone: Reservation.client.phoneNumber,
+    email: Reservation.client.email,
+    comment: Reservation.note,
   });
   const [validationError, setValidationError] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(Reservation.date));
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>();
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>();
   const { setShowMessageToast } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Hello Jackie")
     setNewReservationData((prevData) => ({
       ...prevData,
       [e.target.id]: e.target.value,
@@ -75,7 +77,7 @@ const AddReservation = () => {
         };
 
         const response = await axios.post(
-          config.api.reservationsApi.add,
+          config.api.reservationsApi.edit,
           reservationToAdd,
           {
             headers: {
@@ -228,4 +230,4 @@ const AddReservation = () => {
   );
 };
 
-export default AddReservation;
+export default EditReservation;

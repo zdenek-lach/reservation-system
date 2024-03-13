@@ -348,7 +348,7 @@ const ReservationManagement = () => {
                     >
                       <InfoCircle />
                     </Button>
-                    <EditReservation></EditReservation>
+                    <EditReservation Reservation = {reservation as Reservation} name={reservation.client.firstName}></EditReservation>
                     <Button
                       variant="danger"
                       size="lg"

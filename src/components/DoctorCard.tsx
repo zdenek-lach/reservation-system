@@ -15,12 +15,12 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             src={`/assets/doctorPics/${doctor.pictureId}.png`}
             alt={`Doctor ${doctor.firstName + doctor.lastName}`}
             style={{
-              width: '80%', // Make the picture smaller
+              width: '70%', // Make the picture smaller
               borderRadius: '0.5rem',
               margin: '20px auto', // Center the image
               padding: '10px',
               display: imageLoaded ? 'block' : 'none',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
             }}
             onLoad={() => setImageLoaded(true)}
           />
@@ -30,7 +30,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
             <Card.Title>
               {doctor.title} {doctor.firstName} {doctor.lastName}
             </Card.Title>
-            <Card.Text style={{ color: '#6c757d', lineHeight: '1.6' }}>
+            <Card.Text style={{ color: '#6c757d', lineHeight: '1.8' }}>
               {doctor.description}
             </Card.Text>
           </Card.Body>
@@ -40,7 +40,7 @@ const DoctorCard: React.FC<{ doctor: Doctor }> = ({ doctor }) => {
         <Card style={{ width: '18rem' }}>
           <ListGroup
             variant='flush'
-            style={{ margin: '0 20px', borderRadius: '0.5rem' }}
+            style={{ margin: '20px', borderRadius: '0.5rem' }}
           >
             {doctor.points.map((point, index) => (
               <ListGroup.Item

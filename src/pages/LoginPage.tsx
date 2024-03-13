@@ -44,7 +44,7 @@ const LoginPage = () => {
           const statusCode = error.response.status;
 
           if (statusCode === 400) {
-            setLoginError('Nechybí nějaký údaj?');
+            setLoginError('Chybí uživatelské jméno nebo heslo');
           } else if (statusCode === 401) {
             setLoginError('Neplatné přihlašovací údaje.');
           } else {
@@ -66,8 +66,7 @@ const LoginPage = () => {
           <h2>Přihlášení</h2>
           <Form id='loginForm' onSubmit={handleLoginButton}>
             {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
-            <Form.Group controlId='formUsername'>
-              <Form.Label>Uživatelské jméno</Form.Label>
+            <Form.Group controlId='formUsername' className = 'mt-4'>
               <Form.Control
                 type='text'
                 placeholder='Uživatelské jméno'
@@ -75,8 +74,7 @@ const LoginPage = () => {
                 onChange={(e) => setLoginUserName(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId='formPassword'>
-              <Form.Label>Heslo</Form.Label>
+            <Form.Group controlId='formPassword' className = 'mt-4'>
               <Form.Control
                 type='password'
                 placeholder='Heslo'
@@ -88,7 +86,7 @@ const LoginPage = () => {
               variant='danger'
               type='submit'
               onClick={handleLoginButton}
-              className='mt-2'
+              className='mt-4'
             >
               Přihlásit se
             </Button>

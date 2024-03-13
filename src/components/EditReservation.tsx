@@ -12,7 +12,14 @@ import config from '../../config/config.json';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
 import { useAppContext } from 'context/AppContext';
+import {
+  Pencil,
+} from 'react-bootstrap-icons';
+import Reservation from 'types/ReservationType';
 
+interface EditReservationProps{
+  reservation: Reservation;
+}
 const AddReservation = () => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
@@ -80,7 +87,7 @@ const AddReservation = () => {
 
         if (response.status === 200) {
           // OK, inform user the action has been succesful
-          console.log('Adding reservation was succesful');
+          console.log('Edit reservation was succesful');
           setShowMessageToast(true);
         } else {
           console.log('You have caused an error!');
@@ -95,12 +102,12 @@ const AddReservation = () => {
     const { firstName, lastName, phone, email } = newReservationData;
 
     if (!firstName) {
-      setValidationError('Prosím vyplňte své jméno.');
+      setValidationError('Prosím vyplňte jméno.');
       return false;
     }
 
     if (!lastName) {
-      setValidationError('Prosím vyplňte své příjmení.');
+      setValidationError('Prosím vyplňte příjmení.');
       return false;
     }
 
@@ -129,13 +136,13 @@ const AddReservation = () => {
   };
   return (
     <>
-      <Button variant="danger" onClick={() => setShowModal(true)}>
-        Přidat novou rezervaci
+      <Button variant="warning" size="lg" className="me-1" onClick={() => setShowModal(true)}>
+        <Pencil></Pencil>
       </Button>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Nová rezervace</Modal.Title>
+          <Modal.Title>Editace rezervace</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -181,8 +188,8 @@ const AddReservation = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <br></br>
             <Form.Group controlId="selectedDate">
+              <br></br>
               <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
               <DatePicker
                 selected={selectedDate}
@@ -190,7 +197,7 @@ const AddReservation = () => {
                 dateFormat="yyyy-MM-dd"
                 placeholderText=""
               />
-              <br/>
+              <br />
               Vybraný čas:
               <input
                 type="time"
@@ -212,8 +219,8 @@ const AddReservation = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={handleSubmit}>
-            Odeslat
+          <Button variant="primary" onClick={handleSubmit}>
+            Uložit upravenou rezervaci
           </Button>
         </Modal.Footer>
       </Modal>

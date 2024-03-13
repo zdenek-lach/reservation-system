@@ -10,10 +10,10 @@ const ReservationClinicDropdown = () => {
   const renderReservationClinicDropdown = () => {
     return (
       <Dropdown>
-        <Dropdown.Toggle variant='success' id='dropdown-basic'>
+        <Dropdown.Toggle variant='danger' id='dropdown-basic'>
           {selectedClinic != null
             ? `${selectedClinic.name} ${selectedClinic.location}`
-            : 'Vyberte Kliniku'}
+            : 'Vyberte ambulanci'}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>{listClinicsAsMenuItems()}</Dropdown.Menu>

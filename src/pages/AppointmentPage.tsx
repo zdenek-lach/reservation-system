@@ -1,4 +1,5 @@
 import DoctorCard from 'components/DoctorCard';
+import Footer from 'components/Footer';
 import MessageToast from 'components/MessageToast';
 import ReservationClinicDropdown from 'components/ReservationClinicDropdown';
 import ReservationDoctorDropdown from 'components/ReservationDoctorDropdown';
@@ -35,11 +36,9 @@ const AppointmentPage = () => {
         <Col
           md
           style={{
-            backgroundColor: 'rgba(255, 0, 0, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0)',
             padding: '20px',
-            borderRadius: '15px',
-            marginTop: '20px',
-            marginLeft: '20px',
+            alignContent: "left"
           }}
         >
           <Row className="justify-content-center mb-4">
@@ -56,7 +55,7 @@ const AppointmentPage = () => {
               <ReservationClinicDropdown />
             </Col>
           </Row>
-          <Card style={{ backgroundColor: '#666' }}>
+          <Card style={{ backgroundColor: '#FFF' }} className="justify-content-left mb-">
             <WeekGrid startOfWeek={currentWeek} />
           </Card>
         </Col>
@@ -64,18 +63,18 @@ const AppointmentPage = () => {
         {selectedDoctor != null && (
           <Col
             style={{
-              backgroundColor: 'rgba(255, 0, 0, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0)',
               padding: '20px',
               marginTop: '20px',
               marginLeft: '20px',
               marginRight: '20px',
-              borderRadius: '15px',
             }}
           >
             <DoctorCard doctor={selectedDoctor} />
           </Col>
         )}
       </Row>
+      <Footer></Footer>
     </Container>
   );
 };

@@ -10,10 +10,10 @@ const ReservationDoctorDropdown = () => {
   const renderReservationDoctorDropdown = () => {
     return (
       <Dropdown>
-        <Dropdown.Toggle variant='success' id='dropdown-basic'>
+        <Dropdown.Toggle variant='danger' id='dropdown-basic'>
           {selectedDoctor != null
             ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
-            : 'Vyberte Doktora'}
+            : 'Vyberte doktora'}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>{listDoctorsAsMenuItems()}</Dropdown.Menu>

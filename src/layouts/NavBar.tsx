@@ -17,45 +17,55 @@ const NavBar: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Navbar bg="danger" variant="dark" expand="lg" className="p-3">
+    <Navbar
+      variant='dark'
+      expand='lg'
+      className='p-3 border-bottom border-danger'
+    >
       <Container>
         <Navbar.Brand
           onClick={() => {
             navigate('appointment-page');
           }}
-          className="d-flex align-items-center"
+          className='d-flex align-items-center'
         >
-          <div className="secondary">
-            <Image src={logoText} width={300} thumbnail />
+          <div className='secondary'>
+            <Image src={logoText} width={250} className='p-0 m-0' />
           </div>
         </Navbar.Brand>
         <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Collapse className='justify-content-end'>
           <Nav>
-            <Nav.Item className="text-light p-2 d-flex align-items-center">
+            <Nav.Item className=' p-2 d-flex align-items-center'>
               verze {packageJson.version}
             </Nav.Item>
 
             {isLoggedIn ? (
               <>
                 <Button
-                  variant="secondary"
+                  variant='outline-danger'
                   onClick={() => navigate('/management')}
+                  className='me-2'
                 >
                   Management
                 </Button>
-                <Nav.Link
-                  href="/"
+                <Button
+                  href='/'
                   onClick={handleLogout}
-                  className="d-flex align-items-center"
+                  variant='outline-danger'
+                  className='d-flex align-items-center'
                 >
-                  Log Out
-                </Nav.Link>
+                  Odhlásit se
+                </Button>
               </>
             ) : (
-              <Nav.Link className="d-flex align-items-center" href="/login">
-                Log In
-              </Nav.Link>
+              <Button
+                className='d-flex align-items-center'
+                href='/login'
+                variant='danger'
+              >
+                Přihlásit se
+              </Button>
             )}
           </Nav>
         </Navbar.Collapse>

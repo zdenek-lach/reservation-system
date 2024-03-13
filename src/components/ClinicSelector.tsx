@@ -15,9 +15,8 @@ const ClinicSelector: React.FC<ClinicSelectorProps> = ({
   const { clinicList } = useAppContext();
   return (
     <label>
-      Clinic:
       <Dropdown>
-        <Dropdown.Toggle variant="success">
+        <Dropdown.Toggle variant="success" className = 'me-2 mt-3 mb-3'>
           {selectedClinic != null
             ? `${selectedClinic.name}`
             : 'Vyberte ambulanci'}

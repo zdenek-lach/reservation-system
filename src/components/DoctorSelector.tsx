@@ -15,12 +15,11 @@ const DoctorSelector: React.FC<DoctorSelectorProps> = ({
   const { doctorList } = useAppContext();
   return (
     <label>
-      Doktor:
       <Dropdown>
-        <Dropdown.Toggle variant='success'>
+        <Dropdown.Toggle variant='success' className = 'me-3 mt-3 mb-3'>
           {selectedDoctor != null
             ? `${selectedDoctor.title} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`
-            : 'Vyberte Doktora'}
+            : 'Vyberte doktora'}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>

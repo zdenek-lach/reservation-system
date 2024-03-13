@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that the React app will run on
-EXPOSE 8001
+EXPOSE 443
 
 # Define the command to run when the container starts
 CMD [ "npm", "start" ]

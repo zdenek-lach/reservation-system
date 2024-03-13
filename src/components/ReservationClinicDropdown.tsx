@@ -10,10 +10,10 @@ const ReservationClinicDropdown = () => {
   const renderReservationClinicDropdown = () => {
     return (
       <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
+        <Dropdown.Toggle variant='danger' id='dropdown-basic'>
           {selectedClinic != null
             ? `${selectedClinic.name} ${selectedClinic.location}`
-            : 'Vyberte Kliniku'}
+            : 'Vyberte ambulanci'}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>{listClinicsAsMenuItems()}</Dropdown.Menu>
@@ -23,7 +23,7 @@ const ReservationClinicDropdown = () => {
 
   const listClinicsAsMenuItems = () => {
     if (!Array.isArray(clinicList) || clinicList.length === 0) {
-      return <Dropdown.Item key="empty">ClinicList is empty</Dropdown.Item>;
+      return <Dropdown.Item key='empty'>ClinicList is empty</Dropdown.Item>;
     }
 
     return clinicList.map((clinic) => {
@@ -31,14 +31,14 @@ const ReservationClinicDropdown = () => {
 
       return (
         <Dropdown.Item key={id} onClick={() => setSelectedClinic(clinic)}>
-          {`${id} ${name} ${location}`}
+          {`${name} ${location}`}
         </Dropdown.Item>
       );
     });
   };
 
   return loadingClinics ? (
-    <Spinner animation="border" role="status" />
+    <Spinner animation='border' role='status' />
   ) : errorClinics ? (
     <div>
       <strong>

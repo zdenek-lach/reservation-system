@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
-import { Alert, Button, Container, Form } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import { login } from './../security/AuthService';
@@ -44,7 +44,7 @@ const LoginPage = () => {
           const statusCode = error.response.status;
 
           if (statusCode === 400) {
-            setLoginError('Nechybí nějaký údaj?');
+            setLoginError('Chybí uživatelské jméno nebo heslo');
           } else if (statusCode === 401) {
             setLoginError('Neplatné přihlašovací údaje.');
           } else {
@@ -59,32 +59,41 @@ const LoginPage = () => {
   };
 
   return (
-    <Container className="mt-5">
-      <h2>Přihlášení</h2>
-      <Form id="loginForm" onSubmit={handleLoginButton}>
-        {showLoginError && <Alert variant="danger">{loginError}</Alert>}
-        <Form.Group controlId="formUsername">
-          <Form.Label>Uživatelské jméno</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Uživatelské jméno"
-            value={loginUserName}
-            onChange={(e) => setLoginUserName(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="formPassword">
-          <Form.Label>Heslo</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Heslo"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleLoginButton}>
-          Login
-        </Button>
-      </Form>
+    <Container className='mt-5 ps-'>
+      <Row>
+        <Col></Col>
+        <Col>
+          <h2>Přihlášení</h2>
+          <Form id='loginForm' onSubmit={handleLoginButton}>
+            {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
+            <Form.Group controlId='formUsername' className = 'mt-4'>
+              <Form.Control
+                type='text'
+                placeholder='Uživatelské jméno'
+                value={loginUserName}
+                onChange={(e) => setLoginUserName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId='formPassword' className = 'mt-4'>
+              <Form.Control
+                type='password'
+                placeholder='Heslo'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Button
+              variant='danger'
+              type='submit'
+              onClick={handleLoginButton}
+              className='mt-4'
+            >
+              Přihlásit se
+            </Button>
+          </Form>
+        </Col>
+        <Col></Col>
+      </Row>
     </Container>
   );
 };

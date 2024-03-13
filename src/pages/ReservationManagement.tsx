@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import AddReservation from 'components/AddReservation';
+import EditReservation from 'components/EditReservation';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
 import WeekPicker from 'components/WeekPicker';
@@ -9,6 +10,7 @@ import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
 import { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import {
   Button,
   Container,
@@ -229,11 +231,9 @@ const ReservationManagement = () => {
   return (
     <Container
       style={{
-        backgroundColor: 'rgba(255, 0, 0, 0.4)',
-        padding: '20px',
-        borderRadius: '15px',
-        marginTop: '20px',
-        marginLeft: '20px',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        padding: '30px',
+        alignContent: 'center'
       }}
     >
       <Form.Group>
@@ -290,8 +290,6 @@ const ReservationManagement = () => {
             backgroundColor: 'white',
             padding: '20px',
             borderRadius: '15px',
-            marginTop: '20px',
-            marginLeft: '20px',
           }}
         >
           {reservationsList != null &&
@@ -345,19 +343,12 @@ const ReservationManagement = () => {
                     <Button
                       variant="info"
                       size="lg"
-                      className="mr-1"
+                      className="mr-1 me-1"
                       onClick={() => handleShowInfoModal(reservation)}
                     >
                       <InfoCircle />
                     </Button>
-                    <Button
-                      variant="warning"
-                      size="lg"
-                      className="mr-1"
-                      onClick={() => handleShowEditModal(reservation)}
-                    >
-                      <Pencil />
-                    </Button>
+                    <EditReservation></EditReservation>
                     <Button
                       variant="danger"
                       size="lg"
@@ -370,7 +361,7 @@ const ReservationManagement = () => {
               ))}
         </tbody>
       </Table>
-      <AddReservation />
+      
       <Modal show={showInfoModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Informace o rezervaci</Modal.Title>
@@ -452,14 +443,23 @@ const ReservationManagement = () => {
             E-mail:
             <input type="text" value={editedEmail} onChange={handleEditEmail} />
           </label>
-          <label>
-            Datum:
-            <input type="text" value={editedDate} onChange={handleEditDate} />
-          </label>
-          <label>
-            Čas:
-            <input type="text" value={editedTime} onChange={handleEditTime} />
-          </label>
+          <Form.Group controlId="selectedDate">
+              <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
+              <DatePicker
+                selected={editedDate}
+                onChange={handleEditDate}
+                dateFormat="yyyy-MM-dd"
+                placeholderText=""
+              />
+              <br />
+              Vybraný čas:
+              <input
+                type="time"
+                className = 'ms-2'
+                value={editedTime}
+                onChange={handleEditTime}
+              />
+            </Form.Group>
           <label>
             Poznámka:
             <input type="text" value={editedNote} onChange={handleEditNote} />
@@ -519,6 +519,7 @@ const ReservationManagement = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <AddReservation></AddReservation>
     </Container>
   );
 };

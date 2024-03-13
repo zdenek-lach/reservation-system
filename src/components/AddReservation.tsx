@@ -135,36 +135,10 @@ const AddReservation = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Nová Rezervace</Modal.Title>
+          <Modal.Title>Nová rezervace</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="selectedDate">
-              <Form.Label>Vybrané datum:</Form.Label>
-              <DatePicker
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Select a date"
-              />
-              <br />
-              Vybraný čas:
-              <input
-                type="time"
-                value={selectedTime}
-                onChange={handleTimeChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <DoctorSelector
-                selectedDoctor={selectedDoctor}
-                setSelectedDoctor={setSelectedDoctor}
-              />
-              <ClinicSelector
-                selectedClinic={selectedClinic}
-                setSelectedClinic={setSelectedClinic}
-              />
-            </Form.Group>
             {/* Display validation error if present */}
             {validationError && <Alert>{validationError}</Alert>}
             <Form.Group controlId="firstName">
@@ -205,6 +179,34 @@ const AddReservation = () => {
                 type="text"
                 value={newReservationData.comment}
                 onChange={handleInputChange}
+              />
+            </Form.Group>
+            <br></br>
+            <Form.Group controlId="selectedDate">
+              <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat="yyyy-MM-dd"
+                placeholderText=""
+              />
+              <br/>
+              Vybraný čas:
+              <input
+                type="time"
+                className = 'ms-2'
+                value={selectedTime}
+                onChange={handleTimeChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <DoctorSelector
+                selectedDoctor={selectedDoctor}
+                setSelectedDoctor={setSelectedDoctor}
+              />
+              <ClinicSelector
+                selectedClinic={selectedClinic}
+                setSelectedClinic={setSelectedClinic}
               />
             </Form.Group>
           </Form>

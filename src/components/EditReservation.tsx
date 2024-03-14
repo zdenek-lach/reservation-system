@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,9 +19,10 @@ import Reservation from 'types/ReservationType';
 
 interface EditReservationProps{
   Reservation: Reservation;
-  name: string;
+  ReservationList: Reservation[];
+  SetReservationList: Dispatch<SetStateAction<Reservation[]>>;
 }
-const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) => {
+const EditReservation: React.FC<EditReservationProps> = ({Reservation, ReservationList, SetReservationList}) => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
     firstName: Reservation.client.firstName,
@@ -32,9 +33,9 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) =>
   });
   const [validationError, setValidationError] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(Reservation.date));
-  const [selectedTime, setSelectedTime] = useState('');
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>();
-  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>();
+  const [selectedTime, setSelectedTime] = useState(Reservation.time);
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(Reservation.doctor);
+  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(Reservation.clinic);
   const { setShowMessageToast } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Hello Jackie")
@@ -48,37 +49,45 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) =>
   };
 
   const handleTimeChange = (e: { target: { value: string } }) => {
-    const hours = e.target.value.split(':')[0];
-    setSelectedTime(`${hours}:00`);
+    setSelectedTime(`${e.target.value}`);
+  };
+
+  const updateReservationList = (newReservation:Reservation) => {
+    let changedItem = ReservationList.find( (item) => item.id === newReservation.id)
+    if(changedItem)
+    {
+      ReservationList[ReservationList.indexOf(changedItem)] = newReservation
+      SetReservationList(ReservationList)
+    }
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const data: ReservationData = {
-          date: selectedDate.toLocaleDateString('cs-CZ'),
-          time: selectedTime,
-          doctor: selectedDoctor,
-          clinic: selectedClinic,
-          ...newReservationData,
-        };
+        const updatedReservation = {
+        id: Reservation.id,
+        client: {
+          id: Reservation.client.id,
+          firstName: newReservationData.firstName,
+          lastName: newReservationData.lastName,
+          email: newReservationData.email,
+          phoneNumber: newReservationData.phone,
+        },
+        date: Reservation.date,
+        time: Reservation.time,
+        clinic: {
+          ...(selectedClinic),
+        },
+        doctor: {
+          ...(selectedDoctor),
+        },
+        note: Reservation.note,
+      };
 
-        const reservationToAdd: ReservationDto = {
-          clinicId: data.clinic.id,
-          date: data.date,
-          email: data.email,
-          employeeId: data.doctor.id,
-          name: data.firstName,
-          note: data.comment,
-          phone: data.phone,
-          surname: data.lastName,
-          timeFrom: data.time,
-        };
-
-        const response = await axios.post(
-          config.api.reservationsApi.edit,
-          reservationToAdd,
+        const response = await axios.put(
+          config.api.reservationsApi.edit + `/${Reservation.id}`,
+          updatedReservation,
           {
             headers: {
               ...authHeader(),
@@ -91,6 +100,8 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) =>
           // OK, inform user the action has been succesful
           console.log('Edit reservation was succesful');
           setShowMessageToast(true);
+          setShowModal(false);
+          updateReservationList(updatedReservation);
         } else {
           console.log('You have caused an error!');
         }
@@ -136,6 +147,7 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, name}) =>
     setValidationError('');
     return true;
   };
+
   return (
     <>
       <Button variant="warning" size="lg" className="me-1" onClick={() => setShowModal(true)}>

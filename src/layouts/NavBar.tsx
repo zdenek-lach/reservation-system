@@ -25,11 +25,11 @@ const NavBar: React.FC = () => {
       <Container>
         <Navbar.Brand
           onClick={() => {
-            navigate('appointment-page');
+            navigate('/');
           }}
           className='d-flex align-items-center'
         >
-          <div className='secondary'>
+        <div className='secondary'>
             <Image src={logoText} width={250} className='p-0 m-0' />
           </div>
         </Navbar.Brand>
@@ -43,9 +43,10 @@ const NavBar: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Button
+                  className='me-2'
                   variant='outline-danger'
                   onClick={() => navigate('/management')}
-                  className='me-2'
+                  
                 >
                   Management
                 </Button>

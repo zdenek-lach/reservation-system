@@ -6,7 +6,7 @@ import ReservationDoctorDropdown from 'components/ReservationDoctorDropdown';
 import WeekGrid from 'components/WeekGrid';
 import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 const AppointmentPage = () => {
@@ -23,59 +23,61 @@ const AppointmentPage = () => {
 
   
   return (
-    <Container
-      fluid
-      style={{ minHeight: '100vh', backgroundPosition: 'center' }}
-    >
-      {showMessageToast && (
-        <div>
-          <MessageToast message="Rezervace úspěšně vytvořena!" />
-        </div>
-      )}
-      <Row className="mb-4">
-        <Col
-          md
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            padding: '20px',
-            alignContent: "left"
-          }}
-        >
-          <Row className="justify-content-center mb-4">
-            <WeekPicker
-              currentWeek={currentWeek}
-              setCurrentWeek={setCurrentWeek}
-            />
-          </Row>
-          <Row className="justify-content-center">
-            <Col className="mb-4 d-flex justify-content-center">
-              <ReservationDoctorDropdown />
-            </Col>
-            <Col className="mb-4 d-flex justify-content-center">
-              <ReservationClinicDropdown />
-            </Col>
-          </Row>
-          <Card style={{ backgroundColor: '#FFF' }} className="justify-content-left mb-">
-            <WeekGrid startOfWeek={currentWeek} />
-          </Card>
-        </Col>
-        {}
-        {selectedDoctor != null && (
+    <Fragment>
+      <Container
+        fluid
+        style={{ minHeight: '100vh', backgroundPosition: 'center' }}
+      >
+        {showMessageToast && (
+          <div>
+            <MessageToast message="Rezervace úspěšně vytvořena!" />
+          </div>
+        )}
+        <Row className="mb-4">
           <Col
+            md
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0)',
               padding: '20px',
-              marginTop: '20px',
-              marginLeft: '20px',
-              marginRight: '20px',
+              alignContent: "left"
             }}
           >
-            <DoctorCard doctor={selectedDoctor} />
+            <Row className="justify-content-center mb-4">
+              <WeekPicker
+                currentWeek={currentWeek}
+                setCurrentWeek={setCurrentWeek}
+              />
+            </Row>
+            <Row className="justify-content-center">
+              <Col className="mb-4 d-flex justify-content-center">
+                <ReservationDoctorDropdown />
+              </Col>
+              <Col className="mb-4 d-flex justify-content-center">
+                <ReservationClinicDropdown />
+              </Col>
+            </Row>
+            <Card style={{ backgroundColor: '#FFF' }} className="justify-content-left mb-">
+              <WeekGrid startOfWeek={currentWeek} />
+            </Card>
           </Col>
-        )}
-      </Row>
+          {}
+          {selectedDoctor != null && (
+            <Col
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                padding: '20px',
+                marginTop: '20px',
+                marginLeft: '20px',
+                marginRight: '20px',
+              }}
+            >
+              <DoctorCard doctor={selectedDoctor} />
+            </Col>
+          )}
+        </Row>
+      </Container>
       <Footer></Footer>
-    </Container>
+    </Fragment>
   );
 };
 export default AppointmentPage;

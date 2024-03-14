@@ -93,7 +93,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   };
   enum ButtonType {
     Enabled = "success",
-    Disabled = "danger",
+    Disabled = "secondary",
   }
 
   var enabledButton: ButtonType = ButtonType.Disabled;
@@ -156,11 +156,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           borderRadius: "20px",
         }}
         variant={enabledButton}
-        onClick={() => setShow(true)}
-      >
+        onClick={() => {if(enabledButton == ButtonType.Enabled){setShow(true)}}}
+        disabled={(enabledButton == ButtonType.Disabled)}>
         {time}
       </Button>
-      <Modal show={show} onHide={() => setShow(false)}>
+      {(enabledButton == ButtonType.Enabled) && (
+        <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Rezervace</Modal.Title>
         </Modal.Header>
@@ -227,6 +228,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           </Button>
         </Modal.Footer>
       </Modal>
+      )}
     </>
   );
 };

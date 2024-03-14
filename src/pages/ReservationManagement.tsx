@@ -233,7 +233,7 @@ const ReservationManagement = () => {
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0)',
         padding: '30px',
-        alignContent: 'center'
+        alignContent: 'center',
       }}
     >
       <Form.Group>
@@ -348,7 +348,7 @@ const ReservationManagement = () => {
                     >
                       <InfoCircle />
                     </Button>
-                    <EditReservation Reservation = {reservation as Reservation} name={reservation.client.firstName}></EditReservation>
+                    <EditReservation Reservation = {reservation as Reservation} ReservationList={reservationsList} SetReservationList={setReservationsList}></EditReservation>
                     <Button
                       variant="danger"
                       size="lg"

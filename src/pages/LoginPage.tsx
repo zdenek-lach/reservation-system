@@ -63,33 +63,58 @@ const LoginPage = () => {
       <Row>
         <Col></Col>
         <Col>
-          <h2>Přihlášení</h2>
+          <Row>
+            <h2 className='ps-0'>Přihlášení</h2>
+          </Row>
           <Form id='loginForm' onSubmit={handleLoginButton}>
             {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
             <Form.Group controlId='formUsername' className = 'mt-4'>
-              <Form.Control
-                type='text'
-                placeholder='Uživatelské jméno'
-                value={loginUserName}
-                onChange={(e) => setLoginUserName(e.target.value)}
-              />
+              <Row>
+                <Form.Control
+                  type='text'
+                  placeholder='Uživatelské jméno'
+                  value={loginUserName}
+                  onChange={(e) => setLoginUserName(e.target.value)}
+                />
+              </Row>
             </Form.Group>
             <Form.Group controlId='formPassword' className = 'mt-4'>
-              <Form.Control
-                type='password'
-                placeholder='Heslo'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <Row>
+                <Col
+                  className='ps-0 pe-0 col-9'
+                >
+                  <Form.Control
+                    type='password'
+                    placeholder='Heslo'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Col>
+                <Col
+                  className='ps-0 pe-0'
+                >
+                  <div className='d-grid'>
+                    <Button
+                      className=''
+                      variant='danger'
+                      type='button'
+                    >
+                      Zobrazit
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
             </Form.Group>
-            <Button
-              variant='danger'
-              type='submit'
-              onClick={handleLoginButton}
-              className='mt-4'
-            >
-              Přihlásit se
-            </Button>
+            <Row>
+              <Button
+                variant='danger'
+                type='submit'
+                onClick={handleLoginButton}
+                className='mt-4 col-3'
+              >
+                Přihlásit se
+              </Button>
+            </Row>
           </Form>
         </Col>
         <Col></Col>

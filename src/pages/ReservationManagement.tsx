@@ -9,7 +9,7 @@ import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import {
   Button,
@@ -22,7 +22,6 @@ import {
 import {
   ArrowCounterclockwise,
   InfoCircle,
-  Pencil,
   Trash3Fill,
 } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
@@ -30,6 +29,7 @@ import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
+import FooterManagement from 'components/FooterManagement';
 
 const ReservationManagement = () => {
   const {
@@ -229,298 +229,302 @@ const ReservationManagement = () => {
   });
 
   return (
-    <Container
-      style={{
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        padding: '30px',
-        alignContent: 'center',
-      }}
-    >
-      <Form.Group>
-        <Form.Control
-          type="text"
-          placeholder="Vyhledat"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <DoctorSelector
-          selectedDoctor={filterDoctor}
-          setSelectedDoctor={setFilterDoctor}
-        />
-        <ClinicSelector
-          selectedClinic={filterClinic}
-          setSelectedClinic={setFilterClinic}
-        />
-        <Button
-          variant="danger"
-          onClick={() => {
-            setSearchTerm('');
-            setFilterDoctor(null);
-            setFilterClinic(null);
-          }}
-        >
-          <ArrowCounterclockwise />
-        </Button>
-        <Form.Check
-          type="checkbox"
-          label="Filtrovat dle týdnu"
-          checked={isWeekFilterEnabled}
-          onChange={(e) => setIsWeekFilterEnabled(e.target.checked)}
-        />
-        {isWeekFilterEnabled && (
-          <WeekPicker
-            currentWeek={currentWeek}
-            setCurrentWeek={setCurrentWeek}
+    <Fragment>
+      <Container
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0)',
+          padding: '30px',
+          alignContent: 'center',
+        }}
+      >
+        <Form.Group>
+          <Form.Control
+            type="text"
+            placeholder="Vyhledat"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        )}
-      </Form.Group>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Číslo</th>
-            <th>Jméno</th>
-            <th>Příjmení</th>
-            <th>Datum a čas</th>
-            <th>Doktor</th>
-            <th>Ambulance</th>
-          </tr>
-        </thead>
-        <tbody
-          style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '15px',
-          }}
-        >
-          {reservationsList != null &&
-            reservationsList
-              .filter(
-                (reservation) =>
-                  reservation.client.phoneNumber.includes(searchTerm) ||
-                  reservation.client.firstName
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  reservation.client.lastName
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  reservation.client.email
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  reservation.note
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
-              )
-              .filter(
-                (reservation) =>
-                  filterDoctor == null ||
-                  reservation.doctor.id === filterDoctor.id
-              )
-              .filter(
-                (reservation) =>
-                  filterClinic == null ||
-                  reservation.clinic.id === filterClinic.id
-              )
-              .filter(
-                (reservation) =>
-                  !isWeekFilterEnabled ||
-                  (new Date(reservation.date) >= startOfWeek(currentWeek) &&
-                    new Date(reservation.date) <= endOfWeek(currentWeek))
-              )
-
-              .map((reservation) => (
-                <tr key={reservation.id}>
-                  <td>{reservation.id}</td>
-                  <td>{reservation.client.firstName}</td>
-                  <td>{reservation.client.lastName}</td>
-                  <td>
-                    {reservation.date} {reservation.time}
-                  </td>
-                  <td>
-                    {reservation.doctor.firstName} {reservation.doctor.lastName}
-                  </td>
-                  <td>{reservation.clinic.name}</td>
-                  <td>
-                    <Button
-                      variant="info"
-                      size="lg"
-                      className="mr-1 me-1"
-                      onClick={() => handleShowInfoModal(reservation)}
-                    >
-                      <InfoCircle />
-                    </Button>
-                    <EditReservation Reservation = {reservation as Reservation} ReservationList={reservationsList} SetReservationList={setReservationsList}></EditReservation>
-                    <Button
-                      variant="danger"
-                      size="lg"
-                      onClick={() => handleDeleteReservation(reservation)}
-                    >
-                      <Trash3Fill />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-        </tbody>
-      </Table>
-      
-      <Modal show={showInfoModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Informace o rezervaci</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedReservation && (
-            <div>
-              <p>
-                <strong>Číslo:</strong> {selectedReservation.id}
-              </p>
-              <p>
-                <strong>Jméno:</strong> {selectedReservation.client.firstName}
-              </p>
-              <p>
-                <strong>Příjmení:</strong> {selectedReservation.client.lastName}
-              </p>
-              <p>
-                <strong>Telefon:</strong>
-                {selectedReservation.client.phoneNumber}
-              </p>
-              <p>
-                <strong>E-mail:</strong> {selectedReservation.client.email}
-              </p>
-              <p>
-                <strong>Datum a čas:</strong> {selectedReservation.date}
-                {selectedReservation.time}
-              </p>
-              <p>
-                <strong>Doktor:</strong> {selectedReservation.doctor.firstName}+{' '}
-                {selectedReservation.doctor.lastName}
-              </p>
-              <p>
-                <strong>Ambulance:</strong>
-                {selectedReservation.clinic.name}
-              </p>
-              <p>
-                <strong>Poznámka:</strong>
-                {selectedReservation.note}
-              </p>
-            </div>
+          <DoctorSelector
+            selectedDoctor={filterDoctor}
+            setSelectedDoctor={setFilterDoctor}
+          />
+          <ClinicSelector
+            selectedClinic={filterClinic}
+            setSelectedClinic={setFilterClinic}
+          />
+          <Button
+            variant="danger"
+            onClick={() => {
+              setSearchTerm('');
+              setFilterDoctor(null);
+              setFilterClinic(null);
+            }}
+          >
+            <ArrowCounterclockwise />
+          </Button>
+          <Form.Check
+            type="checkbox"
+            label="Filtrovat dle týdnu"
+            checked={isWeekFilterEnabled}
+            onChange={(e) => setIsWeekFilterEnabled(e.target.checked)}
+          />
+          {isWeekFilterEnabled && (
+            <WeekPicker
+              currentWeek={currentWeek}
+              setCurrentWeek={setCurrentWeek}
+            />
           )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Zavřít
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={showEditModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Editace rezervace</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <label>
-            Jméno:
-            <input
-              type="text"
-              value={editedFirstName}
-              onChange={handleEditFirstName}
-            />
-          </label>
-          <label>
-            Příjmení:
-            <input
-              type="text"
-              value={editedLastName}
-              onChange={handleEditLastName}
-            />
-          </label>
-          <label>
-            Telefon:
-            <input
-              type="text"
-              value={editedPhoneNumber}
-              onChange={handleEditPhoneNumber}
-            />
-          </label>
-          <label>
-            E-mail:
-            <input type="text" value={editedEmail} onChange={handleEditEmail} />
-          </label>
-          <Form.Group controlId="selectedDate">
-              <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
-              <DatePicker
-                selected={editedDate}
-                onChange={handleEditDate}
-                dateFormat="yyyy-MM-dd"
-                placeholderText=""
-              />
-              <br />
-              Vybraný čas:
+        </Form.Group>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Číslo</th>
+              <th>Jméno</th>
+              <th>Příjmení</th>
+              <th>Datum a čas</th>
+              <th>Doktor</th>
+              <th>Ambulance</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody
+            style={{
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '15px',
+            }}
+          >
+            {reservationsList != null &&
+              reservationsList
+                .filter(
+                  (reservation) =>
+                    reservation.client.phoneNumber.includes(searchTerm) ||
+                    reservation.client.firstName
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    reservation.client.lastName
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    reservation.client.email
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                    reservation.note
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase())
+                )
+                .filter(
+                  (reservation) =>
+                    filterDoctor == null ||
+                    reservation.doctor.id === filterDoctor.id
+                )
+                .filter(
+                  (reservation) =>
+                    filterClinic == null ||
+                    reservation.clinic.id === filterClinic.id
+                )
+                .filter(
+                  (reservation) =>
+                    !isWeekFilterEnabled ||
+                    (new Date(reservation.date) >= startOfWeek(currentWeek) &&
+                      new Date(reservation.date) <= endOfWeek(currentWeek))
+                )
+
+                .map((reservation) => (
+                  <tr key={reservation.id}>
+                    <td>{reservation.id}</td>
+                    <td>{reservation.client.firstName}</td>
+                    <td>{reservation.client.lastName}</td>
+                    <td>
+                      {reservation.date} {reservation.time}
+                    </td>
+                    <td>
+                      {reservation.doctor.firstName} {reservation.doctor.lastName}
+                    </td>
+                    <td>{reservation.clinic.name}</td>
+                    <td>
+                      <Button
+                        variant="info"
+                        size="lg"
+                        className="mr-1 me-1"
+                        onClick={() => handleShowInfoModal(reservation)}
+                      >
+                        <InfoCircle />
+                      </Button>
+                      <EditReservation Reservation = {reservation as Reservation} ReservationList={reservationsList} SetReservationList={setReservationsList}></EditReservation>
+                      <Button
+                        variant="danger"
+                        size="lg"
+                        onClick={() => handleDeleteReservation(reservation)}
+                      >
+                        <Trash3Fill />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+          </tbody>
+        </Table>
+        
+        <Modal show={showInfoModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Informace o rezervaci</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedReservation && (
+              <div>
+                <p>
+                  <strong>Číslo:</strong> {selectedReservation.id}
+                </p>
+                <p>
+                  <strong>Jméno:</strong> {selectedReservation.client.firstName}
+                </p>
+                <p>
+                  <strong>Příjmení:</strong> {selectedReservation.client.lastName}
+                </p>
+                <p>
+                  <strong>Telefon:</strong>
+                  {selectedReservation.client.phoneNumber}
+                </p>
+                <p>
+                  <strong>E-mail:</strong> {selectedReservation.client.email}
+                </p>
+                <p>
+                  <strong>Datum a čas:</strong> {selectedReservation.date}
+                  {selectedReservation.time}
+                </p>
+                <p>
+                  <strong>Doktor:</strong> {selectedReservation.doctor.firstName}+{' '}
+                  {selectedReservation.doctor.lastName}
+                </p>
+                <p>
+                  <strong>Ambulance:</strong>
+                  {selectedReservation.clinic.name}
+                </p>
+                <p>
+                  <strong>Poznámka:</strong>
+                  {selectedReservation.note}
+                </p>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Zavřít
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal show={showEditModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Editace rezervace</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <label>
+              Jméno:
               <input
-                type="time"
-                className = 'ms-2'
-                value={editedTime}
-                onChange={handleEditTime}
+                type="text"
+                value={editedFirstName}
+                onChange={handleEditFirstName}
               />
-            </Form.Group>
-          <label>
-            Poznámka:
-            <input type="text" value={editedNote} onChange={handleEditNote} />
-          </label>
-          <label>
-            Doktor:
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                {editedDoctor != null
-                  ? `${editedDoctor.title} ${editedDoctor.firstName} ${editedDoctor.lastName}`
-                  : 'Vyberte Doktora'}
-              </Dropdown.Toggle>
+            </label>
+            <label>
+              Příjmení:
+              <input
+                type="text"
+                value={editedLastName}
+                onChange={handleEditLastName}
+              />
+            </label>
+            <label>
+              Telefon:
+              <input
+                type="text"
+                value={editedPhoneNumber}
+                onChange={handleEditPhoneNumber}
+              />
+            </label>
+            <label>
+              E-mail:
+              <input type="text" value={editedEmail} onChange={handleEditEmail} />
+            </label>
+            <Form.Group controlId="selectedDate">
+                <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
+                <DatePicker
+                  selected={editedDate}
+                  onChange={handleEditDate}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText=""
+                />
+                <br />
+                Vybraný čas:
+                <input
+                  type="time"
+                  className = 'ms-2'
+                  value={editedTime}
+                  onChange={handleEditTime}
+                />
+              </Form.Group>
+            <label>
+              Poznámka:
+              <input type="text" value={editedNote} onChange={handleEditNote} />
+            </label>
+            <label>
+              Doktor:
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {editedDoctor != null
+                    ? `${editedDoctor.title} ${editedDoctor.firstName} ${editedDoctor.lastName}`
+                    : 'Vyberte Doktora'}
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                {doctorList &&
-                  doctorList.map((doctor) => (
-                    <Dropdown.Item
-                      key={doctor.id}
-                      onClick={() => setEditedDoctor(doctor)}
-                    >
-                      {`${doctor.title} ${doctor.firstName} ${doctor.lastName}`}
-                    </Dropdown.Item>
-                  ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </label>
-          <br />
-          <label>
-            Klinika:
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                {editedAmbulance != null
-                  ? `${editedAmbulance.name} ${editedAmbulance.location}`
-                  : 'Vyberte Kliniku'}
-              </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {doctorList &&
+                    doctorList.map((doctor) => (
+                      <Dropdown.Item
+                        key={doctor.id}
+                        onClick={() => setEditedDoctor(doctor)}
+                      >
+                        {`${doctor.title} ${doctor.firstName} ${doctor.lastName}`}
+                      </Dropdown.Item>
+                    ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </label>
+            <br />
+            <label>
+              Klinika:
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {editedAmbulance != null
+                    ? `${editedAmbulance.name} ${editedAmbulance.location}`
+                    : 'Vyberte Kliniku'}
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                {clinicList &&
-                  clinicList.map((clinic) => (
-                    <Dropdown.Item
-                      key={clinic.id}
-                      onClick={() => setEditedAmbulance(clinic)}
-                    >
-                      {`${clinic.name} ${clinic.location}`}
-                    </Dropdown.Item>
-                  ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </label>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Zavřít
-          </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
-            Uložit upravenou rezervaci
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <AddReservation></AddReservation>
-    </Container>
+                <Dropdown.Menu>
+                  {clinicList &&
+                    clinicList.map((clinic) => (
+                      <Dropdown.Item
+                        key={clinic.id}
+                        onClick={() => setEditedAmbulance(clinic)}
+                      >
+                        {`${clinic.name} ${clinic.location}`}
+                      </Dropdown.Item>
+                    ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </label>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Zavřít
+            </Button>
+            <Button variant="primary" onClick={handleSaveChanges}>
+              Uložit upravenou rezervaci
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <AddReservation></AddReservation>
+      </Container>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

@@ -4,13 +4,15 @@ import DoctorSelector from 'components/DoctorSelector';
 import PresetSelector from 'components/PresetSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { authHeader } from 'security/AuthService';
 import styled from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import config from '../../config/config.json';
+import FooterManagement from 'components/FooterManagement';
+
 const StyledContainer = styled(Container)`
   margin-top: 20px;
 `;
@@ -140,38 +142,41 @@ const MyShifts = () => {
   };
 
   return (
-    <StyledContainer>
-      <Row>
-        <Col>
-          <h2>Moje Směny</h2>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <WeekPicker
-            currentWeek={currentWeek}
-            setCurrentWeek={setCurrentWeek}
-          />
-          <DoctorSelector
-            selectedDoctor={selectedDoctor}
-            setSelectedDoctor={setSelectedDoctor}
-          />
-          <ClinicSelector
-            selectedClinic={selectedClinic}
-            setSelectedClinic={setSelectedClinic}
-          />
-          {/* <PresetSelector /> */}
-          <WeekGrid2
-            startOfWeek={currentWeek}
-            setClickedButtons={setClickedButtons}
-            initialShifts={initialShifts}
-          />
-        </Col>
-      </Row>
-      <Button variant="primary" onClick={submitDoctorWorkHours}>
-        Uložit směny
-      </Button>
-    </StyledContainer>
+    <Fragment>
+      <StyledContainer>
+        <Row>
+          <Col>
+            <h2>Moje Směny</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <WeekPicker
+              currentWeek={currentWeek}
+              setCurrentWeek={setCurrentWeek}
+            />
+            <DoctorSelector
+              selectedDoctor={selectedDoctor}
+              setSelectedDoctor={setSelectedDoctor}
+            />
+            <ClinicSelector
+              selectedClinic={selectedClinic}
+              setSelectedClinic={setSelectedClinic}
+            />
+            {/* <PresetSelector /> */}
+            <WeekGrid2
+              startOfWeek={currentWeek}
+              setClickedButtons={setClickedButtons}
+              initialShifts={initialShifts}
+            />
+          </Col>
+        </Row>
+        <Button variant="primary" onClick={submitDoctorWorkHours}>
+          Uložit směny
+        </Button>
+      </StyledContainer>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

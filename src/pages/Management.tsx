@@ -11,11 +11,13 @@ import {
 import { useNavigate } from 'react-router';
 import { CSSProperties } from 'styled-components';
 import { refreshCheck } from '../security/AuthService';
+import FooterManagement from 'components/FooterManagement';
+import { Fragment } from 'react';
 
 const cardStyle: CSSProperties = {
   borderRadius: '15px',
   fontSize: '2em',
-  backgroundColor: 'rgba(255, 0, 0, 0.4)',
+  backgroundColor: '#dc3545',
   color: '#ffffff',
   padding: '20px',
   textAlign: 'center',
@@ -39,11 +41,11 @@ const Management = () => {
   const navigate = useNavigate();
 
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.6)';
+    e.currentTarget.style.backgroundColor = '#b02a37';
   };
 
   const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.4)';
+    e.currentTarget.style.backgroundColor = '#dc3545';
   };
 
   const renderCard = (
@@ -66,51 +68,54 @@ const Management = () => {
   );
 
   return (
-    <Container>
-      <Row className="mb-4 mt-4">
-        {renderCard('Můj profil', <PersonLinesFill style={iconStyle} />, () =>
-          navigate('my-profile')
-        )}
-        {renderCard('Moje směny', <CalendarPlusFill style={iconStyle} />, () =>
-          navigate('my-shifts')
-        )}
-        {renderCard('Moje rezervace', <NodePlusFill style={iconStyle} />, () =>
-          navigate('my-reservations')
-        )}
-      </Row>
-      <Row className="mb-4">
-        {renderCard(
-          'Správa rezervací',
-          <ClipboardCheckFill style={iconStyle} />,
-          () => navigate('reservation-management')
-        )}
-        {renderCard(
-          'Správa zaměstnanců',
-          <PersonFillGear style={iconStyle} />,
-          () => navigate('employee-management')
-        )}
-        <Col
-          md={4}
-          key={'Globální nastavení'}
-          onClick={() => {
-            navigate('global-settings');
-          }}
-        >
-          <Card
-            style={globalSettingsStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#808080';
+    <Fragment>
+      <Container>
+        <Row className="mb-4 mt-4">
+          {renderCard('Můj profil', <PersonLinesFill style={iconStyle} />, () =>
+            navigate('my-profile')
+          )}
+          {renderCard('Moje směny', <CalendarPlusFill style={iconStyle} />, () =>
+            navigate('my-shifts')
+          )}
+          {renderCard('Moje rezervace', <NodePlusFill style={iconStyle} />, () =>
+            navigate('my-reservations')
+          )}
+        </Row>
+        <Row className="mb-4">
+          {renderCard(
+            'Správa rezervací',
+            <ClipboardCheckFill style={iconStyle} />,
+            () => navigate('reservation-management')
+          )}
+          {renderCard(
+            'Správa zaměstnanců',
+            <PersonFillGear style={iconStyle} />,
+            () => navigate('employee-management')
+          )}
+          <Col
+            md={4}
+            key={'Globální nastavení'}
+            onClick={() => {
+              navigate('global-settings');
             }}
           >
-            <GearWide style={iconStyle} />
-            Globální nastavení
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+            <Card
+              style={globalSettingsStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#808080';
+              }}
+            >
+              <GearWide style={iconStyle} />
+              Globální nastavení
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

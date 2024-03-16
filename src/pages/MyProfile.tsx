@@ -6,7 +6,7 @@ import MessageToast from 'components/MessageToast';
 import PresetSelector from 'components/PresetSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
@@ -16,15 +16,10 @@ import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import PresetType from 'types/PresetType';
 import config from '../../config/config.json';
+import FooterManagement from 'components/FooterManagement';
 
 const StyledContainer = styled(Container)`
     margin-top: 20px;
-    // margin-left: 2rem;
-    background-color: rgba(255, 0, 0, 0.4);
-    padding: 2rem;
-            borderRadius: 15px,
-            marginTop: 20px,
-            marginLeft: 20px,
   `;
 
 const MyProfile = () => {
@@ -168,109 +163,112 @@ const MyProfile = () => {
   };
 
   return (
-    <StyledContainer>
-      <MessageToast message="Preset uložen!" />
-      <Row>
-        <Col md={2}>
-          <h2>Můj profil</h2>
-          <ChangePassword />
-          <DoctorSelector
-            selectedDoctor={selectedDoctor}
-            setSelectedDoctor={setSelectedDoctor}
-          />
-          <Form onSubmit={submitDoctorProfileChanges}>
-            <Form.Label>
-              <h3>Profil lékaře</h3>
-            </Form.Label>
-            <Form.Group>
-              <Form.Label>Titul</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="MuDr."
-                value={title || ''}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Jméno</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Jan"
-                value={firstName || ''}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Přijmení</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Novák"
-                value={lastName || ''}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Obrázek</Form.Label>
-              <Form.Control type="file" disabled />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Popisek</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={description || ''}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Body na profilu</Form.Label>
-              {points.map((point, index) => (
-                <div key={index}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Vložit nový bod"
-                    value={point}
-                    onChange={(e) => updatePoint(index, e.target.value)}
-                    className=""
-                  />
-                  <Button variant="danger" onClick={() => deletePoint(index)}>
-                    <Trash2Fill />
-                  </Button>
-                </div>
-              ))}
-              <Button variant="warning" onClick={addPoint}>
-                <PlusCircle />
-              </Button>
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Uložit změny
-            </Button>
-          </Form>
-        </Col>
-        <Col md={8}>
-          <Form onSubmit={submitDoctorPresets}>
-            <Form.Group>
+    <Fragment>
+      <StyledContainer>
+        <MessageToast message="Preset uložen!" />
+        <Row>
+          <Col md={3}>
+            <h2>Můj profil</h2>
+            <ChangePassword />
+            <DoctorSelector
+              selectedDoctor={selectedDoctor}
+              setSelectedDoctor={setSelectedDoctor}
+            />
+            <Form onSubmit={submitDoctorProfileChanges}>
               <Form.Label>
-                <h3>Pracovní hodiny</h3>
+                <h3>Profil lékaře</h3>
               </Form.Label>
-              <ClinicSelector
-                selectedClinic={selectedClinic}
-                setSelectedClinic={setSelectedClinic}
-              />
-              <PresetSelector />
-              <WeekGrid2
-                startOfWeek={currentWeek}
-                setClickedButtons={setClickedButtons}
-              />
-            </Form.Group>
-            <Button variant="danger" onClick={submitDoctorPresets}>
-              Uložit preset
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </StyledContainer>
+              <Form.Group>
+                <Form.Label>Titul</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="MUDr."
+                  value={title || ''}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Jméno</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Jan"
+                  value={firstName || ''}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Přijmení</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Novák"
+                  value={lastName || ''}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Obrázek</Form.Label>
+                <Form.Control type="file" disabled />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Popisek</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={description || ''}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Body na profilu</Form.Label>
+                {points.map((point, index) => (
+                  <div key={index}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Vložit nový bod"
+                      value={point}
+                      onChange={(e) => updatePoint(index, e.target.value)}
+                      className=""
+                    />
+                    <Button variant="danger" onClick={() => deletePoint(index)}>
+                      <Trash2Fill />
+                    </Button>
+                  </div>
+                ))}
+                <Button variant="warning" onClick={addPoint} className='ms-2'>
+                  <PlusCircle />
+                </Button>
+              </Form.Group>
+
+              <Button variant="primary" type="submit">
+                Uložit změny
+              </Button>
+            </Form>
+          </Col>
+          <Col md={9}>
+            <Form onSubmit={submitDoctorPresets}>
+              <Form.Group>
+                <Form.Label>
+                  <h3>Pracovní hodiny</h3>
+                </Form.Label>
+                <ClinicSelector
+                  selectedClinic={selectedClinic}
+                  setSelectedClinic={setSelectedClinic}
+                />
+                <PresetSelector />
+                <WeekGrid2
+                  startOfWeek={currentWeek}
+                  setClickedButtons={setClickedButtons}
+                />
+              </Form.Group>
+              <Button variant="danger" onClick={submitDoctorPresets}>
+                Uložit preset
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      </StyledContainer>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

@@ -24,8 +24,8 @@ const HomePage = () => {
         <Row className='justify-content-md-center'>
           <Col md='auto'>
             <h1 className='mb-3 p-3'>Vstoupit do rezervačního systému</h1>
-            <Button variant='primary' onClick={handleButtonClick}>
-              Vstoupit
+            <Button variant='danger' onClick={handleButtonClick}>
+              Rezervovat se
             </Button>
           </Col>
         </Row>

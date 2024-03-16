@@ -1,5 +1,6 @@
 import Clinic from './ClinicType';
 import Doctor from './DoctorType';
+import PresetType from './PresetType';
 import Reservation from './ReservationType';
 
 export type AppContextType = {
@@ -23,4 +24,8 @@ export type AppContextType = {
   setCurrentWeek: React.Dispatch<React.SetStateAction<Date>>;
   username: string | null;
   setUsername: React.Dispatch<React.SetStateAction<String>>;
+  presetList: PresetType[] | null;
+  setPresetList: React.Dispatch<React.SetStateAction<PresetType | null>>;
+  selectedPreset: PresetType | null;
+  setSelectedPreset: React.Dispatch<React.SetStateAction<PresetType | null>>;
 };

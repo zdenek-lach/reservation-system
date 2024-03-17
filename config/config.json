@@ -2,7 +2,6 @@
   "api": {
     "doctorsApi": {
       "list": "http://127.0.0.1:8080/api/doctors",
-      "detail": "http://127.0.0.1:8080/api/doctor",
       "add": "http://127.0.0.1:8080/api/add/doctor",
       "edit": "http://127.0.0.1:8080/api/edit/doctor",
       "delete": "http://127.0.0.1:8080/api/delete/doctor"

@@ -46,9 +46,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   >(null);
   const [showMessageToast, setShowMessageToast] = useState(false);
   const [presetList, setPresetList] = useState<PresetType[] | null>(null);
-  const [selectedPreset, setSelectedPreset] = useState<PresetType[] | null>(
-    null
-  );
+  const [selectedPreset, setSelectedPreset] = useState<PresetType | null>(null);
 
   // Load context from local storage on initial mount
   useEffect(() => {

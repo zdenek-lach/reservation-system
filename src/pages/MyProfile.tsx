@@ -2,10 +2,11 @@ import axios from 'axios';
 import ChangePassword from 'components/ChangePassword';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
+import MessageToast from 'components/MessageToast';
+import PresetSelector from 'components/PresetSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
-import WeekPicker from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
-import { FormEventHandler, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
@@ -13,16 +14,12 @@ import { styled } from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
+import PresetType from 'types/PresetType';
 import config from '../../config/config.json';
+import FooterManagement from 'components/FooterManagement';
 
 const StyledContainer = styled(Container)`
     margin-top: 20px;
-    // margin-left: 2rem;
-    background-color: rgba(255, 0, 0, 0.4);
-    padding: 2rem;
-            borderRadius: 15px,
-            marginTop: 20px,
-            marginLeft: 20px,
   `;
 
 const MyProfile = () => {
@@ -38,38 +35,7 @@ const MyProfile = () => {
     DoctorWorkhours[] | null
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
-  const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
-  const [shiftsResponseData, setShiftsResponseData] = useState<any[]>([]);
-  useEffect(() => {
-    axios
-      .get(config.api.shiftApi.list, {
-        headers: {
-          ...authHeader(),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((response) => {
-        // Convert the shifts to the TimeSlot format
-        let shifts = response.data.map(
-          (shiftsResponseData: {
-            id: any;
-            doctor: any;
-            clinic: any;
-            shifts: any;
-          }) => ({
-            id: shiftsResponseData.id,
-            doctor: shiftsResponseData.doctor,
-            clinic: shiftsResponseData.clinic,
-            shifts: formatDate(shiftsResponseData.shifts),
-          })
-        );
-        setShiftsResponseData(shifts);
-      })
-      .catch((error) => {
-        console.error(`Error fetching shifts`, error);
-      });
-    setInitialShifts(getInitialShifts());
-  }, [selectedDoctor, selectedClinic]);
+  const { setShowMessageToast } = useAppContext();
   useEffect(() => {
     if (selectedDoctor) {
       setFirstName(selectedDoctor.firstName);
@@ -81,16 +47,6 @@ const MyProfile = () => {
       setDoctorWorkhours(selectedDoctor.availableClinics);
     }
   }, [selectedDoctor]);
-
-  const formatDate = (shifts: any) => {
-    let newShifts: TimeSlot[] = [];
-    for (const shift of shifts) {
-      // shift.date = format(parseISO(shift.date), 'MM/dd/yyyy');
-      shift.date = new Date(shift.date);
-      newShifts.push({ day: shift.date, time: shift.time });
-    }
-    return newShifts;
-  };
 
   const addPoint = () => {
     setPoints([...points, '']);
@@ -138,193 +94,181 @@ const MyProfile = () => {
         });
     }
   };
-  const submitDoctorWorkHours: FormEventHandler<HTMLFormElement> | undefined = (
-    e
-  ) => {
-    e.preventDefault();
 
-    const options = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
+  const convertClickedButtonsToPreset = () => {
+    const newPreset: PresetType = {
+      id: null,
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
     };
 
-    const getFormatedDateAsNeeded = (date: Date, options) => {
-      let dateAndTime = new Date(date)
-        .toLocaleTimeString('en-US', options)
-        .split(',');
-      let dateParts = dateAndTime[0].split('/');
-      return `${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`;
-    };
-
-    // Build the shifts array from clickedButtons
-    let shifts = clickedButtons.map((slot) => ({
-      //date: new Date(slot.day).toISOString().split('T')[0],
-      date: getFormatedDateAsNeeded(slot.day, options),
-      time: slot.time,
-    }));
-
-    // Build the data object to send to the backend
-    let data = {
-      doctor: selectedDoctor,
-      clinic: selectedClinic,
-      shifts: shifts,
-    };
-
-    console.warn(data);
-    axios
-      .post(config.api.shiftApi.add, data, {
-        headers: {
-          ...authHeader(),
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((response) => {
-        console.log(`Successfully added a shift`);
-        // You can update your state here if necessary
-      })
-      .catch((error) => {
-        console.error(`Error adding a shift`, error);
+    clickedButtons.forEach((button) => {
+      const dayOfWeek = new Date(button.day).toLocaleString('en-US', {
+        weekday: 'long',
       });
+
+      switch (dayOfWeek) {
+        case 'Monday':
+          newPreset.Monday.push(button.time);
+          break;
+        case 'Tuesday':
+          newPreset.Tuesday.push(button.time);
+          break;
+        case 'Wednesday':
+          newPreset.Wednesday.push(button.time);
+          break;
+        case 'Thursday':
+          newPreset.Thursday.push(button.time);
+          break;
+        case 'Friday':
+          newPreset.Friday.push(button.time);
+          break;
+        default:
+          console.log(
+            `Day ${dayOfWeek} is not accounted for in the Preset object.`
+          );
+      }
+    });
+
+    return newPreset;
   };
 
-  const getInitialShifts = (): TimeSlot[] => {
-    if (selectedDoctor && selectedClinic) {
-      let filtered = shiftsResponseData.filter((shiftsResponse) => {
-        return (
-          shiftsResponse.doctor.id == selectedDoctor.id &&
-          shiftsResponse.clinic.id == selectedClinic.id
-        );
-      });
-      let finallyAllShifts: TimeSlot[] = [];
-      filtered.forEach((item) => {
-        for (const shift of item.shifts) {
-          finallyAllShifts.push(shift);
+  const submitDoctorPresets = async () => {
+    console.warn(convertClickedButtonsToPreset());
+    try {
+      const response = await axios.post(
+        config.api.presetsApi.add, // Replace with your actual API endpoint
+        convertClickedButtonsToPreset(),
+        {
+          headers: {
+            ...authHeader(),
+            'Content-Type': 'application/json',
+          },
         }
-      });
-      console.log(finallyAllShifts);
-      // TODO reimplement when colours are functional :)
-      // finallyAllShifts = finallyAllShifts.filter((shift) => {
-      //   return (
-      //     new Date(shift.day) >= startOfWeek(currentWeek.getDay()) &&
-      //     new Date(shift.day) <= endOfWeek(currentWeek.getDay())
-      //   );
-      // });
-      // console.log(finallyAllShifts);
-      //TODO
-      return finallyAllShifts;
-    } else {
-      return [];
+      );
+
+      if (response.status === 200) {
+        // OK, inform user the action has been successful
+        console.log('Adding preset was successful');
+        setShowMessageToast(true); // If you have a toast for this action
+      } else {
+        console.log('You have caused an error!');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
-    <StyledContainer>
-      <Row>
-        <Col md={2}>
-          <h2>Můj profil</h2>
-          <ChangePassword />
-          <DoctorSelector
-            selectedDoctor={selectedDoctor}
-            setSelectedDoctor={setSelectedDoctor}
-          />
-          <Form onSubmit={submitDoctorProfileChanges}>
-            <Form.Label>
-              <h3>Profil lékaře</h3>
-            </Form.Label>
-            <Form.Group>
-              <Form.Label>Titul</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="MuDr."
-                value={title || ''}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Jméno</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Jan"
-                value={firstName || ''}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Přijmení</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Novák"
-                value={lastName || ''}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Obrázek</Form.Label>
-              <Form.Control type="file" disabled />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Popisek</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={description || ''}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Body na profilu</Form.Label>
-              {points.map((point, index) => (
-                <div key={index}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Vložit nový bod"
-                    value={point}
-                    onChange={(e) => updatePoint(index, e.target.value)}
-                    className=""
-                  />
-                  <Button variant="danger" onClick={() => deletePoint(index)}>
-                    <Trash2Fill />
-                  </Button>
-                </div>
-              ))}
-              <Button variant="warning" onClick={addPoint}>
-                <PlusCircle />
-              </Button>
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Uložit změny
-            </Button>
-          </Form>
-        </Col>
-        <Col md={8}>
-          <Form onSubmit={submitDoctorWorkHours}>
-            <Form.Group>
+    <Fragment>
+      <StyledContainer>
+        <MessageToast message="Preset uložen!" />
+        <Row>
+          <Col md={3}>
+            <h2>Můj profil</h2>
+            <ChangePassword />
+            <DoctorSelector
+              selectedDoctor={selectedDoctor}
+              setSelectedDoctor={setSelectedDoctor}
+            />
+            <Form onSubmit={submitDoctorProfileChanges}>
               <Form.Label>
-                <h3>Pracovní hodiny</h3>
+                <h3>Profil lékaře</h3>
               </Form.Label>
-              <WeekPicker
-                currentWeek={currentWeek}
-                setCurrentWeek={setCurrentWeek}
-              />
-              <ClinicSelector
-                selectedClinic={selectedClinic}
-                setSelectedClinic={setSelectedClinic}
-              />
-              <WeekGrid2
-                startOfWeek={currentWeek}
-                setClickedButtons={setClickedButtons}
-                initialShifts={initialShifts}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Uložit směny
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </StyledContainer>
+              <Form.Group>
+                <Form.Label>Titul</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="MUDr."
+                  value={title || ''}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Jméno</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Jan"
+                  value={firstName || ''}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Přijmení</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Novák"
+                  value={lastName || ''}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Obrázek</Form.Label>
+                <Form.Control type="file" disabled />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Popisek</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={description || ''}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Body na profilu</Form.Label>
+                {points.map((point, index) => (
+                  <div key={index}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Vložit nový bod"
+                      value={point}
+                      onChange={(e) => updatePoint(index, e.target.value)}
+                      className=""
+                    />
+                    <Button variant="danger" onClick={() => deletePoint(index)}>
+                      <Trash2Fill />
+                    </Button>
+                  </div>
+                ))}
+                <Button variant="warning" onClick={addPoint} className='ms-2'>
+                  <PlusCircle />
+                </Button>
+              </Form.Group>
+
+              <Button variant="primary" type="submit">
+                Uložit změny
+              </Button>
+            </Form>
+          </Col>
+          <Col md={9}>
+            <Form onSubmit={submitDoctorPresets}>
+              <Form.Group>
+                <Form.Label>
+                  <h3>Pracovní hodiny</h3>
+                </Form.Label>
+                <ClinicSelector
+                  selectedClinic={selectedClinic}
+                  setSelectedClinic={setSelectedClinic}
+                />
+                <PresetSelector />
+                <WeekGrid2
+                  startOfWeek={currentWeek}
+                  setClickedButtons={setClickedButtons}
+                />
+              </Form.Group>
+              <Button variant="danger" onClick={submitDoctorPresets}>
+                Uložit preset
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      </StyledContainer>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

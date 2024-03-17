@@ -5,7 +5,7 @@ const Footer = () => {
       <footer 
       className='mt-5'
       style={{
-        background: '#d11a1a',
+        background: '#dc3545',
         paddingTop: '40px',
         display: 'block',
         boxSizing: 'inherit',

@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Alert, Button, Container, Form, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import { login } from './../security/AuthService';
+import FooterManagement from 'components/FooterManagement';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -59,67 +60,70 @@ const LoginPage = () => {
   };
 
   return (
-    <Container className='mt-5 ps-'>
-      <Row>
-        <Col></Col>
-        <Col>
-          <Row>
-            <h2 className='ps-0'>Přihlášení</h2>
-          </Row>
-          <Form id='loginForm' onSubmit={handleLoginButton}>
-            {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
-            <Form.Group controlId='formUsername' className = 'mt-4'>
-              <Row>
-                <Form.Control
-                  type='text'
-                  placeholder='Uživatelské jméno'
-                  value={loginUserName}
-                  onChange={(e) => setLoginUserName(e.target.value)}
-                />
-              </Row>
-            </Form.Group>
-            <Form.Group controlId='formPassword' className = 'mt-4'>
-              <Row>
-                <Col
-                  className='ps-0 pe-0 col-9'
-                >
-                  <Form.Control
-                    type='password'
-                    placeholder='Heslo'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Col>
-                <Col
-                  className='ps-0 pe-0'
-                >
-                  <div className='d-grid'>
-                    <Button
-                      className=''
-                      variant='danger'
-                      type='button'
-                    >
-                      Zobrazit
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
-            </Form.Group>
+    <Fragment>
+      <Container className='mt-5 ps-'>
+        <Row>
+          <Col></Col>
+          <Col>
             <Row>
-              <Button
-                variant='danger'
-                type='submit'
-                onClick={handleLoginButton}
-                className='mt-4 col-3'
-              >
-                Přihlásit se
-              </Button>
+              <h2 className='ps-0'>Přihlášení</h2>
             </Row>
-          </Form>
-        </Col>
-        <Col></Col>
-      </Row>
-    </Container>
+            <Form id='loginForm' onSubmit={handleLoginButton}>
+              {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
+              <Form.Group controlId='formUsername' className = 'mt-4'>
+                <Row>
+                  <Form.Control
+                    type='text'
+                    placeholder='Uživatelské jméno'
+                    value={loginUserName}
+                    onChange={(e) => setLoginUserName(e.target.value)}
+                  />
+                </Row>
+              </Form.Group>
+              <Form.Group controlId='formPassword' className = 'mt-4'>
+                <Row>
+                  <Col
+                    className='ps-0 pe-0 col-9'
+                  >
+                    <Form.Control
+                      type='password'
+                      placeholder='Heslo'
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Col>
+                  <Col
+                    className='ps-0 pe-0'
+                  >
+                    <div className='d-grid'>
+                      <Button
+                        className=''
+                        variant='danger'
+                        type='button'
+                      >
+                        Zobrazit
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Row>
+                <Button
+                  variant='danger'
+                  type='submit'
+                  onClick={handleLoginButton}
+                  className='mt-4 col-3'
+                >
+                  Přihlásit se
+                </Button>
+              </Row>
+            </Form>
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
+      <FooterManagement></FooterManagement>
+    </Fragment>
   );
 };
 

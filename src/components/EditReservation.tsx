@@ -12,17 +12,19 @@ import config from '../../config/config.json';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
 import { useAppContext } from 'context/AppContext';
-import {
-  Pencil,
-} from 'react-bootstrap-icons';
+import { Pencil } from 'react-bootstrap-icons';
 import Reservation from 'types/ReservationType';
 
-interface EditReservationProps{
+interface EditReservationProps {
   Reservation: Reservation;
   ReservationList: Reservation[];
   SetReservationList: Dispatch<SetStateAction<Reservation[]>>;
 }
-const EditReservation: React.FC<EditReservationProps> = ({Reservation, ReservationList, SetReservationList}) => {
+const EditReservation: React.FC<EditReservationProps> = ({
+  Reservation,
+  ReservationList,
+  SetReservationList,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
     firstName: Reservation.client.firstName,
@@ -32,13 +34,18 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
     comment: Reservation.note,
   });
   const [validationError, setValidationError] = useState('');
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(Reservation.date));
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    new Date(Reservation.date)
+  );
   const [selectedTime, setSelectedTime] = useState(Reservation.time);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(Reservation.doctor);
-  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(Reservation.clinic);
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(
+    Reservation.doctor
+  );
+  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(
+    Reservation.clinic
+  );
   const { setShowMessageToast } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Hello Jackie")
     setNewReservationData((prevData) => ({
       ...prevData,
       [e.target.id]: e.target.value,
@@ -52,12 +59,13 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
     setSelectedTime(`${e.target.value}`);
   };
 
-  const updateReservationList = (newReservation:Reservation) => {
-    let changedItem = ReservationList.find( (item) => item.id === newReservation.id)
-    if(changedItem)
-    {
-      ReservationList[ReservationList.indexOf(changedItem)] = newReservation
-      SetReservationList(ReservationList)
+  const updateReservationList = (newReservation: Reservation) => {
+    let changedItem = ReservationList.find(
+      (item) => item.id === newReservation.id
+    );
+    if (changedItem) {
+      ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
+      SetReservationList(ReservationList);
     }
   };
 
@@ -66,24 +74,24 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
     if (validateForm()) {
       try {
         const updatedReservation = {
-        id: Reservation.id,
-        client: {
-          id: Reservation.client.id,
-          firstName: newReservationData.firstName,
-          lastName: newReservationData.lastName,
-          email: newReservationData.email,
-          phoneNumber: newReservationData.phone,
-        },
-        date: Reservation.date,
-        time: Reservation.time,
-        clinic: {
-          ...(selectedClinic),
-        },
-        doctor: {
-          ...(selectedDoctor),
-        },
-        note: Reservation.note,
-      };
+          id: Reservation.id,
+          client: {
+            id: Reservation.client.id,
+            firstName: newReservationData.firstName,
+            lastName: newReservationData.lastName,
+            email: newReservationData.email,
+            phoneNumber: newReservationData.phone,
+          },
+          date: Reservation.date,
+          time: Reservation.time,
+          clinic: {
+            ...selectedClinic,
+          },
+          doctor: {
+            ...selectedDoctor,
+          },
+          note: newReservationData.comment,
+        };
 
         const response = await axios.put(
           config.api.reservationsApi.edit + `/${Reservation.id}`,
@@ -150,7 +158,12 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
 
   return (
     <>
-      <Button variant="warning" size="lg" className="me-1" onClick={() => setShowModal(true)}>
+      <Button
+        variant='warning'
+        size='lg'
+        className='me-1'
+        onClick={() => setShowModal(true)}
+      >
         <Pencil></Pencil>
       </Button>
 
@@ -162,60 +175,60 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
           <Form>
             {/* Display validation error if present */}
             {validationError && <Alert>{validationError}</Alert>}
-            <Form.Group controlId="firstName">
+            <Form.Group controlId='firstName'>
               <Form.Label>Jméno</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.firstName}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="lastName">
+            <Form.Group controlId='lastName'>
               <Form.Label>Příjmení</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.lastName}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="phone">
+            <Form.Group controlId='phone'>
               <Form.Label>Telefon</Form.Label>
               <Form.Control
-                type="tel"
+                type='tel'
                 value={newReservationData.phone}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="email">
+            <Form.Group controlId='email'>
               <Form.Label>Email</Form.Label>
               <Form.Control
-                type="email"
+                type='email'
                 value={newReservationData.email}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="comment">
+            <Form.Group controlId='comment'>
               <Form.Label>Komentář (dobrovolné)</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.comment}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="selectedDate">
+            <Form.Group controlId='selectedDate'>
               <br></br>
-              <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
+              <Form.Label className='me-2'>Vyberte datum:</Form.Label>
               <DatePicker
                 selected={selectedDate}
                 onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                placeholderText=""
+                dateFormat='yyyy-MM-dd'
+                placeholderText=''
               />
               <br />
               Vybraný čas:
               <input
-                type="time"
-                className = 'ms-2'
+                type='time'
+                className='ms-2'
                 value={selectedTime}
                 onChange={handleTimeChange}
               />
@@ -233,7 +246,7 @@ const EditReservation: React.FC<EditReservationProps> = ({Reservation, Reservati
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant='primary' onClick={handleSubmit}>
             Uložit upravenou rezervaci
           </Button>
         </Modal.Footer>

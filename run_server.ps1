@@ -36,4 +36,4 @@ if (-Not (Test-Path .\reservation-system-be)) {
 cd .\reservation-system-be
 
 # Run `python manage.py runserver`
-python manage.py runserver
+python manage.py runserver 127.0.0.1:8080

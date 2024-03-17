@@ -8,6 +8,7 @@ import React, {
 import { AppContextType } from 'types/AppContextType';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
+import PresetType from 'types/PresetType';
 import Reservation from 'types/ReservationType';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -44,7 +45,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     Reservation[] | null
   >(null);
   const [showMessageToast, setShowMessageToast] = useState(false);
-  //const [username, setUsername ] = useState('');
+  const [presetList, setPresetList] = useState<PresetType[] | null>(null);
+  const [selectedPreset, setSelectedPreset] = useState<PresetType[] | null>(
+    null
+  );
 
   // Load context from local storage on initial mount
   useEffect(() => {
@@ -56,6 +60,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       setIsLoggedIn(parsedContext.isLoggedIn);
       setReservationsList(parsedContext.reservationsList);
       setShowMessageToast(parsedContext.showMessageToast); // Set the value from storage
+      setPresetList(parsedContext.presetList);
+      setSelectedPreset(selectedPreset);
     }
   }, []);
 
@@ -73,6 +79,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       setCurrentWeek,
       username,
       setUsername,
+      presetList,
+      setPresetList,
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
   }, [
@@ -87,6 +95,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setCurrentWeek,
     username,
     setUsername,
+    presetList,
+    setPresetList,
   ]);
 
   const contextValue: AppContextType = {
@@ -107,7 +117,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     currentWeek,
     setCurrentWeek,
     username,
-    setUsername
+    setUsername,
+    presetList,
+    setPresetList,
+    selectedPreset,
+    setSelectedPreset,
   };
 
   return (

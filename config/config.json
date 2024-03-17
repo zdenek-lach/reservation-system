@@ -2,7 +2,6 @@
   "api": {
     "doctorsApi": {
       "list": "https://rezervace.artromedi.cz:8080/api/doctors",
-      "detail": "https://rezervace.artromedi.cz:8080/api/doctor",
       "add": "https://rezervace.artromedi.cz:8080/api/add/doctor",
       "edit": "https://rezervace.artromedi.cz:8080/api/edit/doctor",
       "delete": "https://rezervace.artromedi.cz:8080/api/delete/doctor"
@@ -27,6 +26,10 @@
     "shiftApi": {
       "add": "https://rezervace.artromedi.cz:8080/api/add/shift",
       "list": "https://rezervace.artromedi.cz:8080/api/shift"
+    },
+    "presetsApi": {
+      "add": "",
+      "list": ""
     }
   },
   "general": {

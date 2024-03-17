@@ -25,7 +25,7 @@ export type AppContextType = {
   username: string | null;
   setUsername: React.Dispatch<React.SetStateAction<String>>;
   presetList: PresetType[] | null;
-  setPresetList: React.Dispatch<React.SetStateAction<PresetType | null>>;
+  setPresetList: React.Dispatch<React.SetStateAction<PresetType[] | null>>;
   selectedPreset: PresetType | null;
   setSelectedPreset: React.Dispatch<React.SetStateAction<PresetType | null>>;
 };

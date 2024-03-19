@@ -1,26 +1,20 @@
 import axios from 'axios';
 
+import AddReservation from 'components/AddReservation';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
-import WeekPicker from 'components/WeekPicker';
 import EditReservation from 'components/EditReservation';
+import FooterManagement from 'components/FooterManagement';
+import WeekPicker, { getFormattedDate } from 'components/WeekPicker';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
 import { Fragment, useState } from 'react';
-import {
-  Button,
-  Container,
-  Dropdown,
-  Form,
-  Modal,
-  Table,
-} from 'react-bootstrap';
+import { Button, Container, Form, Modal, Table } from 'react-bootstrap';
 import {
   ArrowCounterclockwise,
   InfoCircle,
-  Pencil,
   Trash3Fill,
 } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
@@ -28,7 +22,6 @@ import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
-import FooterManagement from 'components/FooterManagement';
 
 const MyReservations = () => {
   const {
@@ -115,96 +108,6 @@ const MyReservations = () => {
       });
   };
 
-  const handleAddReservation = () => {
-    // Add your logic to add a new reservation to the data source here
-    console.log('Adding a new reservation');
-  };
-  const handleEditFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedFirstName(event.target.value);
-  };
-
-  const handleEditLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedLastName(event.target.value);
-  };
-
-  const handleEditPhoneNumber = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEditedPhoneNumber(event.target.value);
-  };
-
-  const handleEditEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedEmail(event.target.value);
-  };
-
-  const handleEditDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedDate(event.target.value);
-  };
-  const handleEditTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedTime(event.target.value);
-  };
-  const handleEditNote = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedNote(event.target.value);
-  };
-
-  const handleSaveChanges = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    if (selectedReservation) {
-      const editUrl =
-        config.api.reservationsApi.edit + `/${selectedReservation.id}`;
-
-      const updatedReservation = {
-        id: selectedReservation.id,
-        client: {
-          id: selectedReservation.client.id,
-          firstName: editedFirstName,
-          lastName: editedLastName,
-          email: editedEmail,
-          phoneNumber: editedPhoneNumber,
-        },
-        date: editedDate,
-        time: editedTime,
-        clinic: {
-          id: editedAmbulance?.id,
-          ...editedAmbulance,
-        },
-        doctor: {
-          id: editedDoctor?.id,
-          ...editedDoctor,
-        },
-        note: editedNote,
-      };
-
-      axios
-        .put(editUrl, updatedReservation, {
-          headers: {
-            ...authHeader(),
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          console.log(
-            `Successfully updated reservation ${selectedReservation.id}`
-          );
-          console.log(response.status);
-        })
-        .catch((error) => {
-          console.error(
-            `Error updating reservation ${selectedReservation.id}:`,
-            error
-          );
-        });
-
-      console.error(
-        'data sent: ' +
-          Object.entries(updatedReservation).forEach((key) =>
-            console.error(key)
-          )
-      );
-
-      handleCloseModal();
-    }
-  };
   const startOfWeek = (date: Date) => {
     const result = new Date(date);
     result.setDate(result.getDate() - result.getDay() + 1);
@@ -324,10 +227,13 @@ const MyReservations = () => {
                     <td>{reservation.client.firstName}</td>
                     <td>{reservation.client.lastName}</td>
                     <td>
-                      {reservation.date} {reservation.time}
+                      {getFormattedDate(new Date(reservation.date))}
+                      {' v '}
+                      {reservation.time}
                     </td>
                     <td>
-                      {reservation.doctor.firstName} {reservation.doctor.lastName}
+                      {reservation.doctor.firstName}{' '}
+                      {reservation.doctor.lastName}
                     </td>
                     <td>{reservation.clinic.name}</td>
                     <td>
@@ -339,7 +245,11 @@ const MyReservations = () => {
                       >
                         <InfoCircle />
                       </Button>
-                      <EditReservation Reservation = {reservation as Reservation} ReservationList={reservationsList} SetReservationList={setReservationsList}></EditReservation>
+                      <EditReservation
+                        Reservation={reservation as Reservation}
+                        ReservationList={reservationsList}
+                        SetReservationList={setReservationsList}
+                      />
                       <Button
                         variant="danger"
                         size="lg"
@@ -352,9 +262,7 @@ const MyReservations = () => {
                 ))}
           </tbody>
         </Table>
-        <Button variant="danger" onClick={handleAddReservation}>
-          Přidat novou rezervaci
-        </Button>
+        {/* FIXME v designu to není, opravdu to tu nemá být? <AddReservation /> */}
         <Modal show={showInfoModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Informace o rezervaci</Modal.Title>
@@ -369,7 +277,8 @@ const MyReservations = () => {
                   <strong>Jméno:</strong> {selectedReservation.client.firstName}
                 </p>
                 <p>
-                  <strong>Příjmení:</strong> {selectedReservation.client.lastName}
+                  <strong>Příjmení:</strong>{' '}
+                  {selectedReservation.client.lastName}
                 </p>
                 <p>
                   <strong>Telefon:</strong>
@@ -379,11 +288,15 @@ const MyReservations = () => {
                   <strong>E-mail:</strong> {selectedReservation.client.email}
                 </p>
                 <p>
-                  <strong>Datum a čas:</strong> {selectedReservation.date}
-                  {selectedReservation.time}
+                  <strong>Datum: </strong>
+                  {getFormattedDate(new Date(selectedReservation.date))}
                 </p>
                 <p>
-                  <strong>Doktor:</strong> {selectedReservation.doctor.firstName}+{' '}
+                  <strong>Čas:</strong> {selectedReservation.time}
+                </p>
+                <p>
+                  <strong>Doktor:</strong>{' '}
+                  {selectedReservation.doctor.firstName}+{' '}
                   {selectedReservation.doctor.lastName}
                 </p>
                 <p>

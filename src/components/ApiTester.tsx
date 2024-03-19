@@ -5,9 +5,11 @@ import config from '../../config/config.json';
 
 const ApiTester = () => {
   const apiUrls = {
-    doctorsApi: 'http://127.0.0.1:8000/api/doctors',
-    clinicsApi: 'http://127.0.0.1:8000/api/clinics',
-    reservationsApi: 'http://127.0.0.1:8000/api/reservations',
+    doctorsApi: config.api.doctorsApi.list,
+    clinicsApi: config.api.clinicsApi.list,
+    reservationsApi: config.api.reservationsApi.list,
+    shiftApi: config.api.shiftApi.list,
+    presetsApi: config.api.presetsApi.list,
     authApi: config.api.authApi.getToken,
     authRefresh: config.api.authApi.refreshToken,
   };
@@ -25,9 +27,14 @@ const ApiTester = () => {
     <div>
       <h1>API Tester</h1>
       {Object.entries(apiUrls).map(([apiName, apiUrl]) => (
-        <button key={apiName} onClick={() => testApi(apiName, apiUrl)}>
+        <Button
+          variant="dark"
+          className="m-1"
+          key={apiName}
+          onClick={() => testApi(apiName, apiUrl)}
+        >
           Test {apiName}
-        </button>
+        </Button>
       ))}
       <Button variant="dark" onClick={refreshCheck}>
         Manual Token Refresh

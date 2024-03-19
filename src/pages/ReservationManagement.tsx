@@ -518,7 +518,7 @@ const ReservationManagement = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-        <AddReservation></AddReservation>
+        <AddReservation managementMode={true}/>
       </Container>
       <FooterManagement></FooterManagement>
     </Fragment>

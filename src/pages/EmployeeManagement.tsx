@@ -369,14 +369,6 @@ const EmployeeManagement = () => {
                 <div>
                   <strong>Obrázek ID:</strong> {selectedDoctor.pictureId}
                 </div>
-                <div>
-                  <WeekGrid2
-                    startOfWeek={currentWeek}
-                    setClickedButtons={setClickedButtons}
-                    initialShifts={initialShifts}
-                    readOnly={true}
-                  />
-                </div>
               </div>
             )}
           </Modal.Body>
@@ -435,11 +427,6 @@ const EmployeeManagement = () => {
                 onChange={handleEditPictureId}
               />
             </label>
-            <WeekGrid2
-              startOfWeek={currentWeek}
-              setClickedButtons={setClickedButtons}
-              initialShifts={initialShifts}
-            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>

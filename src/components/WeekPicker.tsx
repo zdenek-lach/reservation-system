@@ -8,19 +8,18 @@ interface WeekPickerProps {
   currentWeek: Date;
   setCurrentWeek: (date: Date) => void;
 }
-
+export const getFormattedDate = (date: Date): string => {
+  return date.toLocaleDateString('cs-CZ', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+};
 const WeekPicker: React.FC<WeekPickerProps> = ({
   currentWeek,
   setCurrentWeek,
 }) => {
-  const getFormattedDate = (date: Date): string => {
-    return date.toLocaleDateString('cs-CZ', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  };
-
+  
   const handlePrevWeek = () => {
     // Used getTime() to avoid mutating the original date
     const prevWeek = new Date(currentWeek.getTime());

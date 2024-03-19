@@ -24,7 +24,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   startOfWeek,
   setClickedButtons,
   initialShifts,
-  readOnly = false, // Add this line
+  readOnly = false,
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 

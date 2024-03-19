@@ -16,7 +16,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   onFormSubmit,
   onShowSummary,
 }) => {
-  const [show, setShow] = useState(false);
+  const [showReservationForm, setShowReservationForm] = useState(false);
 
   // States for form inputs
   const [formData, setFormData] = useState({
@@ -87,7 +87,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       };
 
       onFormSubmit(data);
-      setShow(false);
+      setShowReservationForm(false);
       onShowSummary();
     }
   };
@@ -156,12 +156,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           borderRadius: "20px",
         }}
         variant={enabledButton}
-        onClick={() => {if(enabledButton == ButtonType.Enabled){setShow(true)}}}
+        onClick={() => {if(enabledButton == ButtonType.Enabled){setShowReservationForm(true)}}}
         disabled={(enabledButton == ButtonType.Disabled)}>
         {time}
       </Button>
       {(enabledButton == ButtonType.Enabled) && (
-        <Modal show={show} onHide={() => setShow(false)}>
+        <Modal show={showReservationForm} onHide={() => setShowReservationForm(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Rezervace</Modal.Title>
         </Modal.Header>
@@ -174,7 +174,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               <br />
               <Form.Label>Vybraný čas: {time}</Form.Label>
             </Form.Group>
-            {/* Display validation error if present */}
             {validationError && (
               <div style={{ color: "red", marginBottom: "10px" }}>
                 {validationError}

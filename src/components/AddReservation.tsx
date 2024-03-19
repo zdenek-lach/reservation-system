@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
@@ -11,9 +12,18 @@ import ReservationDto from 'types/ReservationDtoType';
 import config from '../../config/config.json';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
-import { useAppContext } from 'context/AppContext';
+import { getFormattedDate } from './WeekPicker';
 
-const AddReservation = () => {
+interface AddReservationProps {
+  managementMode?: Boolean | null;
+  time?: string;
+  date?: Date;
+}
+const AddReservation: React.FC<AddReservationProps> = ({
+  managementMode = false,
+  time,
+  date,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
     firstName: '',
@@ -23,10 +33,13 @@ const AddReservation = () => {
     comment: '',
   });
   const [validationError, setValidationError] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>();
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>();
+  const [isManagement, setIsManagement] = useState<Boolean | null>(
+    managementMode
+  );
   const { setShowMessageToast } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewReservationData((prevData) => ({
@@ -127,6 +140,7 @@ const AddReservation = () => {
     setValidationError('');
     return true;
   };
+
   return (
     <>
       <Button variant="danger" onClick={() => setShowModal(true)}>
@@ -139,7 +153,19 @@ const AddReservation = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            {/* Display validation error if present */}
+            {!isManagement && (
+              <>
+                <Form.Group controlId="reservationDate">
+                  <Form.Label>Vybrané datum: </Form.Label>
+                  {getFormattedDate(date)}
+                </Form.Group>
+                <Form.Group controlId="reservationTime">
+                  <Form.Label>Vybraný čas: </Form.Label>
+                  {time}
+                </Form.Group>
+              </>
+            )}
+
             {validationError && <Alert>{validationError}</Alert>}
             <Form.Group controlId="firstName">
               <Form.Label>Jméno</Form.Label>
@@ -181,34 +207,37 @@ const AddReservation = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <br></br>
-            <Form.Group controlId="selectedDate">
-              <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
-              <DatePicker
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                placeholderText=""
-              />
-              <br/>
-              Vybraný čas:
-              <input
-                type="time"
-                className = 'ms-2'
-                value={selectedTime}
-                onChange={handleTimeChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <DoctorSelector
-                selectedDoctor={selectedDoctor}
-                setSelectedDoctor={setSelectedDoctor}
-              />
-              <ClinicSelector
-                selectedClinic={selectedClinic}
-                setSelectedClinic={setSelectedClinic}
-              />
-            </Form.Group>
+            {isManagement && (
+              <>
+                <Form.Group controlId="selectedDate">
+                  <Form.Label className="me-2">Vyberte datum:</Form.Label>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText=""
+                  />
+                  <br />
+                  Vybraný čas:
+                  <input
+                    type="time"
+                    className="ms-2"
+                    value={selectedTime}
+                    onChange={handleTimeChange}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <DoctorSelector
+                    selectedDoctor={selectedDoctor}
+                    setSelectedDoctor={setSelectedDoctor}
+                  />
+                  <ClinicSelector
+                    selectedClinic={selectedClinic}
+                    setSelectedClinic={setSelectedClinic}
+                  />
+                </Form.Group>
+              </>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>

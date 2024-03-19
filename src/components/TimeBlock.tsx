@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import ReservationForm from './ReservationForm';
 import ReservationData from 'types/ReservationData';
 import ReservationSummary from './ReservationSummary';
+import AddReservation from './AddReservation';
 
 interface TimeBlockProps {
   time: string;
@@ -25,6 +26,7 @@ const TimeBlock: React.FC<TimeBlockProps> = ({ time, date }) => {
         onFormSubmit={(data) => setReservationData(data)}
         onShowSummary={onShowSummary}
       />
+      {/* <AddReservation time={time} date={date}/> */}
       {(
         <ReservationSummary ReservationData={ReservationData} ShowSummary={showSummary} SetSummary={setShowSummary}/>
       )}

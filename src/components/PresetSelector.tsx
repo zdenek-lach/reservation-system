@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { authHeader } from 'security/AuthService';
 import config from '../../config/config.json';
+import { TimeSlot } from './WeekGrid2';
 
 type PresetSelectorProps = {
   presetName?: string;

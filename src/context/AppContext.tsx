@@ -47,6 +47,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [showMessageToast, setShowMessageToast] = useState(false);
   const [presetList, setPresetList] = useState<PresetType[] | null>(null);
   const [selectedPreset, setSelectedPreset] = useState<PresetType | null>(null);
+  const [refreshID, setRefreshID] = useState<NodeJS.Timeout | null>(null);
 
   // Load context from local storage on initial mount
   useEffect(() => {
@@ -79,6 +80,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       setUsername,
       presetList,
       setPresetList,
+      refreshID,
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
   }, [
@@ -95,6 +97,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setUsername,
     presetList,
     setPresetList,
+    refreshID,
   ]);
 
   const contextValue: AppContextType = {
@@ -120,6 +123,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setPresetList,
     selectedPreset,
     setSelectedPreset,
+    refreshID,
+    setRefreshID,
   };
 
   return (

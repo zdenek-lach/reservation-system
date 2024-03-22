@@ -2,11 +2,12 @@ import axios from 'axios';
 import ChangePassword from 'components/ChangePassword';
 import ClinicSelector from 'components/ClinicSelector';
 import DoctorSelector from 'components/DoctorSelector';
+import FooterManagement from 'components/FooterManagement';
 import MessageToast from 'components/MessageToast';
 import PresetSelector from 'components/PresetSelector';
 import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
 import { authHeader } from 'security/AuthService';
@@ -16,15 +17,15 @@ import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import PresetType from 'types/PresetType';
 import config from '../../config/config.json';
-import FooterManagement from 'components/FooterManagement';
 
 const StyledContainer = styled(Container)`
-    margin-top: 20px;
-  `;
+  margin-top: 20px;
+`;
 
 const MyProfile = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
+  const [presetName, setPresetName] = useState<string | null>('');
   const [firstName, setFirstName] = useState<string | null>('');
   const [lastName, setLastName] = useState<string | null>('');
   const [description, setDescription] = useState<string | null>('');
@@ -35,7 +36,8 @@ const MyProfile = () => {
     DoctorWorkhours[] | null
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
-  const { setShowMessageToast } = useAppContext();
+  const { setShowMessageToast, selectedPreset, setSelectedPreset } =
+    useAppContext();
   useEffect(() => {
     if (selectedDoctor) {
       setFirstName(selectedDoctor.firstName);
@@ -98,11 +100,15 @@ const MyProfile = () => {
   const convertClickedButtonsToPreset = () => {
     const newPreset: PresetType = {
       id: null,
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],
+      doctorId: selectedDoctor ? selectedDoctor.id : null,
+      name: presetName,
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: [],
     };
 
     clickedButtons.forEach((button) => {
@@ -110,21 +116,27 @@ const MyProfile = () => {
         weekday: 'long',
       });
 
-      switch (dayOfWeek) {
-        case 'Monday':
-          newPreset.Monday.push(button.time);
+      switch (dayOfWeek.toLowerCase()) {
+        case 'monday':
+          newPreset.monday.push(button.time);
           break;
-        case 'Tuesday':
-          newPreset.Tuesday.push(button.time);
+        case 'tuesday':
+          newPreset.tuesday.push(button.time);
           break;
-        case 'Wednesday':
-          newPreset.Wednesday.push(button.time);
+        case 'wednesday':
+          newPreset.wednesday.push(button.time);
           break;
-        case 'Thursday':
-          newPreset.Thursday.push(button.time);
+        case 'thursday':
+          newPreset.thursday.push(button.time);
           break;
-        case 'Friday':
-          newPreset.Friday.push(button.time);
+        case 'friday':
+          newPreset.friday.push(button.time);
+          break;
+        case 'saturday':
+          newPreset.friday.push(button.time);
+          break;
+        case 'sunday':
+          newPreset.friday.push(button.time);
           break;
         default:
           console.log(
@@ -140,7 +152,7 @@ const MyProfile = () => {
     console.warn(convertClickedButtonsToPreset());
     try {
       const response = await axios.post(
-        config.api.presetsApi.add, // Replace with your actual API endpoint
+        config.api.presetsApi.add,
         convertClickedButtonsToPreset(),
         {
           headers: {
@@ -151,9 +163,8 @@ const MyProfile = () => {
       );
 
       if (response.status === 200) {
-        // OK, inform user the action has been successful
         console.log('Adding preset was successful');
-        setShowMessageToast(true); // If you have a toast for this action
+        setShowMessageToast(true);
       } else {
         console.log('You have caused an error!');
       }
@@ -162,6 +173,38 @@ const MyProfile = () => {
     }
   };
 
+  const initialShifts = useMemo(() => {
+    if (!selectedPreset) return [];
+
+    const daysOfWeek = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ];
+    let shifts = [];
+
+    daysOfWeek.forEach((day, index) => {
+      const dayDate = new Date(
+        currentWeek.getFullYear(),
+        currentWeek.getMonth(),
+        currentWeek.getDate() + index,
+        0,
+        0,
+        0,
+        0 // Sets the time to 00:00:00.000
+      );
+
+      selectedPreset[day].forEach((time) => {
+        shifts.push({ day: dayDate, time });
+      });
+    });
+
+    return shifts;
+  }, [selectedPreset, currentWeek]);
   return (
     <Fragment>
       <StyledContainer>
@@ -234,7 +277,7 @@ const MyProfile = () => {
                     </Button>
                   </div>
                 ))}
-                <Button variant="warning" onClick={addPoint} className='ms-2'>
+                <Button variant="warning" onClick={addPoint} className="ms-2">
                   <PlusCircle />
                 </Button>
               </Form.Group>
@@ -254,9 +297,14 @@ const MyProfile = () => {
                   selectedClinic={selectedClinic}
                   setSelectedClinic={setSelectedClinic}
                 />
-                <PresetSelector />
+                <PresetSelector
+                  presetName={presetName}
+                  setPresetName={setPresetName}
+                  clickedButtons={clickedButtons}
+                />
                 <WeekGrid2
                   startOfWeek={currentWeek}
+                  initialShifts={initialShifts}
                   setClickedButtons={setClickedButtons}
                 />
               </Form.Group>
@@ -267,7 +315,7 @@ const MyProfile = () => {
           </Col>
         </Row>
       </StyledContainer>
-      <FooterManagement></FooterManagement>
+      <FooterManagement />
     </Fragment>
   );
 };

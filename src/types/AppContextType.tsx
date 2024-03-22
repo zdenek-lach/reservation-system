@@ -28,4 +28,6 @@ export type AppContextType = {
   setPresetList: React.Dispatch<React.SetStateAction<PresetType[] | null>>;
   selectedPreset: PresetType | null;
   setSelectedPreset: React.Dispatch<React.SetStateAction<PresetType | null>>;
+  refreshID: NodeJS.Timeout | null;
+  setRefreshID: React.Dispatch<React.SetStateAction<NodeJS.Timeout | null>>;
 };

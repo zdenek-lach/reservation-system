@@ -9,9 +9,7 @@ if (!container) throw new Error('Failed to find the root element');
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <AppProvider>
-        <App />
-    </AppProvider>
-  </React.StrictMode>
+  <AppProvider>
+    <App />
+  </AppProvider>
 );

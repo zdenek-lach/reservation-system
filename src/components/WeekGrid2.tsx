@@ -31,7 +31,6 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   const getInitialShifts = () => {
     let initialButtonStates: string[] = [];
     initialShifts?.forEach((slot) => {
-      // Use optional chaining here
       const buttonKey = `${slot.day.getFullYear()}-${slot.day.getMonth()}-${slot.day.getDate()}-${
         slot.time
       }`;

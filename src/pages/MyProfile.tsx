@@ -15,7 +15,6 @@ import { styled } from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
-import PresetType from 'types/PresetType';
 import config from '../../config/config.json';
 
 const StyledContainer = styled(Container)`
@@ -36,8 +35,6 @@ const MyProfile = () => {
     DoctorWorkhours[] | null
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
-  const { setShowMessageToast, selectedPreset, setSelectedPreset } =
-    useAppContext();
   useEffect(() => {
     if (selectedDoctor) {
       setFirstName(selectedDoctor.firstName);
@@ -62,7 +59,7 @@ const MyProfile = () => {
     setPoints(points.map((point, i) => (i === index ? value : point)));
   };
 
-  const { currentWeek, setCurrentWeek } = useAppContext();
+  const { currentWeek, selectedPreset } = useAppContext();
 
   const submitDoctorProfileChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -94,82 +91,6 @@ const MyProfile = () => {
         .catch((error) => {
           console.error(`Error updating doctor ${selectedDoctor.id}:`, error);
         });
-    }
-  };
-
-  const convertClickedButtonsToPreset = () => {
-    const newPreset: PresetType = {
-      id: null,
-      doctorId: selectedDoctor ? selectedDoctor.id : null,
-      name: presetName,
-      monday: [],
-      tuesday: [],
-      wednesday: [],
-      thursday: [],
-      friday: [],
-      saturday: [],
-      sunday: [],
-    };
-
-    clickedButtons.forEach((button) => {
-      const dayOfWeek = new Date(button.day).toLocaleString('en-US', {
-        weekday: 'long',
-      });
-
-      switch (dayOfWeek.toLowerCase()) {
-        case 'monday':
-          newPreset.monday.push(button.time);
-          break;
-        case 'tuesday':
-          newPreset.tuesday.push(button.time);
-          break;
-        case 'wednesday':
-          newPreset.wednesday.push(button.time);
-          break;
-        case 'thursday':
-          newPreset.thursday.push(button.time);
-          break;
-        case 'friday':
-          newPreset.friday.push(button.time);
-          break;
-        case 'saturday':
-          newPreset.friday.push(button.time);
-          break;
-        case 'sunday':
-          newPreset.friday.push(button.time);
-          break;
-        default:
-          console.log(
-            `Day ${dayOfWeek} is not accounted for in the Preset object.`
-          );
-      }
-    });
-
-    return newPreset;
-  };
-
-  const submitDoctorPresets = async () => {
-    console.warn(convertClickedButtonsToPreset());
-    try {
-      const response = await axios.post(
-        config.api.presetsApi.add,
-        convertClickedButtonsToPreset(),
-        {
-          headers: {
-            ...authHeader(),
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log('Adding preset was successful');
-        setShowMessageToast(true);
-      } else {
-        console.log('You have caused an error!');
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -208,7 +129,7 @@ const MyProfile = () => {
   return (
     <Fragment>
       <StyledContainer>
-        <MessageToast message="Preset uložen!" />
+        <MessageToast message='Preset uložen!' />
         <Row>
           <Col md={3}>
             <h2>Můj profil</h2>
@@ -224,8 +145,8 @@ const MyProfile = () => {
               <Form.Group>
                 <Form.Label>Titul</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="MUDr."
+                  type='text'
+                  placeholder='MUDr.'
                   value={title || ''}
                   onChange={(e) => setTitle(e.target.value)}
                 />
@@ -233,8 +154,8 @@ const MyProfile = () => {
               <Form.Group>
                 <Form.Label>Jméno</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Jan"
+                  type='text'
+                  placeholder='Jan'
                   value={firstName || ''}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
@@ -242,20 +163,20 @@ const MyProfile = () => {
               <Form.Group>
                 <Form.Label>Přijmení</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Novák"
+                  type='text'
+                  placeholder='Novák'
                   value={lastName || ''}
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Obrázek</Form.Label>
-                <Form.Control type="file" disabled />
+                <Form.Control type='file' disabled />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Popisek</Form.Label>
                 <Form.Control
-                  as="textarea"
+                  as='textarea'
                   rows={3}
                   value={description || ''}
                   onChange={(e) => setDescription(e.target.value)}
@@ -266,29 +187,29 @@ const MyProfile = () => {
                 {points.map((point, index) => (
                   <div key={index}>
                     <Form.Control
-                      type="text"
-                      placeholder="Vložit nový bod"
+                      type='text'
+                      placeholder='Vložit nový bod'
                       value={point}
                       onChange={(e) => updatePoint(index, e.target.value)}
-                      className=""
+                      className=''
                     />
-                    <Button variant="danger" onClick={() => deletePoint(index)}>
+                    <Button variant='danger' onClick={() => deletePoint(index)}>
                       <Trash2Fill />
                     </Button>
                   </div>
                 ))}
-                <Button variant="warning" onClick={addPoint} className="ms-2">
+                <Button variant='warning' onClick={addPoint} className='ms-2'>
                   <PlusCircle />
                 </Button>
               </Form.Group>
 
-              <Button variant="primary" type="submit">
+              <Button variant='primary' type='submit'>
                 Uložit změny
               </Button>
             </Form>
           </Col>
           <Col md={9}>
-            <Form onSubmit={submitDoctorPresets}>
+            <Form>
               <Form.Group>
                 <Form.Label>
                   <h3>Pracovní hodiny</h3>
@@ -308,9 +229,7 @@ const MyProfile = () => {
                   setClickedButtons={setClickedButtons}
                 />
               </Form.Group>
-              <Button variant="danger" onClick={submitDoctorPresets}>
-                Uložit preset
-              </Button>
+             
             </Form>
           </Col>
         </Row>

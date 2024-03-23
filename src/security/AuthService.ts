@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { useAppContext } from 'context/AppContext';
 import { jwtDecode } from 'jwt-decode';
+import { useEffect } from 'react';
 import config from '../../config/config.json';
 
 export const login = (username: string, password: string) => {
@@ -78,3 +80,19 @@ export const authHeader = () => {
     return { Authorization: '' };
   }
 };
+
+export const fetchLoggedDoctor = async () => {
+  if (getCurrentUser() != null) {
+    try {
+      const response = await axios.get(config.api.authApi.loggedUser, {
+        headers: authHeader(),
+      });
+      if (response.data.doctor != null) {
+        return response.data.doctor;
+      }
+    } catch (err: any) {
+      console.error('Failed to retrieve logged doctor' + err);
+    }
+  }
+};
+

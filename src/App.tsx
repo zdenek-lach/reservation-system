@@ -6,6 +6,7 @@ import MyProfile from 'pages/MyProfile';
 import MyReservations from 'pages/MyReservations';
 import MyShifts from 'pages/MyShifts';
 import ReservationManagement from 'pages/ReservationManagement';
+import { useEffect } from 'react';
 import {
   Navigate,
   Route,
@@ -23,12 +24,22 @@ import Management from './pages/Management';
 export const App = () => {
   const { isLoggedIn } = useAppContext();
   const { refreshID, setRefreshID } = useAppContext();
-  if (refreshID == null) {
-    let theRunner = setInterval(function () {
-      refreshCheck();
-    }, 1000 * config.security.refreshPeriodInSeconds);
-    setRefreshID(theRunner);
-  }
+  useEffect(() => {
+    if (refreshID == null) {
+      let theRunner = setInterval(function () {
+        refreshCheck();
+      }, 1000 * config.security.refreshPeriodInSeconds);
+      setRefreshID(theRunner);
+    }
+
+    // Cleanup function
+    return () => {
+      if (refreshID != null) {
+        clearInterval(refreshID);
+      }
+    };
+  }, [refreshID]); // Depend on refreshID
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>

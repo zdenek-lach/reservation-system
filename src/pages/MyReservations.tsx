@@ -1,43 +1,43 @@
 import axios from 'axios';
 
-import AddReservation from 'components/AddReservation';
-import ClinicSelector from 'components/ClinicSelector';
-import DoctorSelector from 'components/DoctorSelector';
-import EditReservation from 'components/EditReservation';
-import FooterManagement from 'components/FooterManagement';
 import WeekPicker, { getFormattedDate } from 'components/WeekPicker';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import DoctorSelector from 'components/management-components/DoctorSelector';
+import EditReservation from 'components/management-components/EditReservation';
+import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Container, Form, Modal, Table } from 'react-bootstrap';
 import {
   ArrowCounterclockwise,
   InfoCircle,
   Trash3Fill,
 } from 'react-bootstrap-icons';
-import { authHeader } from 'security/AuthService';
+import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
+import AddReservation from 'components/management-components/AddReservation';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const MyReservations = () => {
   const {
     reservationsList,
     setReservationsList,
-    doctorList,
-    clinicList,
     currentWeek,
     setCurrentWeek,
   } = useAppContext();
-  const { loadingReservations, errorReservations } = useReservations();
+const { loadingReservations, errorReservations } = useReservations();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
 
-  const [editedFirstName, setEditedFirstName] = useState('');
+const [editedFirstName, setEditedFirstName] = useState('');
   const [editedLastName, setEditedLastName] = useState('');
   const [editedPhoneNumber, setEditedPhoneNumber] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
@@ -49,33 +49,18 @@ const MyReservations = () => {
   const [filterDoctor, setFilterDoctor] = useState<Doctor | null>(null);
   const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
   const [isWeekFilterEnabled, setIsWeekFilterEnabled] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const { loadingDoctors, errorDoctors } = useDoctors();
   const { loadingClinics, errorClinics } = useClinics();
 
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
 
-  const [searchTerm, setSearchTerm] = useState(''); // Add this line
+  const [searchTerm, setSearchTerm] = useState(''); 
 
   const handleShowInfoModal = (reservation: Reservation) => {
     setSelectedReservation(reservation);
     setShowInfoModal(true);
-  };
-
-  const handleShowEditModal = (reservation: Reservation) => {
-    setSelectedReservation(reservation);
-    setEditedFirstName(reservation.client.firstName);
-    setEditedLastName(reservation.client.lastName);
-    setEditedPhoneNumber(reservation.client.phoneNumber);
-    setEditedEmail(reservation.client.email);
-    setEditedDate(reservation.date);
-    setEditedTime(reservation.time);
-    setEditedNote(reservation.note);
-    setEditedAmbulance(reservation.clinic);
-    setEditedDoctor(reservation.doctor);
-
-    setShowEditModal(true);
   };
 
   const handleCloseModal = () => {
@@ -96,7 +81,6 @@ const MyReservations = () => {
         console.log(response.status);
 
         if (reservationsList) {
-          // Update the reservationsList state after successful deletion
           const updatedReservations = reservationsList.filter(
             (res) => res.id !== reservation.id
           );
@@ -120,6 +104,24 @@ const MyReservations = () => {
     return result;
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLoggedDoctor();
+        setLoggedInDoctor(response);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
+  if (loading) {
+    return <CenterSpinner />;
+  }
   return (
     <Fragment>
       <Container
@@ -131,32 +133,32 @@ const MyReservations = () => {
       >
         <Form.Group>
           <Form.Control
-            type="text"
-            placeholder="Vyhledat"
+            type='text'
+            placeholder='Vyhledat'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <DoctorSelector
-            selectedDoctor={filterDoctor}
-            setSelectedDoctor={setFilterDoctor}
+            selectedDoctorProp={loggedInDoctor}
+            setSelectedDoctorProp={setLoggedInDoctor}
           />
           <ClinicSelector
             selectedClinic={filterClinic}
             setSelectedClinic={setFilterClinic}
           />
           <Button
-            variant="danger"
+            variant='danger'
             onClick={() => {
               setSearchTerm('');
-              setFilterDoctor(null);
+              setLoggedInDoctor(null);
               setFilterClinic(null);
             }}
           >
             <ArrowCounterclockwise />
           </Button>
           <Form.Check
-            type="checkbox"
-            label="Filtrovat dle týdnu"
+            type='checkbox'
+            label='Filtrovat dle týdnu'
             checked={isWeekFilterEnabled}
             onChange={(e) => setIsWeekFilterEnabled(e.target.checked)}
           />
@@ -206,8 +208,8 @@ const MyReservations = () => {
                 )
                 .filter(
                   (reservation) =>
-                    filterDoctor == null ||
-                    reservation.doctor.id === filterDoctor.id
+                    loggedInDoctor == null ||
+                    reservation.doctor.id === loggedInDoctor.id
                 )
                 .filter(
                   (reservation) =>
@@ -238,9 +240,9 @@ const MyReservations = () => {
                     <td>{reservation.clinic.name}</td>
                     <td>
                       <Button
-                        variant="info"
-                        size="lg"
-                        className="mr-1 me-1"
+                        variant='info'
+                        size='lg'
+                        className='mr-1 me-1'
                         onClick={() => handleShowInfoModal(reservation)}
                       >
                         <InfoCircle />
@@ -251,8 +253,8 @@ const MyReservations = () => {
                         SetReservationList={setReservationsList}
                       />
                       <Button
-                        variant="danger"
-                        size="lg"
+                        variant='danger'
+                        size='lg'
                         onClick={() => handleDeleteReservation(reservation)}
                       >
                         <Trash3Fill />
@@ -262,7 +264,7 @@ const MyReservations = () => {
                 ))}
           </tbody>
         </Table>
-        {/* FIXME v designu to není, opravdu to tu nemá být? <AddReservation /> */}
+        <AddReservation managementMode={true}/>
         <Modal show={showInfoModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Informace o rezervaci</Modal.Title>
@@ -311,13 +313,13 @@ const MyReservations = () => {
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant='secondary' onClick={handleCloseModal}>
               Zavřít
             </Button>
           </Modal.Footer>
         </Modal>
       </Container>
-      <FooterManagement></FooterManagement>
+      <FooterManagement/>
     </Fragment>
   );
 };

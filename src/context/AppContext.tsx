@@ -17,12 +17,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [doctorList, setDoctorList] = useState(() => {
     const storedContext = localStorage.getItem('appContext');
     return storedContext ? JSON.parse(storedContext).doctorList : null;
   });
+
   const [currentWeek, setCurrentWeek] = useState(() => {
     const date = new Date();
     const day = date.getDay();
@@ -81,6 +83,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       presetList,
       setPresetList,
       refreshID,
+      loggedInDoctor
     };
     localStorage.setItem('appContext', JSON.stringify(contextToStore));
   }, [
@@ -98,6 +101,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     presetList,
     setPresetList,
     refreshID,
+    loggedInDoctor
   ]);
 
   const contextValue: AppContextType = {
@@ -125,6 +129,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     setSelectedPreset,
     refreshID,
     setRefreshID,
+    loggedInDoctor,
+    setLoggedInDoctor
   };
 
   return (

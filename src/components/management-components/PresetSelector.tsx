@@ -3,8 +3,7 @@ import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { authHeader } from 'security/AuthService';
-import PresetType from 'types/PresetType';
-import config from '../../config/config.json';
+import config from '../../../config/config.json';
 import { TimeSlot } from './WeekGrid2';
 
 type PresetSelectorProps = {
@@ -201,7 +200,7 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
       console.log(error);
     }
   };
-//todo after new preset, update the dropdown-selected one .. or the selected one overall
+  //todo after new preset, update the dropdown-selected one .. or the selected one overall
   return (
     <label>
       <Dropdown>

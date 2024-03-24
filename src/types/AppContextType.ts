@@ -12,6 +12,8 @@ export type AppContextType = {
   selectedClinic: Clinic | null;
   setSelectedDoctor: React.Dispatch<React.SetStateAction<Doctor | null>>;
   setSelectedClinic: React.Dispatch<React.SetStateAction<Clinic | null>>;
+  loggedInDoctor: Doctor | null;
+  setLoggedInDoctor: React.Dispatch<React.SetStateAction<Doctor | null>>;
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   reservationsList: Reservation[] | null;

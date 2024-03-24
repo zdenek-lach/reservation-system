@@ -1,19 +1,17 @@
 import axios from 'axios';
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useAppContext } from 'context/AppContext';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
+import { Pencil } from 'react-bootstrap-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
-import ReservationData from 'types/ReservationData';
-import ReservationDto from 'types/ReservationDtoType';
-import config from '../../config/config.json';
+import Reservation from 'types/ReservationType';
+import config from '../../../config/config.json';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
-import { useAppContext } from 'context/AppContext';
-import { Pencil } from 'react-bootstrap-icons';
-import Reservation from 'types/ReservationType';
 
 interface EditReservationProps {
   Reservation: Reservation;
@@ -235,8 +233,8 @@ const EditReservation: React.FC<EditReservationProps> = ({
             </Form.Group>
             <Form.Group>
               <DoctorSelector
-                selectedDoctor={selectedDoctor}
-                setSelectedDoctor={setSelectedDoctor}
+                selectedDoctorProp={selectedDoctor}
+                setSelectedDoctorProp={setSelectedDoctor}
               />
               <ClinicSelector
                 selectedClinic={selectedClinic}

@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { authHeader } from 'security/AuthService';
+import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 import config from '../../../config/config.json';
 import { TimeSlot } from './WeekGrid2';
 
@@ -17,13 +18,10 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
   setPresetName,
   clickedButtons,
 }) => {
-  const {
-    setShowMessageToast,
-    selectedPreset,
-    setSelectedPreset,
-    selectedDoctor,
-  } = useAppContext();
+  const { selectedPreset, setSelectedPreset } = useAppContext();
   const [presetList, setPresetList] = useState([]);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchPresets = async () => {
     try {
@@ -132,11 +130,24 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
         console.error(`Error editing preset ${selectedPreset.id}:`, error);
       });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLoggedDoctor();
+        setLoggedInDoctor(response);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const submitNewPreset = async () => {
     const newPreset = {
       id: null,
-      doctorId: selectedDoctor ? selectedDoctor.id : null,
+      doctorId: loggedInDoctor ? loggedInDoctor.id : null,
       name: presetName,
       monday: [],
       tuesday: [],
@@ -180,7 +191,6 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
           );
       }
     });
-
     try {
       const response = await axios.post(config.api.presetsApi.add, newPreset, {
         headers: {
@@ -194,13 +204,16 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
         setSelectedPreset(newPreset);
         fetchPresets();
       } else {
-        console.log('You have caused an error!');
+        console.error('You have caused an error!');
       }
     } catch (error) {
       console.log(error);
     }
   };
-  //todo after new preset, update the dropdown-selected one .. or the selected one overall
+  if (loading) {
+    console.log('Waiting for logged-in api');
+    return <CenterSpinner />;
+  }
   return (
     <label>
       <Dropdown>

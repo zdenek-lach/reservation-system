@@ -1,4 +1,4 @@
-import ApiTester from 'components/ApiTester';
+import ApiTester from 'components/management-components/ApiTester';
 import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { Button, Container, Form, Image, Nav, Navbar } from 'react-bootstrap';
@@ -23,27 +23,27 @@ const NavBar: React.FC = () => {
 
   return (
     <Navbar
-      variant="dark"
-      expand="lg"
-      className="p-3 border-bottom border-danger"
+      variant='dark'
+      expand='lg'
+      className='p-3 border-bottom border-danger'
     >
       <Container>
         <Navbar.Brand
           onClick={() => {
             navigate('/');
           }}
-          className="d-flex align-items-center"
+          className='d-flex align-items-center'
         >
-          <div className="secondary">
-            <Image src={logoText} width={250} className="p-0 m-0" />
+          <div className='secondary'>
+            <Image src={logoText} width={250} className='p-0 m-0' />
           </div>
         </Navbar.Brand>
-        <Nav.Item className="p-2 d-flex align-items-center">
+        <Nav.Item className='p-2 d-flex align-items-center'>
           <Form>
             <Form.Check
-              type="switch"
-              id="custom-switch"
-              label="My sanity is running low"
+              type='switch'
+              id='custom-switch'
+              label='My sanity is running low'
               onChange={handleSanityToggle} // Add the onChange handler
             />
           </Form>
@@ -56,35 +56,35 @@ const NavBar: React.FC = () => {
           </>
         )}
         <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Collapse className='justify-content-end'>
           <Nav>
-            <Nav.Item className=" p-2 d-flex align-items-center">
+            <Nav.Item className=' p-2 d-flex align-items-center'>
               verze {packageJson.version}
             </Nav.Item>
 
             {isLoggedIn ? (
               <>
                 <Button
-                  className="me-2"
-                  variant="outline-danger"
+                  className='me-2'
+                  variant='outline-danger'
                   onClick={() => navigate('/management')}
                 >
                   Management
                 </Button>
                 <Button
-                  href="/"
+                  href='/'
                   onClick={handleLogout}
-                  variant="outline-danger"
-                  className="d-flex align-items-center"
+                  variant='outline-danger'
+                  className='d-flex align-items-center'
                 >
                   Odhlásit se
                 </Button>
               </>
             ) : (
               <Button
-                className="d-flex align-items-center"
-                href="/login"
-                variant="danger"
+                className='d-flex align-items-center'
+                href='/login'
+                variant='danger'
               >
                 Přihlásit se
               </Button>

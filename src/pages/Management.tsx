@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import FooterManagement from 'components/FooterManagement';
+import FooterManagement from 'components/management-components/FooterManagement';
 import { Fragment, useEffect, useState } from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import {
   CalendarPlusFill,
   ClipboardCheckFill,
@@ -41,6 +41,7 @@ const iconStyle: CSSProperties = {
 const Management = () => {
   const navigate = useNavigate();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [loadingDoctor, setIsLoadingDoctor] = useState(true);
 
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>) => {
     e.currentTarget.style.backgroundColor = '#b02a37';
@@ -49,14 +50,19 @@ const Management = () => {
   const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
     e.currentTarget.style.backgroundColor = '#dc3545';
   };
+
   useEffect(() => {
-    fetchLoggedUser().then((user) => setDoctor(user));
+    fetchLoggedUser().then((user) => {
+      setDoctor(user);
+      setIsLoadingDoctor(false);
+    });
   }, []);
+
   const renderCard = (
     title: string,
     icon: JSX.Element,
     onClick: () => void,
-    altStyle?: CSSProperties
+    isLoading?: boolean
   ) => (
     <Col md={4} key={title}>
       <Card
@@ -65,8 +71,13 @@ const Management = () => {
         onMouseLeave={handleCardLeave}
         onClick={onClick}
       >
-        {icon}
-        {title}
+        {!isLoading && (
+          <>
+            {icon}
+            {title}
+          </>
+        )}
+        {isLoading && <Spinner />}
       </Card>
     </Col>
   );
@@ -75,21 +86,23 @@ const Management = () => {
     <Fragment>
       <Container>
         <Row className='mb-4 mt-4'>
-          {doctor &&
-            renderCard(
+          {renderCard(
               'Můj profil',
               <PersonLinesFill style={iconStyle} />,
-              () => navigate('my-profile')
+              () => navigate('my-profile'),
+              loadingDoctor
             )}
           {renderCard(
             'Moje směny',
             <CalendarPlusFill style={iconStyle} />,
-            () => navigate('my-shifts')
+            () => navigate('my-shifts'),
+            loadingDoctor
           )}
           {renderCard(
             'Moje rezervace',
             <NodePlusFill style={iconStyle} />,
-            () => navigate('my-reservations')
+            () => navigate('my-reservations'),
+            loadingDoctor
           )}
         </Row>
         <Row className='mb-4'>
@@ -125,7 +138,7 @@ const Management = () => {
           </Col>
         </Row>
       </Container>
-      <FooterManagement></FooterManagement>
+      <FooterManagement />
     </Fragment>
   );
 };

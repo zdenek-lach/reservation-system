@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-import ClinicSelector from 'components/ClinicSelector';
-import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import FooterManagement from 'components/management-components/FooterManagement';
+import WeekGrid2, {
+  TimeSlot,
+} from 'components/management-components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
@@ -18,7 +21,6 @@ import Clinic from 'types/ClinicType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
-import FooterManagement from 'components/FooterManagement';
 
 const EmployeeManagement = () => {
   const { doctorList, setDoctorList, clinicList, currentWeek, setCurrentWeek } =
@@ -216,8 +218,8 @@ const EmployeeManagement = () => {
       >
         <Form.Group>
           <Form.Control
-            type="text"
-            placeholder="Vyhledat"
+            type='text'
+            placeholder='Vyhledat'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -226,7 +228,7 @@ const EmployeeManagement = () => {
             setSelectedClinic={setFilterClinic}
           />
           <Button
-            variant="danger"
+            variant='danger'
             onClick={() => {
               setSearchTerm('');
               setFilterDoctor(null);
@@ -272,7 +274,9 @@ const EmployeeManagement = () => {
                       ?.join(', ')
                       .toLowerCase()
                       .includes(searchTerm.toLowerCase()) ||
-                    doctor.title?.toLowerCase().includes(searchTerm.toLowerCase())
+                    doctor.title
+                      ?.toLowerCase()
+                      .includes(searchTerm.toLowerCase())
                 )
                 .filter(
                   (doctor) =>
@@ -311,24 +315,24 @@ const EmployeeManagement = () => {
 
                     <td>
                       <Button
-                        variant="info"
-                        size="lg"
-                        className="mr-1"
+                        variant='info'
+                        size='lg'
+                        className='mr-1'
                         onClick={() => handleShowInfoModal(doctor)}
                       >
                         <InfoCircle />
                       </Button>
                       <Button
-                        variant="warning"
-                        size="lg"
-                        className="mr-1"
+                        variant='warning'
+                        size='lg'
+                        className='mr-1'
                         onClick={() => handleShowEditModal(doctor)}
                       >
                         <Pencil />
                       </Button>
                       <Button
-                        variant="danger"
-                        size="lg"
+                        variant='danger'
+                        size='lg'
                         onClick={() => handleDeleteDoctor(doctor)}
                       >
                         <Trash3Fill />
@@ -338,7 +342,7 @@ const EmployeeManagement = () => {
                 ))}
           </tbody>
         </Table>
-        <Button variant="success" onClick={() => setShowAddModal(true)}>
+        <Button variant='success' onClick={() => setShowAddModal(true)}>
           Přidat nového doktora
         </Button>
         <Modal show={showInfoModal} onHide={handleCloseModal}>
@@ -373,7 +377,7 @@ const EmployeeManagement = () => {
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant='secondary' onClick={handleCloseModal}>
               Zavřít
             </Button>
           </Modal.Footer>
@@ -386,7 +390,7 @@ const EmployeeManagement = () => {
             <label>
               Jméno:
               <input
-                type="text"
+                type='text'
                 value={editedFirstName}
                 onChange={handleEditFirstName}
               />
@@ -394,7 +398,7 @@ const EmployeeManagement = () => {
             <label>
               Příjmení:
               <input
-                type="text"
+                type='text'
                 value={editedLastName}
                 onChange={handleEditLastName}
               />
@@ -402,7 +406,7 @@ const EmployeeManagement = () => {
             <label>
               Popis:
               <input
-                type="text"
+                type='text'
                 value={editedDescription}
                 onChange={handleEditDescription}
               />
@@ -410,29 +414,33 @@ const EmployeeManagement = () => {
             <label>
               Body:
               <input
-                type="text"
+                type='text'
                 value={editedPoints.join(', ')}
                 onChange={handleEditPoints}
               />
             </label>
             <label>
               Titul:
-              <input type="text" value={editedTitle} onChange={handleEditTitle} />
+              <input
+                type='text'
+                value={editedTitle}
+                onChange={handleEditTitle}
+              />
             </label>
             <label>
               Obrázek ID:
               <input
-                type="number"
+                type='number'
                 value={editedPictureId || ''}
                 onChange={handleEditPictureId}
               />
             </label>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant='secondary' onClick={handleCloseModal}>
               Zavřít
             </Button>
-            <Button variant="primary" onClick={handleSaveChanges}>
+            <Button variant='primary' onClick={handleSaveChanges}>
               Uložit upraveného doktora
             </Button>
           </Modal.Footer>
@@ -445,7 +453,7 @@ const EmployeeManagement = () => {
             <label>
               Jméno:
               <input
-                type="text"
+                type='text'
                 value={newFirstName}
                 onChange={(e) => setNewFirstName(e.target.value)}
               />
@@ -453,7 +461,7 @@ const EmployeeManagement = () => {
             <label>
               Příjmení:
               <input
-                type="text"
+                type='text'
                 value={newLastName}
                 onChange={(e) => setNewLastName(e.target.value)}
               />
@@ -461,7 +469,7 @@ const EmployeeManagement = () => {
             <label>
               Popis:
               <input
-                type="text"
+                type='text'
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
               />
@@ -469,7 +477,7 @@ const EmployeeManagement = () => {
             <label>
               Body:
               <input
-                type="text"
+                type='text'
                 value={newPoints.join(', ')}
                 onChange={(e) =>
                   setNewPoints(
@@ -481,7 +489,7 @@ const EmployeeManagement = () => {
             <label>
               Titul:
               <input
-                type="text"
+                type='text'
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
@@ -489,7 +497,7 @@ const EmployeeManagement = () => {
             <label>
               Obrázek ID:
               <input
-                type="number"
+                type='number'
                 value={newPictureId || ''}
                 onChange={(e) => setNewPictureId(Number(e.target.value))}
               />
@@ -501,17 +509,17 @@ const EmployeeManagement = () => {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+            <Button variant='secondary' onClick={() => setShowAddModal(false)}>
               Zavřít
             </Button>
-            <Button variant="primary" onClick={handleAddDoctor}>
+            <Button variant='primary' onClick={handleAddDoctor}>
               Uložit nového doktora
             </Button>
           </Modal.Footer>
         </Modal>
       </Container>
       <FooterManagement></FooterManagement>
-      </Fragment>
+    </Fragment>
   );
 };
 export default EmployeeManagement;

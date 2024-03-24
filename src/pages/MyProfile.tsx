@@ -1,28 +1,32 @@
 import axios from 'axios';
-import ChangePassword from 'components/ChangePassword';
-import ClinicSelector from 'components/ClinicSelector';
-import DoctorSelector from 'components/DoctorSelector';
-import FooterManagement from 'components/FooterManagement';
 import MessageToast from 'components/MessageToast';
-import PresetSelector from 'components/PresetSelector';
-import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
+import ChangePassword from 'components/management-components/ChangePassword';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import DoctorSelector from 'components/management-components/DoctorSelector';
+import FooterManagement from 'components/management-components/FooterManagement';
+import PresetSelector from 'components/management-components/PresetSelector';
+import WeekGrid2, {
+  TimeSlot,
+} from 'components/management-components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
-import { authHeader } from 'security/AuthService';
+import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import { styled } from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
 `;
 
 const MyProfile = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [presetName, setPresetName] = useState<string | null>('');
   const [firstName, setFirstName] = useState<string | null>('');
@@ -35,17 +39,32 @@ const MyProfile = () => {
     DoctorWorkhours[] | null
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
+
   useEffect(() => {
-    if (selectedDoctor) {
-      setFirstName(selectedDoctor.firstName);
-      setLastName(selectedDoctor.lastName);
-      setDescription(selectedDoctor.description);
-      setPoints(selectedDoctor.points);
-      setTitle(selectedDoctor.title);
-      setPictureId(selectedDoctor.pictureId);
-      setDoctorWorkhours(selectedDoctor.availableClinics);
+    const fetchData = async () => {
+      try {
+        const response = await fetchLoggedDoctor();
+        setLoggedInDoctor(response);
+        setLoading(false); 
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (loggedInDoctor) {
+      setFirstName(loggedInDoctor.firstName);
+      setLastName(loggedInDoctor.lastName);
+      setDescription(loggedInDoctor.description);
+      setPoints(loggedInDoctor.points);
+      setTitle(loggedInDoctor.title);
+      setPictureId(loggedInDoctor.pictureId);
+      setDoctorWorkhours(loggedInDoctor.availableClinics);
     }
-  }, [selectedDoctor]);
+  }, [loggedInDoctor]);
 
   const addPoint = () => {
     setPoints([...points, '']);
@@ -63,9 +82,9 @@ const MyProfile = () => {
 
   const submitDoctorProfileChanges = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    if (selectedDoctor) {
+    if (loggedInDoctor) {
       const updatedDoctor: Doctor = {
-        ...selectedDoctor,
+        ...loggedInDoctor,
         firstName,
         lastName,
         description,
@@ -75,7 +94,7 @@ const MyProfile = () => {
         availableClinics,
       };
 
-      const editUrl = config.api.doctorsApi.edit + `/${selectedDoctor.id}`;
+      const editUrl = config.api.doctorsApi.edit + `/${loggedInDoctor.id}`;
 
       axios
         .put(editUrl, updatedDoctor, {
@@ -85,11 +104,11 @@ const MyProfile = () => {
           },
         })
         .then((response) => {
-          console.log(`Successfully updated doctor ${selectedDoctor.id}`);
+          console.log(`Successfully updated doctor ${loggedInDoctor.id}`);
           // You can update your state here if necessary
         })
         .catch((error) => {
-          console.error(`Error updating doctor ${selectedDoctor.id}:`, error);
+          console.error(`Error updating doctor ${loggedInDoctor.id}:`, error);
         });
     }
   };
@@ -126,6 +145,12 @@ const MyProfile = () => {
 
     return shifts;
   }, [selectedPreset, currentWeek]);
+
+
+  
+  if (loading) {
+    return <CenterSpinner/>;
+  }
   return (
     <Fragment>
       <StyledContainer>
@@ -135,8 +160,8 @@ const MyProfile = () => {
             <h2>Můj profil</h2>
             <ChangePassword />
             <DoctorSelector
-              selectedDoctor={selectedDoctor}
-              setSelectedDoctor={setSelectedDoctor}
+              selectedDoctorProp={loggedInDoctor}
+              setSelectedDoctorProp={setLoggedInDoctor}
             />
             <Form onSubmit={submitDoctorProfileChanges}>
               <Form.Label>
@@ -229,7 +254,6 @@ const MyProfile = () => {
                   setClickedButtons={setClickedButtons}
                 />
               </Form.Group>
-             
             </Form>
           </Col>
         </Row>

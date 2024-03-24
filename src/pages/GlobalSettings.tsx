@@ -1,7 +1,7 @@
+import FooterManagement from 'components/management-components/FooterManagement';
 import React, { Fragment } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import styled from 'styled-components';
-import FooterManagement from 'components/FooterManagement';
 
 const Container = styled.div`
   display: flex;
@@ -38,12 +38,12 @@ const GlobalSettings: React.FC<Props> = () => {
         <Section>
           <SectionTitle>Obecné</SectionTitle>
           <Form>
-            <Form.Group as={Row} controlId="colorPalette">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='colorPalette'>
+              <Form.Label column sm='4'>
                 Barvová paleta:
               </Form.Label>
-              <Col sm="8">
-                <Form.Control as="select">
+              <Col sm='8'>
+                <Form.Control as='select'>
                   <option>Modrá</option>
                   <option>Červená</option>
                   <option>Zelená</option>
@@ -52,30 +52,30 @@ const GlobalSettings: React.FC<Props> = () => {
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="ambulanceCount">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='ambulanceCount'>
+              <Form.Label column sm='4'>
                 Počet ambulancí:
               </Form.Label>
-              <Col sm="8">
-                <Form.Control type="number" min="1" max="10" />
+              <Col sm='8'>
+                <Form.Control type='number' min='1' max='10' />
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="addWeekends">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='addWeekends'>
+              <Form.Label column sm='4'>
                 Přidat víkendy do kalendáře:
               </Form.Label>
-              <Col sm="8">
-                <Form.Check type="checkbox" />
+              <Col sm='8'>
+                <Form.Check type='checkbox' />
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="editReservations">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='editReservations'>
+              <Form.Label column sm='4'>
                 Zaměstnanci můžou upravovat vlastní rezervace:
               </Form.Label>
-              <Col sm="8">
-                <Form.Check type="checkbox" />
+              <Col sm='8'>
+                <Form.Check type='checkbox' />
               </Col>
             </Form.Group>
           </Form>
@@ -84,36 +84,36 @@ const GlobalSettings: React.FC<Props> = () => {
         <Section>
           <SectionTitle>Rezervace</SectionTitle>
           <Form>
-            <Form.Group as={Row} controlId="reservationCount">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='reservationCount'>
+              <Form.Label column sm='4'>
                 Počet rezervačí po hodinovém úseku:
               </Form.Label>
-              <Col sm="8">
-                <Form.Control type="number" min="1" max="10" />
+              <Col sm='8'>
+                <Form.Control type='number' min='1' max='10' />
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="extraReservations">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='extraReservations'>
+              <Form.Label column sm='4'>
                 Počet extra rezervací po hodinovém úseku od admina:
               </Form.Label>
-              <Col sm="8">
-                <Form.Control type="number" min="0" max="10" />
+              <Col sm='8'>
+                <Form.Control type='number' min='0' max='10' />
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} controlId="maxReservations">
-              <Form.Label column sm="4">
+            <Form.Group as={Row} controlId='maxReservations'>
+              <Form.Label column sm='4'>
                 Maximální počet rezervačních míst:
               </Form.Label>
-              <Col sm="8">
-                <Form.Control type="number" min="1" max="100" />
+              <Col sm='8'>
+                <Form.Control type='number' min='1' max='100' />
               </Col>
             </Form.Group>
           </Form>
         </Section>
 
-        <Button variant="primary">Uložit změny</Button>
+        <Button variant='primary'>Uložit změny</Button>
         <SupportText>Pomozte nám vývojářům a podpořte nás zde.</SupportText>
       </Container>
       <FooterManagement></FooterManagement>

@@ -9,10 +9,10 @@ import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import ReservationData from 'types/ReservationData';
 import ReservationDto from 'types/ReservationDtoType';
-import config from '../../config/config.json';
+import config from '../../../config/config.json';
+import { getFormattedDate } from '../WeekPicker';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
-import { getFormattedDate } from './WeekPicker';
 
 interface AddReservationProps {
   managementMode?: Boolean | null;
@@ -143,7 +143,7 @@ const AddReservation: React.FC<AddReservationProps> = ({
 
   return (
     <>
-      <Button variant="danger" onClick={() => setShowModal(true)}>
+      <Button variant='danger' onClick={() => setShowModal(true)}>
         Přidat novou rezervaci
       </Button>
 
@@ -155,11 +155,11 @@ const AddReservation: React.FC<AddReservationProps> = ({
           <Form>
             {!isManagement && (
               <>
-                <Form.Group controlId="reservationDate">
+                <Form.Group controlId='reservationDate'>
                   <Form.Label>Vybrané datum: </Form.Label>
                   {getFormattedDate(date)}
                 </Form.Group>
-                <Form.Group controlId="reservationTime">
+                <Form.Group controlId='reservationTime'>
                   <Form.Label>Vybraný čas: </Form.Label>
                   {time}
                 </Form.Group>
@@ -167,69 +167,69 @@ const AddReservation: React.FC<AddReservationProps> = ({
             )}
 
             {validationError && <Alert>{validationError}</Alert>}
-            <Form.Group controlId="firstName">
+            <Form.Group controlId='firstName'>
               <Form.Label>Jméno</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.firstName}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="lastName">
+            <Form.Group controlId='lastName'>
               <Form.Label>Příjmení</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.lastName}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="phone">
+            <Form.Group controlId='phone'>
               <Form.Label>Telefon</Form.Label>
               <Form.Control
-                type="tel"
+                type='tel'
                 value={newReservationData.phone}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="email">
+            <Form.Group controlId='email'>
               <Form.Label>Email</Form.Label>
               <Form.Control
-                type="email"
+                type='email'
                 value={newReservationData.email}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="comment">
+            <Form.Group controlId='comment'>
               <Form.Label>Komentář (dobrovolné)</Form.Label>
               <Form.Control
-                type="text"
+                type='text'
                 value={newReservationData.comment}
                 onChange={handleInputChange}
               />
             </Form.Group>
             {isManagement && (
               <>
-                <Form.Group controlId="selectedDate">
-                  <Form.Label className="me-2">Vyberte datum:</Form.Label>
+                <Form.Group controlId='selectedDate'>
+                  <Form.Label className='me-2'>Vyberte datum:</Form.Label>
                   <DatePicker
                     selected={selectedDate}
                     onChange={handleDateChange}
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText=""
+                    dateFormat='yyyy-MM-dd'
+                    placeholderText=''
                   />
                   <br />
                   Vybraný čas:
                   <input
-                    type="time"
-                    className="ms-2"
+                    type='time'
+                    className='ms-2'
                     value={selectedTime}
                     onChange={handleTimeChange}
                   />
                 </Form.Group>
                 <Form.Group>
                   <DoctorSelector
-                    selectedDoctor={selectedDoctor}
-                    setSelectedDoctor={setSelectedDoctor}
+                    selectedDoctorProp={selectedDoctor}
+                    setSelectedDoctorProp={setSelectedDoctor}
                   />
                   <ClinicSelector
                     selectedClinic={selectedClinic}
@@ -241,7 +241,7 @@ const AddReservation: React.FC<AddReservationProps> = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={handleSubmit}>
+          <Button variant='success' onClick={handleSubmit}>
             Odeslat
           </Button>
         </Modal.Footer>

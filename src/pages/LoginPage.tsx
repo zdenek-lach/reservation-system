@@ -1,11 +1,11 @@
 import axios from 'axios';
+import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
 import { Fragment, useState } from 'react';
-import { Alert, Button, Container, Form, Row, Col } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import { login } from './../security/AuthService';
-import FooterManagement from 'components/FooterManagement';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ const LoginPage = () => {
             </Row>
             <Form id='loginForm' onSubmit={handleLoginButton}>
               {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
-              <Form.Group controlId='formUsername' className = 'mt-4'>
+              <Form.Group controlId='formUsername' className='mt-4'>
                 <Row>
                   <Form.Control
                     type='text'
@@ -80,11 +80,9 @@ const LoginPage = () => {
                   />
                 </Row>
               </Form.Group>
-              <Form.Group controlId='formPassword' className = 'mt-4'>
+              <Form.Group controlId='formPassword' className='mt-4'>
                 <Row>
-                  <Col
-                    className='ps-0 pe-0 col-9'
-                  >
+                  <Col className='ps-0 pe-0 col-9'>
                     <Form.Control
                       type='password'
                       placeholder='Heslo'
@@ -92,15 +90,9 @@ const LoginPage = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </Col>
-                  <Col
-                    className='ps-0 pe-0'
-                  >
+                  <Col className='ps-0 pe-0'>
                     <div className='d-grid'>
-                      <Button
-                        className=''
-                        variant='danger'
-                        type='button'
-                      >
+                      <Button className='' variant='danger' type='button'>
                         Zobrazit
                       </Button>
                     </div>

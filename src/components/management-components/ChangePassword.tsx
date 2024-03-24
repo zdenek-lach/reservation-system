@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
 import React, { useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
-import config from '../../config/config.json';
+import config from '../../../config/config.json';
 
 const ChangePassword: React.FC = () => {
   const [show, setShow] = useState(false);
@@ -43,7 +43,7 @@ const ChangePassword: React.FC = () => {
       <div>
         Přihlášený uživatel: <h2>{username}</h2>
       </div>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant='primary' onClick={handleShow}>
         Změnit heslo
       </Button>
 
@@ -53,41 +53,41 @@ const ChangePassword: React.FC = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formOldPassword">
+            <Form.Group controlId='formOldPassword'>
               <Form.Label>Současné heslo</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Vložte původní heslo"
+                type='password'
+                placeholder='Vložte původní heslo'
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group controlId="formNewPassword">
+            <Form.Group controlId='formNewPassword'>
               <Form.Label>Nové heslo</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Vložte nové heslo"
+                type='password'
+                placeholder='Vložte nové heslo'
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group controlId="formRepeatNewPassword">
+            <Form.Group controlId='formRepeatNewPassword'>
               <Form.Label>Nové heslo znovu</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Vložte znovu nové heslo (pro kontrolu)"
+                type='password'
+                placeholder='Vložte znovu nové heslo (pro kontrolu)'
                 value={repeatNewPassword}
                 onChange={(e) => setRepeatNewPassword(e.target.value)}
               />
             </Form.Group>
 
             {passwordMismatch && (
-              <Alert variant="danger">Nové hesla se neshodují!</Alert>
+              <Alert variant='danger'>Nové hesla se neshodují!</Alert>
             )}
 
-            <Button variant="primary" type="submit">
+            <Button variant='primary' type='submit'>
               Submit
             </Button>
           </Form>

@@ -1,17 +1,19 @@
 import axios from 'axios';
-import ClinicSelector from 'components/ClinicSelector';
-import DoctorSelector from 'components/DoctorSelector';
-import PresetSelector from 'components/PresetSelector';
-import WeekGrid2, { TimeSlot } from 'components/WeekGrid2';
 import WeekPicker from 'components/WeekPicker';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import DoctorSelector from 'components/management-components/DoctorSelector';
+import FooterManagement from 'components/management-components/FooterManagement';
+import WeekGrid2, {
+  TimeSlot,
+} from 'components/management-components/WeekGrid2';
 import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { authHeader } from 'security/AuthService';
+import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import styled from 'styled-components';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import config from '../../config/config.json';
-import FooterManagement from 'components/FooterManagement';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -30,8 +32,9 @@ const MyShifts = () => {
     date.setHours(0, 0, 0, 0); // set time to 00:00:00.000
     return date;
   });
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
+  const [loading, setLoading] = useState(true);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
   const [shiftsResponseData, setShiftsResponseData] = useState<any[]>([]);
   const [initialShifts, setInitialShifts] = useState<TimeSlot[]>([]);
@@ -44,6 +47,21 @@ const MyShifts = () => {
     }
     return newShifts;
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchLoggedDoctor();
+        setLoggedInDoctor(response);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
     axios
       .get(config.api.shiftApi.list, {
@@ -72,12 +90,12 @@ const MyShifts = () => {
         console.error(`Error fetching shifts`, error);
       });
     setInitialShifts(getInitialShifts());
-  }, [selectedDoctor, selectedClinic]);
+  }, [loggedInDoctor, selectedClinic]);
   const getInitialShifts = (): TimeSlot[] => {
-    if (selectedDoctor && selectedClinic) {
+    if (loggedInDoctor && selectedClinic) {
       let filtered = shiftsResponseData.filter((shiftsResponse) => {
         return (
-          shiftsResponse.doctor.id == selectedDoctor.id &&
+          shiftsResponse.doctor.id == loggedInDoctor.id &&
           shiftsResponse.clinic.id == selectedClinic.id
         );
       });
@@ -119,7 +137,7 @@ const MyShifts = () => {
 
     // Build the data object to send to the backend
     let data = {
-      doctor: selectedDoctor,
+      doctor: loggedInDoctor,
       clinic: selectedClinic,
       shifts: shifts,
     };
@@ -134,13 +152,14 @@ const MyShifts = () => {
       })
       .then((response) => {
         console.log(`Successfully added a shift`);
-        // You can update your state here if necessary
       })
       .catch((error) => {
         console.error(`Error adding a shift`, error);
       });
   };
-
+  if (loading) {
+    return <CenterSpinner />;
+  }
   return (
     <Fragment>
       <StyledContainer>
@@ -156,8 +175,8 @@ const MyShifts = () => {
               setCurrentWeek={setCurrentWeek}
             />
             <DoctorSelector
-              selectedDoctor={selectedDoctor}
-              setSelectedDoctor={setSelectedDoctor}
+              selectedDoctorProp={loggedInDoctor}
+              setSelectedDoctorProp={setLoggedInDoctor}
             />
             <ClinicSelector
               selectedClinic={selectedClinic}
@@ -171,7 +190,7 @@ const MyShifts = () => {
             />
           </Col>
         </Row>
-        <Button variant="primary" onClick={submitDoctorWorkHours}>
+        <Button variant='primary' onClick={submitDoctorWorkHours}>
           Uložit směny
         </Button>
       </StyledContainer>

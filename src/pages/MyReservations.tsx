@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import WeekPicker, { getFormattedDate } from 'components/WeekPicker';
+import AddReservation from 'components/management-components/AddReservation';
 import ClinicSelector from 'components/management-components/ClinicSelector';
 import DoctorSelector from 'components/management-components/DoctorSelector';
 import EditReservation from 'components/management-components/EditReservation';
@@ -17,27 +18,22 @@ import {
   Trash3Fill,
 } from 'react-bootstrap-icons';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
-import AddReservation from 'components/management-components/AddReservation';
-import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const MyReservations = () => {
-  const {
-    reservationsList,
-    setReservationsList,
-    currentWeek,
-    setCurrentWeek,
-  } = useAppContext();
-const { loadingReservations, errorReservations } = useReservations();
+  const { reservationsList, setReservationsList, currentWeek, setCurrentWeek } =
+    useAppContext();
+  const { loadingReservations, errorReservations } = useReservations();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
 
-const [editedFirstName, setEditedFirstName] = useState('');
+  const [editedFirstName, setEditedFirstName] = useState('');
   const [editedLastName, setEditedLastName] = useState('');
   const [editedPhoneNumber, setEditedPhoneNumber] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
@@ -56,7 +52,7 @@ const [editedFirstName, setEditedFirstName] = useState('');
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
 
-  const [searchTerm, setSearchTerm] = useState(''); 
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleShowInfoModal = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -118,8 +114,8 @@ const [editedFirstName, setEditedFirstName] = useState('');
     fetchData();
   }, []);
 
-  
   if (loading) {
+    console.log('Waiting for logged-in api');
     return <CenterSpinner />;
   }
   return (
@@ -264,7 +260,7 @@ const [editedFirstName, setEditedFirstName] = useState('');
                 ))}
           </tbody>
         </Table>
-        <AddReservation managementMode={true}/>
+        <AddReservation managementMode={true} />
         <Modal show={showInfoModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Informace o rezervaci</Modal.Title>
@@ -319,7 +315,7 @@ const [editedFirstName, setEditedFirstName] = useState('');
           </Modal.Footer>
         </Modal>
       </Container>
-      <FooterManagement/>
+      <FooterManagement />
     </Fragment>
   );
 };

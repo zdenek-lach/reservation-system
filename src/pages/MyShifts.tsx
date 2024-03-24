@@ -10,10 +10,10 @@ import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import styled from 'styled-components';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import config from '../../config/config.json';
-import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -158,6 +158,7 @@ const MyShifts = () => {
       });
   };
   if (loading) {
+    console.log('Waiting for logged-in api');
     return <CenterSpinner />;
   }
   return (

@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
-import { useEffect, useState } from 'react';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { useEffect, useState, Fragment } from 'react';
+import { Button, Dropdown, Form, InputGroup, Row, Col } from 'react-bootstrap';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import { CenterSpinner } from 'styles/StyledComponentsLib';
 import config from '../../../config/config.json';
 import { TimeSlot } from './WeekGrid2';
+import Doctor from 'types/DoctorType';
 
 type PresetSelectorProps = {
   presetName?: string;
@@ -215,40 +216,69 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
     return <CenterSpinner />;
   }
   return (
-    <label>
-      <Dropdown>
-        <Dropdown.Toggle variant='success' className='me-2 mt-3 mb-3'>
-          {selectedPreset != null
-            ? `Preset ${selectedPreset.name}`
-            : 'Vyberte Preset'}
-        </Dropdown.Toggle>
+    <Fragment>
+      <Row>
+        <Col>
+        <Dropdown>
+          <Dropdown.Toggle variant='success' className='me-2 mt-3 mb-3'>
+            {selectedPreset != null
+              ? `Preset ${selectedPreset.name}`
+              : 'Vyberte preset'}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setSelectedPreset(null)}>
+                Nový Preset
+              </Dropdown.Item>
+              {presetList &&
+                presetList.map((preset) => (
+                  <Dropdown.Item
+                    key={preset.id}
+                    onClick={() => setSelectedPreset(preset)}
+                  >
+                    {`Preset ${preset.name}`}
+                  </Dropdown.Item>
+                ))}
+            </Dropdown.Menu>
+        </Dropdown>
+        </Col>
+        <Col>
+          {selectedPreset != null && (
+            <InputGroup className='mb-3 mt-3'>
+              <Form.Control
+                placeholder='Jméno presetu'
+                aria-label='Jméno presetu'
+                aria-describedby='preset-name'
+                value={selectedPreset.name.toString()}
+                onChange={(e) => {
+                  setPresetName(e.target.value);
+                  setSelectedPreset({ ...selectedPreset, name: e.target.value });
+                }}
+              />
+            </InputGroup>
+          )}
+        </Col>
+        <Col>
+         <Button variant='primary' onClick={submitNewPreset}>
+              Přidat nový preset
+          </Button>
+        </Col>
+        <Col>
+          {selectedPreset != null && (
+              <Button variant='danger' onClick={deleteSelectedPreset}>
+                Odstranit vybraný preset
+              </Button>
+          )}
+        </Col>
+        <Col>
         {selectedPreset != null && (
-          <InputGroup className='mb-3'>
-            <Form.Control
-              placeholder='Jméno presetu'
-              aria-label='Jméno presetu'
-              aria-describedby='preset-name'
-              value={selectedPreset.name.toString()}
-              onChange={(e) => {
-                setPresetName(e.target.value);
-                setSelectedPreset({ ...selectedPreset, name: e.target.value });
-              }}
-            />
-          </InputGroup>
-        )}
-        {selectedPreset != null && (
-          <>
-            <Button variant='danger' onClick={deleteSelectedPreset}>
-              Odstranit vybraný preset
-            </Button>
-            <Button variant='warning' onClick={editSelectedPreset}>
-              Edit selected preset
-            </Button>
-          </>
-        )}
+              <Button variant='warning' onClick={editSelectedPreset}>
+                Edit selected preset
+              </Button>
+          )}
+        </Col>
+        <Col>
         {selectedPreset == null && (
-          <>
-            <InputGroup className='mb-3'>
+            <InputGroup className=''>
               <Form.Control
                 placeholder='Jméno presetu'
                 aria-label='Jméno presetu'
@@ -257,28 +287,28 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
                 onChange={(e) => setPresetName(e.target.value)}
               />
             </InputGroup>
-            <Button variant='primary' onClick={submitNewPreset}>
-              Add new preset
-            </Button>
-          </>
-        )}
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => setSelectedPreset(null)}>
-            Nový Preset
-          </Dropdown.Item>
-          {presetList &&
-            presetList.map((preset) => (
-              <Dropdown.Item
-                key={preset.id}
-                onClick={() => setSelectedPreset(preset)}
-              >
-                {`Preset ${preset.name}`}
-              </Dropdown.Item>
-            ))}
-        </Dropdown.Menu>
-      </Dropdown>
-    </label>
+         )}
+        </Col>
+      </Row>
+      {/* <Row>
+        <Col>
+        
+        
+        </Col>
+        <Col>
+        
+        </Col>
+        <Col>
+        
+        </Col>
+        <Col>
+        
+        </Col>
+        <Col>
+          
+        </Col>
+      </Row> */}
+    </Fragment>
   );
 };
-
 export default PresetSelector;

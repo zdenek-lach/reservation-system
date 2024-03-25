@@ -14,31 +14,19 @@ import {
   createRoutesFromElements,
 } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import { refreshCheck } from 'security/AuthService';
-import config from '../config/config.json';
 import AppointmentPage from './pages/AppointmentPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import Management from './pages/Management';
+import { startRefreshing } from 'security/AuthService';
 export const App = () => {
-  const { isLoggedIn } = useAppContext();
-  const { refreshID, setRefreshID } = useAppContext();
-  useEffect(() => {
-    if (refreshID == null) {
-      let theRunner = setInterval(function () {
-        refreshCheck();
-      }, 1000 * config.security.refreshPeriodInSeconds);
-      setRefreshID(theRunner);
-    }
+  const { isLoggedIn, setIsLoggedIn, timerSet, setTimerSet } = useAppContext();
 
-    // Cleanup function
-    return () => {
-      if (refreshID != null) {
-        clearInterval(refreshID);
-      }
-    };
-  }, [refreshID]); // Depend on refreshID
+  if (isLoggedIn && (timerSet == false || timerSet == null)) {
+    startRefreshing(setIsLoggedIn);
+    setTimerSet(true);
+  }
 
   const router = createBrowserRouter(
     createRoutesFromElements(

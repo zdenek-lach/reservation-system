@@ -10,6 +10,7 @@ import { login } from './../security/AuthService';
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn, username, setUsername } = useAppContext();
+  const { setTimerSet } = useAppContext();
   const [loginUserName, setLoginUserName] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -29,8 +30,9 @@ const LoginPage = () => {
         if (response.status === 200) {
           console.log(`Successfully logged in`);
           console.log(response.status);
+          login(loginUserName, password, setIsLoggedIn);
+          setTimerSet(true);
           setIsLoggedIn(true);
-          login(loginUserName, password);
           setUsername(loginUserName);
           navigate('/management');
         } else if (response.status === 400) {

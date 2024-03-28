@@ -9,16 +9,16 @@ import WeekGrid2, {
   TimeSlot,
 } from 'components/management-components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { PlusCircle, Trash2Fill } from 'react-bootstrap-icons';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import { styled } from 'styled-components';
+import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
-import { CenterSpinner } from 'styles/StyledComponentsLib';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -45,7 +45,7 @@ const MyProfile = () => {
       try {
         const response = await fetchLoggedDoctor();
         setLoggedInDoctor(response);
-        setLoading(false); 
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch user:', error);
       }
@@ -146,13 +146,13 @@ const MyProfile = () => {
     return shifts;
   }, [selectedPreset, currentWeek]);
 
-
-  
   if (loading) {
-    return <CenterSpinner/>;
+    return <CenterSpinner />;
   }
+const presetSelectorRef = useRef();
+
   return (
-    <Fragment>
+    <>
       <StyledContainer>
         <MessageToast message='Preset uložen!' />
         <Row>
@@ -247,19 +247,22 @@ const MyProfile = () => {
                   presetName={presetName}
                   setPresetName={setPresetName}
                   clickedButtons={clickedButtons}
+                  onSubmitNewPreset={() => {}}
                 />
                 <WeekGrid2
                   startOfWeek={currentWeek}
                   initialShifts={initialShifts}
                   setClickedButtons={setClickedButtons}
+                  isPresetMode={true}
                 />
+                <Button variant='danger' ref={presetSelectorRef} />
               </Form.Group>
             </Form>
           </Col>
         </Row>
       </StyledContainer>
       <FooterManagement />
-    </Fragment>
+    </>
   );
 };
 

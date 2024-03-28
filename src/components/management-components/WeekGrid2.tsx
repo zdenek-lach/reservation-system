@@ -7,6 +7,7 @@ interface WeekGrid2Props {
   setClickedButtons: React.Dispatch<React.SetStateAction<TimeSlot[]>>;
   initialShifts?: TimeSlot[];
   readOnly?: boolean;
+  isPresetMode?: boolean;
 }
 const startHour = 7;
 const endHour = 19;
@@ -25,6 +26,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   setClickedButtons,
   initialShifts,
   readOnly = false,
+  isPresetMode = false,
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
@@ -115,9 +117,11 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
             <tr key={day} className='bg-light text-dark'>
               <td>
                 {day}
-                <Badge className=''>
-                  {dayDate.toLocaleDateString('cs-CZ')}
-                </Badge>
+                {!isPresetMode && (
+                  <Badge className=''>
+                    {dayDate.toLocaleDateString('cs-CZ')}
+                  </Badge>
+                )}
               </td>
               {timeSlots.map((time) => {
                 const buttonKey = `${dayDate.getFullYear()}-${dayDate.getMonth()}-${dayDate.getDate()}-${time}`;
@@ -134,7 +138,8 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
                         !readOnly && addOrRemoveSelectedTime(dayDate, time)
                       }
                     >
-                      {time} - {dayDate.toLocaleDateString()}
+                      {time}
+                      {!isPresetMode && ' - ' + dayDate.toLocaleDateString()}
                     </Button>
                   </td>
                 );

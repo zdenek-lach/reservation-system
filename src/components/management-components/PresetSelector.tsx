@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
 	Button,
 	Col,
 	Container,
 	Dropdown,
 	Form,
+	FormCheck,
 	InputGroup,
 	Row,
 } from 'react-bootstrap';
@@ -14,7 +15,7 @@ import { authHeader } from 'security/AuthService';
 import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Doctor from 'types/DoctorType';
 import config from '../../../config/config.json';
-import { TimeSlot } from './WeekGrid2';
+import WeekGrid2, { TimeSlot } from './WeekGrid2';
 
 type PresetSelectorProps = {
 	presetName?: string;
@@ -23,24 +24,17 @@ type PresetSelectorProps = {
 	loggedInDoctor: Doctor | null;
 	loading: boolean;
 };
-// Converted to function to expose submit function via React.Ref.
-function PresetSelector(
-	{ presetName, setPresetName, clickedButtons, loggedInDoctor, loading },
-	ref
-) {
-	const { selectedPreset, setSelectedPreset } = useAppContext();
+
+const PresetSelector = ({
+	presetName,
+	setPresetName,
+	loggedInDoctor,
+	loading,
+}) => {
+	const { selectedPreset, setSelectedPreset, currentWeek } = useAppContext();
 	const [presetList, setPresetList] = useState([]);
-
-	useImperativeHandle(
-		ref,
-		() => {
-			return {
-				customSubmit: () => submitNewPreset(),
-			};
-		},
-		[]
-	);
-
+	const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
+	const [shouldPresetBeRenamed, setShouldPresetBeRenamed] = useState(true);
 	// Fetch presets from the API
 	const fetchPresets = async () => {
 		try {
@@ -222,92 +216,155 @@ function PresetSelector(
 		console.log('Waiting for logged-in api');
 		return <CenterSpinner />;
 	}
+
+	const initialShifts = useMemo(() => {
+		if (!selectedPreset) return [];
+
+		const daysOfWeek = [
+			'monday',
+			'tuesday',
+			'wednesday',
+			'thursday',
+			'friday',
+			'saturday',
+			'sunday',
+		];
+		let shifts = [];
+
+		daysOfWeek.forEach((day, index) => {
+			const dayDate = new Date(
+				currentWeek.getFullYear(),
+				currentWeek.getMonth(),
+				currentWeek.getDate() + index,
+				0,
+				0,
+				0,
+				0 // Sets the time to 00:00:00.000
+			);
+
+			selectedPreset[day].forEach((time) => {
+				shifts.push({ day: dayDate, time });
+			});
+		});
+
+		return shifts;
+	}, [selectedPreset, currentWeek]);
 	// Render the dropdown and preset options/buttons
 	return (
 		<Container>
-			<Dropdown>
-				<Row>
-					<Col>
+			<Row>
+				<Col sm={3}>
+					<Dropdown>
 						<Dropdown.Toggle
 							variant='success'
 							className='me-2 mt-3 mb-3'>
 							{selectedPreset != null
 								? `Preset ${selectedPreset.name}`
-								: 'Vyberte Preset'}
-						</Dropdown.Toggle>
-					</Col>
-					<Col>
-						{selectedPreset != null && (
-							<InputGroup className='mb-3'>
-								<Form.Control
-									placeholder='Jméno presetu'
-									aria-label='Jméno presetu'
-									aria-describedby='preset-name'
-									value={selectedPreset.name.toString()}
-									onChange={(e) => {
-										setPresetName(e.target.value);
-										setSelectedPreset({
-											...selectedPreset,
-											name: e.target.value,
-										});
-									}}
-								/>
-							</InputGroup>
-						)}
-					</Col><Col>
-						{selectedPreset == null && (
-							<>
-								<InputGroup className='mb-3'>
-									<Form.Control
-										placeholder='Jméno presetu'
-										aria-label='Jméno presetu'
-										aria-describedby='preset-name'
-										value={presetName || ''}
-										onChange={(e) => setPresetName(e.target.value)}
-									/>
-								</InputGroup>
-								<Button
-									variant='primary'
-									onClick={submitNewPreset}>
-									Přidat nový preset
-								</Button>
-							</>
-						)}
-					</Col>
-					<Col>
-						{selectedPreset != null && (
-							<>
-								<Button
-									variant='danger'
-									onClick={deleteSelectedPreset}>
-									Odstranit vybraný preset
-								</Button>
-								<Button
-									variant='warning'
-									onClick={editSelectedPreset}>
-									Uložit provedené změny
-								</Button>
-							</>
-						)}
-					</Col>
-					
-					<Dropdown.Menu>
-						<Dropdown.Item onClick={() => setSelectedPreset(null)}>
-							Nový Preset
-						</Dropdown.Item>
-						{presetList &&
-							presetList.map((preset) => (
-								<Dropdown.Item
-									key={preset.id}
-									onClick={() => setSelectedPreset(preset)}>
-									{`Preset ${preset.name}`}
+								: 'Vytvořit nový preset'}
+							<Dropdown.Menu>
+								<Dropdown.Item onClick={() => setSelectedPreset(null)}>
+									Nový Preset
 								</Dropdown.Item>
-							))}
-					</Dropdown.Menu>
-				</Row>
-			</Dropdown>
+								{presetList &&
+									presetList.map((preset) => (
+										<Dropdown.Item
+											key={preset.id}
+											onClick={() => setSelectedPreset(preset)}>
+											{`Preset ${preset.name}`}
+										</Dropdown.Item>
+									))}
+							</Dropdown.Menu>
+						</Dropdown.Toggle>
+					</Dropdown>
+				</Col>
+				<Col sm={3}>
+					{selectedPreset != null && (
+						<Button
+							variant='danger'
+							onClick={deleteSelectedPreset}>
+							Odstranit vybraný preset
+						</Button>
+					)}
+				</Col>
+			</Row>
+			<Row>
+				<Col sm={4}>
+					{selectedPreset == null && (
+						<InputGroup>
+							{shouldPresetBeRenamed && (
+								<Form.Control
+									placeholder='Zvolte jméno nového presetu'
+									aria-describedby='preset-name'
+									value={presetName || ''}
+									onChange={(e) => setPresetName(e.target.value)}
+								/>
+							)}
+						</InputGroup>
+					)}
+					{selectedPreset != null && (
+						<Form>
+							<FormCheck
+								type='switch'
+								label='Ponechat jméno presetu'
+								checked={shouldPresetBeRenamed}
+								onChange={() =>
+									setShouldPresetBeRenamed((prevValue) => !prevValue)
+								}/>
+						</Form>
+					)}
+				</Col>
+			</Row>
+			<Row>
+				<Col sm={12}>
+					{selectedPreset != null && !shouldPresetBeRenamed && (
+						<InputGroup className='mb-3'>
+							<Form.Control
+								placeholder='Jméno presetu'
+								aria-label='Jméno presetu'
+								aria-describedby='preset-name'
+								value={selectedPreset.name.toString()}
+								onChange={(e) => {
+									setPresetName(e.target.value);
+									setSelectedPreset({
+										...selectedPreset,
+										name: e.target.value,
+									});
+								}}
+							/>
+						</InputGroup>
+					)}
+				</Col>
+			</Row>
+			<Row>
+				<Col sm={12}>
+					<WeekGrid2
+						startOfWeek={currentWeek}
+						initialShifts={initialShifts}
+						setClickedButtons={setClickedButtons}
+						isPresetMode={true}
+					/>
+				</Col>
+			</Row>
+			<Row>
+				<Col sm={4}>
+					{selectedPreset == null && (
+						<Button
+							variant='primary'
+							onClick={submitNewPreset}>
+							Přidat nový preset
+						</Button>
+					)}
+					{selectedPreset != null && (
+						<Button
+							variant='warning'
+							onClick={editSelectedPreset}>
+							Uložit provedené změny
+						</Button>
+					)}
+				</Col>
+			</Row>
 		</Container>
 	);
-}
+};
 
-export default forwardRef(PresetSelector);
+export default PresetSelector;

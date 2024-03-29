@@ -37,14 +37,7 @@ const MyProfile = () => {
 	const [availableClinics, setDoctorWorkhours] = useState<
 		DoctorWorkhours[] | null
 	>([]);
-	const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
 
-	const presetSelectorRef = useRef(null);
-	const callSubmit = () => {
-		if (presetSelectorRef != null) {
-			presetSelectorRef.current.customSubmit();
-		}
-	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -84,7 +77,7 @@ const MyProfile = () => {
 		setPoints(points.map((point, i) => (i === index ? value : point)));
 	};
 
-	const { currentWeek, selectedPreset } = useAppContext();
+
 
 	const submitDoctorProfileChanges = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
@@ -119,38 +112,7 @@ const MyProfile = () => {
 		}
 	};
 
-	const initialShifts = useMemo(() => {
-		if (!selectedPreset) return [];
-
-		const daysOfWeek = [
-			'monday',
-			'tuesday',
-			'wednesday',
-			'thursday',
-			'friday',
-			'saturday',
-			'sunday',
-		];
-		let shifts = [];
-
-		daysOfWeek.forEach((day, index) => {
-			const dayDate = new Date(
-				currentWeek.getFullYear(),
-				currentWeek.getMonth(),
-				currentWeek.getDate() + index,
-				0,
-				0,
-				0,
-				0 // Sets the time to 00:00:00.000
-			);
-
-			selectedPreset[day].forEach((time) => {
-				shifts.push({ day: dayDate, time });
-			});
-		});
-
-		return shifts;
-	}, [selectedPreset, currentWeek]);
+	
 
 	if (loading) {
 		return <CenterSpinner />;
@@ -254,29 +216,12 @@ const MyProfile = () => {
 								<Form.Label>
 									<h3>Pracovní hodiny - preset</h3>
 								</Form.Label>
-								{/* <ClinicSelector
-									selectedClinic={selectedClinic}
-									setSelectedClinic={setSelectedClinic}
-								/> */}
 								<PresetSelector
 									presetName={presetName}
 									setPresetName={setPresetName}
-									clickedButtons={clickedButtons}
 									loggedInDoctor={loggedInDoctor}
 									loading={loading}
-									ref={presetSelectorRef}
 								/>
-								<WeekGrid2
-									startOfWeek={currentWeek}
-									initialShifts={initialShifts}
-									setClickedButtons={setClickedButtons}
-									isPresetMode={true}
-								/>
-								<Button
-									variant='danger'
-									onClick={callSubmit}>
-									Jackieho vynucené a lehce zbytečné tlačítko Uložit
-								</Button>
 							</Form.Group>
 						</Form>
 					</Col>

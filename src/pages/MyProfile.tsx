@@ -40,6 +40,13 @@ const MyProfile = () => {
   >([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
 
+  const presetSelectorRef = useRef(null);
+  const callSubmit = () => {
+    if (presetSelectorRef != null) {
+      presetSelectorRef.current.customSubmit();
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -149,7 +156,6 @@ const MyProfile = () => {
   if (loading) {
     return <CenterSpinner />;
   }
-const presetSelectorRef = useRef();
 
   return (
     <>
@@ -247,7 +253,9 @@ const presetSelectorRef = useRef();
                   presetName={presetName}
                   setPresetName={setPresetName}
                   clickedButtons={clickedButtons}
-                  onSubmitNewPreset={() => {}}
+                  loggedInDoctor={loggedInDoctor}
+                  loading={loading}
+                  ref={presetSelectorRef}
                 />
                 <WeekGrid2
                   startOfWeek={currentWeek}
@@ -255,7 +263,9 @@ const presetSelectorRef = useRef();
                   setClickedButtons={setClickedButtons}
                   isPresetMode={true}
                 />
-                <Button variant='danger' ref={presetSelectorRef} />
+                <Button variant='danger' onClick={callSubmit}>
+                  Uložit
+                </Button>
               </Form.Group>
             </Form>
           </Col>

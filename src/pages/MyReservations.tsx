@@ -3,7 +3,6 @@ import axios from 'axios';
 import WeekPicker, { getFormattedDate } from 'components/WeekPicker';
 import AddReservation from 'components/management-components/AddReservation';
 import ClinicSelector from 'components/management-components/ClinicSelector';
-import DoctorSelector from 'components/management-components/DoctorSelector';
 import EditReservation from 'components/management-components/EditReservation';
 import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
@@ -27,27 +26,13 @@ import Doctor from './../types/DoctorType';
 const MyReservations = () => {
   const { reservationsList, setReservationsList, currentWeek, setCurrentWeek } =
     useAppContext();
-  const { loadingReservations, errorReservations } = useReservations();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
 
-  const [editedFirstName, setEditedFirstName] = useState('');
-  const [editedLastName, setEditedLastName] = useState('');
-  const [editedPhoneNumber, setEditedPhoneNumber] = useState('');
-  const [editedEmail, setEditedEmail] = useState('');
-  const [editedDate, setEditedDate] = useState('');
-  const [editedTime, setEditedTime] = useState('');
-  const [editedNote, setEditedNote] = useState('');
-  const [editedAmbulance, setEditedAmbulance] = useState<Clinic | null>(null);
-  const [editedDoctor, setEditedDoctor] = useState<Doctor | null>(null);
-  const [filterDoctor, setFilterDoctor] = useState<Doctor | null>(null);
   const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
   const [isWeekFilterEnabled, setIsWeekFilterEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { loadingDoctors, errorDoctors } = useDoctors();
-  const { loadingClinics, errorClinics } = useClinics();
 
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null);
@@ -62,7 +47,6 @@ const MyReservations = () => {
   const handleCloseModal = () => {
     setSelectedReservation(null);
     setShowInfoModal(false);
-    setShowEditModal(false);
   };
 
   const handleDeleteReservation = (reservation: Reservation) => {
@@ -133,10 +117,6 @@ const MyReservations = () => {
             placeholder='Vyhledat'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <DoctorSelector
-            selectedDoctorProp={loggedInDoctor}
-            setSelectedDoctorProp={setLoggedInDoctor}
           />
           <ClinicSelector
             selectedClinic={filterClinic}

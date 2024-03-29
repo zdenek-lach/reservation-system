@@ -309,7 +309,9 @@ const PresetSelector = ({
 								checked={shouldPresetBeRenamed}
 								onChange={() =>
 									setShouldPresetBeRenamed((prevValue) => !prevValue)
-								}/>
+								}
+								className='mb-3'
+							/>
 						</Form>
 					)}
 				</Col>

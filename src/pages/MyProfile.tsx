@@ -26,7 +26,6 @@ const StyledContainer = styled(Container)`
 const MyProfile = () => {
 	const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
 	const [presetName, setPresetName] = useState<string | null>('');
 	const [firstName, setFirstName] = useState<string | null>('');
 	const [lastName, setLastName] = useState<string | null>('');

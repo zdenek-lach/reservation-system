@@ -229,10 +229,7 @@ const ReservationManagement = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <DoctorSelector
-            selectedDoctorProp={filterDoctor}
-            setSelectedDoctorProp={setFilterDoctor}
-          />
+          <DoctorSelector setDoctorToThis={setFilterDoctor} />
           <ClinicSelector
             selectedClinic={filterClinic}
             setSelectedClinic={setFilterClinic}

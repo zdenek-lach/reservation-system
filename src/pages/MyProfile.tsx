@@ -1,7 +1,6 @@
 import axios from 'axios';
 import MessageToast from 'components/MessageToast';
 import ChangePassword from 'components/management-components/ChangePassword';
-import ClinicSelector from 'components/management-components/ClinicSelector';
 import DoctorSelector from 'components/management-components/DoctorSelector';
 import FooterManagement from 'components/management-components/FooterManagement';
 import PresetSelector from 'components/management-components/PresetSelector';
@@ -253,12 +252,12 @@ const MyProfile = () => {
 						<Form>
 							<Form.Group>
 								<Form.Label>
-									<h3>Pracovní hodiny</h3>
+									<h3>Pracovní hodiny - preset</h3>
 								</Form.Label>
-								<ClinicSelector
+								{/* <ClinicSelector
 									selectedClinic={selectedClinic}
 									setSelectedClinic={setSelectedClinic}
-								/>
+								/> */}
 								<PresetSelector
 									presetName={presetName}
 									setPresetName={setPresetName}

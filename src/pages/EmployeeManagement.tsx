@@ -241,13 +241,12 @@ const EmployeeManagement = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Číslo</th>
+              <th>Obrázek ID</th>
+              <th>Titul</th>
               <th>Jméno</th>
               <th>Příjmení</th>
               <th>Popis</th>
               <th>Body</th>
-              <th>Titul</th>
-              <th>Obrázek ID</th>
               <th>Dostupné kliniky</th>
               <th></th>
             </tr>
@@ -291,7 +290,8 @@ const EmployeeManagement = () => {
                 )
                 .map((doctor) => (
                   <tr key={doctor.id}>
-                    <td>{doctor.id}</td>
+                    <td>{doctor.pictureId}</td>
+                    <td>{doctor.title}</td>
                     <td>{doctor.firstName}</td>
                     <td>{doctor.lastName}</td>
                     <td>{doctor.description}</td>
@@ -300,16 +300,14 @@ const EmployeeManagement = () => {
                         <Badge key={index}>{point}</Badge>
                       ))}
                     </td>
-                    <td>{doctor.title}</td>
-                    <td>{doctor.pictureId}</td>
+                    
                     <td>
                       {doctor.availableClinics.map((clinic) => (
                         <>
-                          <Badge>
-                            {clinic.clinic.name}
-                            {'@' + clinic.date}
-                          </Badge>
-                        </>
+                        <Badge>
+                          {clinic.clinic.name}
+                        </Badge>
+                      </>
                       ))}
                     </td>
 

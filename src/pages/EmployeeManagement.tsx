@@ -535,11 +535,6 @@ const EmployeeManagement = () => {
 								onChange={(e) => setNewPictureId(Number(e.target.value))}
 							/>
 						</label>
-						<WeekGrid2
-							startOfWeek={currentWeek}
-							setClickedButtons={setClickedButtons}
-							initialShifts={initialShifts}
-						/>
 					</Modal.Body>
 					<Modal.Footer>
 						<Button

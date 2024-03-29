@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState, useImperativeHandle } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import { CenterSpinner } from 'styles/StyledComponentsLib';
@@ -12,18 +12,26 @@ type PresetSelectorProps = {
   presetName?: string;
   setPresetName?: (value: string) => void;
   clickedButtons: TimeSlot[];
-  onSubmitNewPreset?: () => void;
+  loggedInDoctor: Doctor | null;
+  loading: boolean;
 };
 
-const PresetSelector: React.FC<PresetSelectorProps> = ({
-  presetName,
-  setPresetName,
-  clickedButtons,
-}) => {
+function PresetSelector(
+  { presetName, setPresetName, clickedButtons, loggedInDoctor, loading },
+  ref
+) {
   const { selectedPreset, setSelectedPreset } = useAppContext();
   const [presetList, setPresetList] = useState([]);
-  const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        customSubmit: () => submitNewPreset(),
+      };
+    },
+    []
+  );
 
   const fetchPresets = async () => {
     try {
@@ -132,19 +140,6 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
         console.error(`Error editing preset ${selectedPreset.id}:`, error);
       });
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchLoggedDoctor();
-        setLoggedInDoctor(response);
-        setLoading(false);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const submitNewPreset = async () => {
     const newPreset = {
@@ -205,7 +200,6 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
         console.log('Adding preset was successful');
         setSelectedPreset(newPreset);
         fetchPresets();
-
       } else {
         console.error('You have caused an error!');
       }
@@ -217,6 +211,7 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
     console.log('Waiting for logged-in api');
     return <CenterSpinner />;
   }
+
   return (
     <>
       <Dropdown>
@@ -234,7 +229,10 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
               value={selectedPreset.name.toString()}
               onChange={(e) => {
                 setPresetName(e.target.value);
-                setSelectedPreset({ ...selectedPreset, name: e.target.value });
+                setSelectedPreset({
+                  ...selectedPreset,
+                  name: e.target.value,
+                });
               }}
             />
           </InputGroup>
@@ -282,6 +280,6 @@ const PresetSelector: React.FC<PresetSelectorProps> = ({
       </Dropdown>
     </>
   );
-};
+}
 
-export default PresetSelector;
+export default forwardRef(PresetSelector);

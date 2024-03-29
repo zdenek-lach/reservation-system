@@ -36,13 +36,10 @@ const EditReservation: React.FC<EditReservationProps> = ({
     new Date(Reservation.date)
   );
   const [selectedTime, setSelectedTime] = useState(Reservation.time);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(
-    Reservation.doctor
-  );
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(
     Reservation.clinic
   );
-  const { setShowMessageToast } = useAppContext();
+  const { setShowMessageToast, selectedDoctor } = useAppContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewReservationData((prevData) => ({
       ...prevData,
@@ -232,10 +229,7 @@ const EditReservation: React.FC<EditReservationProps> = ({
               />
             </Form.Group>
             <Form.Group>
-              <DoctorSelector
-                selectedDoctorProp={selectedDoctor}
-                setSelectedDoctorProp={setSelectedDoctor}
-              />
+              <DoctorSelector />
               <ClinicSelector
                 selectedClinic={selectedClinic}
                 setSelectedClinic={setSelectedClinic}

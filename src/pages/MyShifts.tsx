@@ -1,7 +1,6 @@
 import axios from 'axios';
 import WeekPicker from 'components/WeekPicker';
 import ClinicSelector from 'components/management-components/ClinicSelector';
-import DoctorSelector from 'components/management-components/DoctorSelector';
 import FooterManagement from 'components/management-components/FooterManagement';
 import WeekGrid2, {
   TimeSlot,
@@ -174,10 +173,6 @@ const MyShifts = () => {
             <WeekPicker
               currentWeek={currentWeek}
               setCurrentWeek={setCurrentWeek}
-            />
-            <DoctorSelector
-              selectedDoctorProp={loggedInDoctor}
-              setSelectedDoctorProp={setLoggedInDoctor}
             />
             <ClinicSelector
               selectedClinic={selectedClinic}

@@ -319,38 +319,6 @@ const PresetSelector = ({
 		setInitialShifts(convertedPresetsToTimeslots);
 	};
 
-	// // Render the dropdown and preset options/buttons
-	// const renderDropDown = () => {
-	// 	return (
-	// 		<Dropdown>
-	// 			<Dropdown.Toggle
-	// 				variant='success'
-	// 				className='me-2 mt-3 mb-3'>
-	// 				{selectedPreset != null
-	// 					? `Preset ${selectedPreset.name}`
-	// 					: !isReadOnly
-	// 					? 'Vytvořit nový preset'
-	// 					: 'Vyberte preset'}
-	// 			</Dropdown.Toggle>
-	// 			<Dropdown.Menu>
-	// 				{!isReadOnly && (
-	// 					<Dropdown.Item onClick={() => setSelectedPreset(null)}>
-	// 						Nový Preset
-	// 					</Dropdown.Item>
-	// 				)}
-	// 				{presetList &&
-	// 					presetList.map((preset) => (
-	// 						<Dropdown.Item
-	// 							key={preset.id}
-	// 							onClick={() => handlePresetSelected(preset)}>
-	// 							{`Preset ${preset.name}`}
-	// 						</Dropdown.Item>
-	// 					))}
-	// 			</Dropdown.Menu>
-	// 		</Dropdown>
-	// 	);
-	// };
-
 	return (
 		<>
 			<Container>

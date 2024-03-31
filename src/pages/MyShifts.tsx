@@ -7,7 +7,7 @@ import WeekGrid2, {
 	TimeSlot,
 } from 'components/management-components/WeekGrid2';
 import { Fragment, useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Form, Row } from 'react-bootstrap';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
 import styled from 'styled-components';
 import { CenterSpinner } from 'styles/StyledComponentsLib';
@@ -181,13 +181,24 @@ const MyShifts = () => {
 							selectedClinic={selectedClinic}
 							setSelectedClinic={setSelectedClinic}
 						/>
-						<PresetSelector
-							isReadOnly={true}
-							loggedInDoctor={loggedInDoctor}
-							loading={loading}
-							setInitialShifts={setInitialShifts}
-							currentWeek={currentWeek}
-						/>
+
+						{selectedClinic != null ? (
+							<PresetSelector
+								isReadOnly={true}
+								loggedInDoctor={loggedInDoctor}
+								loading={loading}
+								setInitialShifts={setInitialShifts}
+								currentWeek={currentWeek}
+							/>
+						) : (
+							<Dropdown>
+								<Dropdown.Toggle
+									variant='success'
+									className='me-2 mt-3 mb-3'>
+									Vyberte preset
+								</Dropdown.Toggle>
+							</Dropdown>
+						)}
 
 						<WeekGrid2
 							startOfWeek={currentWeek}

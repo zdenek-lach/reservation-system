@@ -42,7 +42,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   };
 
   const [buttonStates, setButtonStates] = useState<string[]>([]);
-  const [selectedTimes, setSelectedTimes] = useState(initialShifts || []);
+  const [selectedTimes, setSelectedTimes] = useState([]);
 
   const getSelectedTimes = () => {
     let times: TimeSlot[] = [];

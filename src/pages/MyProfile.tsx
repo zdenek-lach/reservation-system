@@ -12,6 +12,7 @@ import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Doctor from 'types/DoctorType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
+import PresetSelector2 from 'components/management-components/PresetSelector2';
 
 const StyledContainer = styled(Container)`
   margin-top: 20px;
@@ -190,7 +191,7 @@ const MyProfile = () => {
                 <Form.Label>
                   <h3>Pracovní hodiny - preset</h3>
                 </Form.Label>
-                <PresetSelector
+                <PresetSelector2
                   presetName={presetName}
                   setPresetName={setPresetName}
                   loggedInDoctor={loggedInDoctor}

@@ -13,7 +13,7 @@ import {
 import { useNavigate } from 'react-router';
 import { CSSProperties } from 'styled-components';
 import Doctor from 'types/DoctorType';
-import { fetchLoggedUser } from '../security/AuthService';
+import { fetchLoggedDoctor } from '../security/AuthService';
 
 const cardStyle: CSSProperties = {
   borderRadius: '15px',
@@ -52,7 +52,7 @@ const Management = () => {
   };
 
   useEffect(() => {
-    fetchLoggedUser().then((user) => {
+    fetchLoggedDoctor().then((user) => {
       setDoctor(user);
       setIsLoadingDoctor(false);
     });
@@ -87,11 +87,11 @@ const Management = () => {
       <Container>
         <Row className='mb-4 mt-4'>
           {renderCard(
-              'Můj profil',
-              <PersonLinesFill style={iconStyle} />,
-              () => navigate('my-profile'),
-              loadingDoctor
-            )}
+            'Můj profil',
+            <PersonLinesFill style={iconStyle} />,
+            () => navigate('my-profile'),
+            loadingDoctor
+          )}
           {renderCard(
             'Moje směny',
             <CalendarPlusFill style={iconStyle} />,

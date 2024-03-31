@@ -115,14 +115,14 @@ export const fetchLoggedDoctor = async () => {
   }
 };
 
-export const fetchLoggedUser = async () => {
+export const fetchLoggedUserData = async () => {
   if (localStorage.getItem('accessToken') != null) {
     try {
       const response = await axios.get(config.api.authApi.loggedUser, {
         headers: authHeader(),
       });
       if (response.data.doctor != null) {
-        return response.data.doctor;
+        return response.data;
       }
     } catch (err: any) {
       console.error('Failed to retrieve logged doctor' + err);

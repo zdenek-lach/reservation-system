@@ -21,7 +21,7 @@
     "authApi": {
       "getToken": "http://127.0.0.1:8080/api/token",
       "refreshToken": "http://127.0.0.1:8080/api/token/refresh",
-      "changePassword": "http://127.0.0.1:8080/api/edit/managementUser/",
+      "changePassword": "http://127.0.0.1:8080/api/edit/changePassword",
       "loggedUser": "http://127.0.0.1:8080/api/logged/user"
     },
     "shiftApi": {

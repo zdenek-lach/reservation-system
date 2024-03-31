@@ -78,7 +78,7 @@ const EditReservation: React.FC<EditReservationProps> = ({
             phoneNumber: newReservationData.phone,
           },
           date: Reservation.date,
-          time: Reservation.time,
+          time: selectedTime,
           clinic: {
             ...selectedClinic,
           },

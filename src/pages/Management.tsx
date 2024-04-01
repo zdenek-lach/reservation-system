@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import FooterManagement from 'components/management-components/FooterManagement';
+import { Fragment, useEffect, useState } from 'react';
+import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import {
   CalendarPlusFill,
   ClipboardCheckFill,
@@ -10,9 +12,8 @@ import {
 } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 import { CSSProperties } from 'styled-components';
-import { refreshCheck } from '../security/AuthService';
-import FooterManagement from 'components/FooterManagement';
-import { Fragment } from 'react';
+import Doctor from 'types/DoctorType';
+import { fetchLoggedDoctor } from '../security/AuthService';
 
 const cardStyle: CSSProperties = {
   borderRadius: '15px',
@@ -39,6 +40,8 @@ const iconStyle: CSSProperties = {
 
 const Management = () => {
   const navigate = useNavigate();
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [loadingDoctor, setIsLoadingDoctor] = useState(true);
 
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>) => {
     e.currentTarget.style.backgroundColor = '#b02a37';
@@ -48,11 +51,18 @@ const Management = () => {
     e.currentTarget.style.backgroundColor = '#dc3545';
   };
 
+  useEffect(() => {
+    fetchLoggedDoctor().then((user) => {
+      setDoctor(user);
+      setIsLoadingDoctor(false);
+    });
+  }, []);
+
   const renderCard = (
     title: string,
     icon: JSX.Element,
     onClick: () => void,
-    altStyle?: CSSProperties
+    isLoading?: boolean
   ) => (
     <Col md={4} key={title}>
       <Card
@@ -61,8 +71,13 @@ const Management = () => {
         onMouseLeave={handleCardLeave}
         onClick={onClick}
       >
-        {icon}
-        {title}
+        {!isLoading && (
+          <>
+            {icon}
+            {title}
+          </>
+        )}
+        {isLoading && <Spinner />}
       </Card>
     </Col>
   );
@@ -70,18 +85,27 @@ const Management = () => {
   return (
     <Fragment>
       <Container>
-        <Row className="mb-4 mt-4">
-          {renderCard('Můj profil', <PersonLinesFill style={iconStyle} />, () =>
-            navigate('my-profile')
+        <Row className='mb-4 mt-4'>
+          {renderCard(
+            'Můj profil',
+            <PersonLinesFill style={iconStyle} />,
+            () => navigate('my-profile'),
+            loadingDoctor
           )}
-          {renderCard('Moje směny', <CalendarPlusFill style={iconStyle} />, () =>
-            navigate('my-shifts')
+          {renderCard(
+            'Moje směny',
+            <CalendarPlusFill style={iconStyle} />,
+            () => navigate('my-shifts'),
+            loadingDoctor
           )}
-          {renderCard('Moje rezervace', <NodePlusFill style={iconStyle} />, () =>
-            navigate('my-reservations')
+          {renderCard(
+            'Moje rezervace',
+            <NodePlusFill style={iconStyle} />,
+            () => navigate('my-reservations'),
+            loadingDoctor
           )}
         </Row>
-        <Row className="mb-4">
+        <Row className='mb-4'>
           {renderCard(
             'Správa rezervací',
             <ClipboardCheckFill style={iconStyle} />,
@@ -114,7 +138,7 @@ const Management = () => {
           </Col>
         </Row>
       </Container>
-      <FooterManagement></FooterManagement>
+      <FooterManagement />
     </Fragment>
   );
 };

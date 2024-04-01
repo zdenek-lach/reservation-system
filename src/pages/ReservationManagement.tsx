@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-import AddReservation from 'components/AddReservation';
-import EditReservation from 'components/EditReservation';
-import ClinicSelector from 'components/ClinicSelector';
-import DoctorSelector from 'components/DoctorSelector';
-import WeekPicker from 'components/WeekPicker';
+import WeekPicker, { getFormattedDate } from 'components/WeekPicker';
+import AddReservation from 'components/management-components/AddReservation';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import DoctorSelector from 'components/management-components/DoctorSelector';
+import EditReservation from 'components/management-components/EditReservation';
+import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
 import { useReservations } from 'hooks/useReservations';
 import { Fragment, useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import {
   Button,
   Container,
@@ -24,12 +24,12 @@ import {
   InfoCircle,
   Trash3Fill,
 } from 'react-bootstrap-icons';
+import DatePicker from 'react-datepicker';
 import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import Reservation from 'types/ReservationType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
-import FooterManagement from 'components/FooterManagement';
 
 const ReservationManagement = () => {
   const {
@@ -69,21 +69,6 @@ const ReservationManagement = () => {
   const handleShowInfoModal = (reservation: Reservation) => {
     setSelectedReservation(reservation);
     setShowInfoModal(true);
-  };
-
-  const handleShowEditModal = (reservation: Reservation) => {
-    setSelectedReservation(reservation);
-    setEditedFirstName(reservation.client.firstName);
-    setEditedLastName(reservation.client.lastName);
-    setEditedPhoneNumber(reservation.client.phoneNumber);
-    setEditedEmail(reservation.client.email);
-    setEditedDate(reservation.date);
-    setEditedTime(reservation.time);
-    setEditedNote(reservation.note);
-    setEditedAmbulance(reservation.clinic);
-    setEditedDoctor(reservation.doctor);
-
-    setShowEditModal(true);
   };
 
   const handleCloseModal = () => {
@@ -239,21 +224,18 @@ const ReservationManagement = () => {
       >
         <Form.Group>
           <Form.Control
-            type="text"
-            placeholder="Vyhledat"
+            type='text'
+            placeholder='Vyhledat'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <DoctorSelector
-            selectedDoctor={filterDoctor}
-            setSelectedDoctor={setFilterDoctor}
-          />
+          <DoctorSelector setDoctorToThis={setFilterDoctor} />
           <ClinicSelector
             selectedClinic={filterClinic}
             setSelectedClinic={setFilterClinic}
           />
           <Button
-            variant="danger"
+            variant='danger'
             onClick={() => {
               setSearchTerm('');
               setFilterDoctor(null);
@@ -263,8 +245,8 @@ const ReservationManagement = () => {
             <ArrowCounterclockwise />
           </Button>
           <Form.Check
-            type="checkbox"
-            label="Filtrovat dle týdnu"
+            type='checkbox'
+            label='Filtrovat dle týdnu'
             checked={isWeekFilterEnabled}
             onChange={(e) => setIsWeekFilterEnabled(e.target.checked)}
           />
@@ -335,25 +317,32 @@ const ReservationManagement = () => {
                     <td>{reservation.client.firstName}</td>
                     <td>{reservation.client.lastName}</td>
                     <td>
-                      {reservation.date} {reservation.time}
+                      {getFormattedDate(new Date(reservation.date))}
+                      {' v '}
+                      {reservation.time}
                     </td>
                     <td>
-                      {reservation.doctor.firstName} {reservation.doctor.lastName}
+                      {reservation.doctor.firstName}{' '}
+                      {reservation.doctor.lastName}
                     </td>
                     <td>{reservation.clinic.name}</td>
                     <td>
                       <Button
-                        variant="info"
-                        size="lg"
-                        className="mr-1 me-1"
+                        variant='info'
+                        size='lg'
+                        className='mr-1 me-1'
                         onClick={() => handleShowInfoModal(reservation)}
                       >
                         <InfoCircle />
                       </Button>
-                      <EditReservation Reservation = {reservation as Reservation} ReservationList={reservationsList} SetReservationList={setReservationsList}></EditReservation>
+                      <EditReservation
+                        Reservation={reservation as Reservation}
+                        ReservationList={reservationsList}
+                        SetReservationList={setReservationsList}
+                      />
                       <Button
-                        variant="danger"
-                        size="lg"
+                        variant='danger'
+                        size='lg'
                         onClick={() => handleDeleteReservation(reservation)}
                       >
                         <Trash3Fill />
@@ -363,7 +352,7 @@ const ReservationManagement = () => {
                 ))}
           </tbody>
         </Table>
-        
+
         <Modal show={showInfoModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Informace o rezervaci</Modal.Title>
@@ -378,7 +367,8 @@ const ReservationManagement = () => {
                   <strong>Jméno:</strong> {selectedReservation.client.firstName}
                 </p>
                 <p>
-                  <strong>Příjmení:</strong> {selectedReservation.client.lastName}
+                  <strong>Příjmení:</strong>{' '}
+                  {selectedReservation.client.lastName}
                 </p>
                 <p>
                   <strong>Telefon:</strong>
@@ -392,7 +382,8 @@ const ReservationManagement = () => {
                   {selectedReservation.time}
                 </p>
                 <p>
-                  <strong>Doktor:</strong> {selectedReservation.doctor.firstName}+{' '}
+                  <strong>Doktor:</strong>{' '}
+                  {selectedReservation.doctor.firstName}+{' '}
                   {selectedReservation.doctor.lastName}
                 </p>
                 <p>
@@ -407,7 +398,7 @@ const ReservationManagement = () => {
             )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant='secondary' onClick={handleCloseModal}>
               Zavřít
             </Button>
           </Modal.Footer>
@@ -420,7 +411,7 @@ const ReservationManagement = () => {
             <label>
               Jméno:
               <input
-                type="text"
+                type='text'
                 value={editedFirstName}
                 onChange={handleEditFirstName}
               />
@@ -428,7 +419,7 @@ const ReservationManagement = () => {
             <label>
               Příjmení:
               <input
-                type="text"
+                type='text'
                 value={editedLastName}
                 onChange={handleEditLastName}
               />
@@ -436,40 +427,44 @@ const ReservationManagement = () => {
             <label>
               Telefon:
               <input
-                type="text"
+                type='text'
                 value={editedPhoneNumber}
                 onChange={handleEditPhoneNumber}
               />
             </label>
             <label>
               E-mail:
-              <input type="text" value={editedEmail} onChange={handleEditEmail} />
+              <input
+                type='text'
+                value={editedEmail}
+                onChange={handleEditEmail}
+              />
             </label>
-            <Form.Group controlId="selectedDate">
-                <Form.Label className = 'me-2'>Vyberte datum:</Form.Label>
-                <DatePicker
-                  selected={editedDate}
-                  onChange={handleEditDate}
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText=""
-                />
-                <br />
-                Vybraný čas:
-                <input
-                  type="time"
-                  className = 'ms-2'
-                  value={editedTime}
-                  onChange={handleEditTime}
-                />
-              </Form.Group>
+            <Form.Group controlId='selectedDate'>
+              <Form.Label className='me-2'>Vyberte datum:</Form.Label>
+              <DatePicker
+                selected={editedDate}
+                onChange={handleEditDate}
+                dateFormat='dd-MM-yyyy'
+                placeholderText=''
+              />
+              <br />
+              Vybraný čas:
+              <input
+                type='time'
+                className='ms-2'
+                value={editedTime}
+                onChange={handleEditTime}
+              />
+            </Form.Group>
             <label>
               Poznámka:
-              <input type="text" value={editedNote} onChange={handleEditNote} />
+              <input type='text' value={editedNote} onChange={handleEditNote} />
             </label>
             <label>
               Doktor:
               <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <Dropdown.Toggle variant='success' id='dropdown-basic'>
                   {editedDoctor != null
                     ? `${editedDoctor.title} ${editedDoctor.firstName} ${editedDoctor.lastName}`
                     : 'Vyberte Doktora'}
@@ -492,7 +487,7 @@ const ReservationManagement = () => {
             <label>
               Klinika:
               <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <Dropdown.Toggle variant='success' id='dropdown-basic'>
                   {editedAmbulance != null
                     ? `${editedAmbulance.name} ${editedAmbulance.location}`
                     : 'Vyberte Kliniku'}
@@ -513,15 +508,15 @@ const ReservationManagement = () => {
             </label>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant='secondary' onClick={handleCloseModal}>
               Zavřít
             </Button>
-            <Button variant="primary" onClick={handleSaveChanges}>
+            <Button variant='primary' onClick={handleSaveChanges}>
               Uložit upravenou rezervaci
             </Button>
           </Modal.Footer>
         </Modal>
-        <AddReservation></AddReservation>
+        <AddReservation managementMode={true} />
       </Container>
       <FooterManagement></FooterManagement>
     </Fragment>

@@ -12,6 +12,8 @@ export type AppContextType = {
   selectedClinic: Clinic | null;
   setSelectedDoctor: React.Dispatch<React.SetStateAction<Doctor | null>>;
   setSelectedClinic: React.Dispatch<React.SetStateAction<Clinic | null>>;
+  loggedInDoctor: Doctor | null;
+  setLoggedInDoctor: React.Dispatch<React.SetStateAction<Doctor | null>>;
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   reservationsList: Reservation[] | null;
@@ -22,10 +24,10 @@ export type AppContextType = {
   setShowMessageToast: React.Dispatch<React.SetStateAction<boolean>>;
   currentWeek: Date;
   setCurrentWeek: React.Dispatch<React.SetStateAction<Date>>;
-  username: string | null;
-  setUsername: React.Dispatch<React.SetStateAction<String>>;
   presetList: PresetType[] | null;
   setPresetList: React.Dispatch<React.SetStateAction<PresetType[] | null>>;
   selectedPreset: PresetType | null;
   setSelectedPreset: React.Dispatch<React.SetStateAction<PresetType | null>>;
+  timerSet: boolean | null;
+  setTimerSet: React.Dispatch<React.SetStateAction<boolean | null>>;
 };

@@ -1,19 +1,22 @@
 import axios from 'axios';
+import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
 import { Fragment, useState } from 'react';
-import { Alert, Button, Container, Form, Row, Col } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 import config from '../../config/config.json';
 import { login } from './../security/AuthService';
-import FooterManagement from 'components/FooterManagement';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn, username, setUsername } = useAppContext();
+  const { setIsLoggedIn } = useAppContext();
+  const { setTimerSet } = useAppContext();
   const [loginUserName, setLoginUserName] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [showLoginError, setShowLoginError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLoginButton = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -29,9 +32,9 @@ const LoginPage = () => {
         if (response.status === 200) {
           console.log(`Successfully logged in`);
           console.log(response.status);
+          login(loginUserName, password, setIsLoggedIn);
+          setTimerSet(true);
           setIsLoggedIn(true);
-          login(loginUserName, password);
-          setUsername(loginUserName);
           navigate('/management');
         } else if (response.status === 400) {
           setLoginError(response.data.message);
@@ -70,7 +73,7 @@ const LoginPage = () => {
             </Row>
             <Form id='loginForm' onSubmit={handleLoginButton}>
               {showLoginError && <Alert variant='danger'>{loginError}</Alert>}
-              <Form.Group controlId='formUsername' className = 'mt-4'>
+              <Form.Group controlId='formUsername' className='mt-4'>
                 <Row>
                   <Form.Control
                     type='text'
@@ -80,28 +83,23 @@ const LoginPage = () => {
                   />
                 </Row>
               </Form.Group>
-              <Form.Group controlId='formPassword' className = 'mt-4'>
+              <Form.Group controlId='formPassword' className='mt-4'>
                 <Row>
-                  <Col
-                    className='ps-0 pe-0 col-9'
-                  >
+                  <Col className='ps-0 pe-0 col-9'>
                     <Form.Control
-                      type='password'
+                      type={showPassword ? 'text' : 'password'} // change type based on showPassword state
                       placeholder='Heslo'
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </Col>
-                  <Col
-                    className='ps-0 pe-0'
-                  >
+                  <Col className='ps-0 pe-0'>
                     <div className='d-grid'>
                       <Button
-                        className=''
                         variant='danger'
-                        type='button'
+                        onClick={() => setShowPassword(!showPassword)}
                       >
-                        Zobrazit
+                        {showPassword ? <EyeSlashFill /> : <EyeFill />}
                       </Button>
                     </div>
                   </Col>
@@ -122,7 +120,7 @@ const LoginPage = () => {
           <Col></Col>
         </Row>
       </Container>
-      <FooterManagement></FooterManagement>
+      <FooterManagement />
     </Fragment>
   );
 };

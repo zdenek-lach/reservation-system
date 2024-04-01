@@ -4,8 +4,8 @@ import { Dropdown } from 'react-bootstrap';
 import Clinic from 'types/ClinicType';
 
 interface ClinicSelectorProps {
-  selectedClinic: Clinic | null;
-  setSelectedClinic: Dispatch<SetStateAction<Clinic | null>>;
+  selectedClinic?: Clinic | null;
+  setSelectedClinic?: Dispatch<SetStateAction<Clinic | null>>;
 }
 
 const ClinicSelector: React.FC<ClinicSelectorProps> = ({

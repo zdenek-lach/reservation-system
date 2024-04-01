@@ -7,6 +7,7 @@ interface WeekGrid2Props {
   setClickedButtons: React.Dispatch<React.SetStateAction<TimeSlot[]>>;
   initialShifts?: TimeSlot[];
   readOnly?: boolean;
+  isPresetMode?: boolean;
 }
 const startHour = 7;
 const endHour = 19;
@@ -24,14 +25,14 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   startOfWeek,
   setClickedButtons,
   initialShifts,
-  readOnly = false, // Add this line
+  readOnly = false,
+  isPresetMode = false,
 }) => {
   const days = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 
   const getInitialShifts = () => {
     let initialButtonStates: string[] = [];
     initialShifts?.forEach((slot) => {
-      // Use optional chaining here
       const buttonKey = `${slot.day.getFullYear()}-${slot.day.getMonth()}-${slot.day.getDate()}-${
         slot.time
       }`;
@@ -41,7 +42,7 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
   };
 
   const [buttonStates, setButtonStates] = useState<string[]>([]);
-  const [selectedTimes, setSelectedTimes] = useState(initialShifts || []);
+  const [selectedTimes, setSelectedTimes] = useState([]);
 
   const getSelectedTimes = () => {
     let times: TimeSlot[] = [];
@@ -116,9 +117,11 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
             <tr key={day} className='bg-light text-dark'>
               <td>
                 {day}
-                <Badge className=''>
-                  {dayDate.toLocaleDateString('cs-CZ')}
-                </Badge>
+                {!isPresetMode && (
+                  <Badge className=''>
+                    {dayDate.toLocaleDateString('cs-CZ')}
+                  </Badge>
+                )}
               </td>
               {timeSlots.map((time) => {
                 const buttonKey = `${dayDate.getFullYear()}-${dayDate.getMonth()}-${dayDate.getDate()}-${time}`;
@@ -135,7 +138,8 @@ const WeekGrid2: React.FC<WeekGrid2Props> = ({
                         !readOnly && addOrRemoveSelectedTime(dayDate, time)
                       }
                     >
-                      {time} - {dayDate.toLocaleDateString()}
+                      {time}
+                      {!isPresetMode && ' - ' + dayDate.toLocaleDateString()}
                     </Button>
                   </td>
                 );

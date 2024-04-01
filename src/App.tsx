@@ -6,6 +6,7 @@ import MyProfile from 'pages/MyProfile';
 import MyReservations from 'pages/MyReservations';
 import MyShifts from 'pages/MyShifts';
 import ReservationManagement from 'pages/ReservationManagement';
+import { useEffect } from 'react';
 import {
   Navigate,
   Route,
@@ -13,73 +14,73 @@ import {
   createRoutesFromElements,
 } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import { refreshCheck } from 'security/AuthService';
-import config from '../config/config.json';
 import AppointmentPage from './pages/AppointmentPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import Management from './pages/Management';
+import { startRefreshing } from 'security/AuthService';
 export const App = () => {
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, setIsLoggedIn, timerSet, setTimerSet } = useAppContext();
 
-  let theRunner = setInterval(function () { //TODO just an idea to fix the multiplication spam .. perhaps there is a clear for interval?
-    refreshCheck();
-  }, 1000 * config.security.refreshPeriodInSeconds);
+  if (isLoggedIn && (timerSet == false || timerSet == null)) {
+    startRefreshing(setIsLoggedIn);
+    setTimerSet(true);
+  }
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
+      <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
         <Route index element={<HomePage />} />
-        <Route path="appointment-page" element={<AppointmentPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path='appointment-page' element={<AppointmentPage />} />
+        <Route path='login' element={<LoginPage />} />
 
         <Route
-          path="management"
+          path='management'
           element={
-            isLoggedIn ? <Management /> : <Navigate to="/login" replace />
+            isLoggedIn ? <Management /> : <Navigate to='/login' replace />
           }
         />
         <Route
-          path="management/my-profile"
+          path='management/my-profile'
           element={
-            isLoggedIn ? <MyProfile /> : <Navigate to="/login" replace />
+            isLoggedIn ? <MyProfile /> : <Navigate to='/login' replace />
           }
         />
         <Route
-          path="management/my-shifts"
-          element={isLoggedIn ? <MyShifts /> : <Navigate to="/login" replace />}
+          path='management/my-shifts'
+          element={isLoggedIn ? <MyShifts /> : <Navigate to='/login' replace />}
         />
         <Route
-          path="management/my-reservations"
+          path='management/my-reservations'
           element={
-            isLoggedIn ? <MyReservations /> : <Navigate to="/login" replace />
+            isLoggedIn ? <MyReservations /> : <Navigate to='/login' replace />
           }
         />
         <Route
-          path="management/reservation-management"
+          path='management/reservation-management'
           element={
             isLoggedIn ? (
               <ReservationManagement />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to='/login' replace />
             )
           }
         />
         <Route
-          path="management/employee-management"
+          path='management/employee-management'
           element={
             isLoggedIn ? (
               <EmployeeManagement />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to='/login' replace />
             )
           }
         />
         <Route
-          path="management/global-settings"
+          path='management/global-settings'
           element={
-            isLoggedIn ? <GlobalSettings /> : <Navigate to="/login" replace />
+            isLoggedIn ? <GlobalSettings /> : <Navigate to='/login' replace />
           }
         />
       </Route>

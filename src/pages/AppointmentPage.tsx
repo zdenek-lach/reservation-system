@@ -21,7 +21,6 @@ const AppointmentPage = () => {
     return date;
   });
 
-  
   return (
     <Fragment>
       <Container
@@ -39,7 +38,7 @@ const AppointmentPage = () => {
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0)',
               padding: '20px',
-              alignContent: "left"
+              alignContent: 'left',
             }}
           >
             <Row className="justify-content-center mb-4">
@@ -56,7 +55,10 @@ const AppointmentPage = () => {
                 <ReservationClinicDropdown />
               </Col>
             </Row>
-            <Card style={{ backgroundColor: '#FFF' }} className="justify-content-left mb-">
+            <Card
+              style={{ backgroundColor: '#FFF' }}
+              className="justify-content-left mb-"
+            >
               <WeekGrid startOfWeek={currentWeek} />
             </Card>
           </Col>

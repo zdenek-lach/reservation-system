@@ -21,7 +21,6 @@ const StyledContainer = styled(Container)`
 const MyProfile = () => {
   const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(true);
-  const [presetName, setPresetName] = useState<string | null>('');
   const [firstName, setFirstName] = useState<string | null>('');
   const [lastName, setLastName] = useState<string | null>('');
   const [description, setDescription] = useState<string | null>('');
@@ -192,8 +191,6 @@ const MyProfile = () => {
                   <h3>Pracovní hodiny - preset</h3>
                 </Form.Label>
                 <PresetSelector2
-                  presetName={presetName}
-                  setPresetName={setPresetName}
                   loggedInDoctor={loggedInDoctor}
                   loading={loading}
                 />

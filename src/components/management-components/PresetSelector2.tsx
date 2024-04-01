@@ -27,7 +27,7 @@ const PresetSelector2 = ({ loggedInDoctor, loading }: PresetSelectorProps) => {
   const [presetList, setPresetList] = useState([]);
   const [presetTimes, setPresetTimes] = useState<TimeSlot[]>([]);
   const [clickedButtons, setClickedButtons] = useState<TimeSlot[]>([]);
-  const [presetName, setPresetName] = useState('');
+  const [presetName, setPresetName] = useState<string>('');
 
   // Fetch presets from the API
   const fetchPresets = async () => {
@@ -62,7 +62,7 @@ const PresetSelector2 = ({ loggedInDoctor, loading }: PresetSelectorProps) => {
     );
     // Update the initial shifts to match the selected preset
     setPresetTimes(convertedPresetsToTimeslots);
-    setPresetName(preset.name);
+    setPresetName(preset.name as string);
   };
 
   const deleteSelectedPreset = () => {

@@ -28,8 +28,10 @@
       "list": "https://rezervace.artromedi.cz:8080/api/shift"
     },
     "presetsApi": {
-      "add": "",
-      "list": ""
+      "add": "https://rezervace.artromedi.cz:8080/api/add/preset",
+      "edit": "https://rezervace.artromedi.cz:8080/api/edit/preset",
+      "delete": "https://rezervace.artromedi.cz:8080/api/delete/preset",
+      "list": "https://rezervace.artromedi.cz:8080/api/presets"
     }
   },
   "general": {

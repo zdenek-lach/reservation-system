@@ -1,4 +1,5 @@
-import React from 'react';
+import isWeekend from 'date-fns/isWeekend';
+import React, { useEffect } from 'react';
 import { Button, ButtonGroup, Card } from 'react-bootstrap';
 import { CaretLeftFill, CaretRightFill } from 'react-bootstrap-icons';
 
@@ -7,19 +8,18 @@ interface WeekPickerProps {
   currentWeek: Date;
   setCurrentWeek: (date: Date) => void;
 }
-
+export const getFormattedDate = (date: Date): string => {
+  return date.toLocaleDateString('cs-CZ', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+};
 const WeekPicker: React.FC<WeekPickerProps> = ({
   currentWeek,
   setCurrentWeek,
 }) => {
-  const getFormattedDate = (date: Date): string => {
-    return date.toLocaleDateString('cs-CZ', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  };
-
+  
   const handlePrevWeek = () => {
     // Used getTime() to avoid mutating the original date
     const prevWeek = new Date(currentWeek.getTime());
@@ -33,6 +33,24 @@ const WeekPicker: React.FC<WeekPickerProps> = ({
     nextWeek.setDate(nextWeek.getDate() + 7);
     setCurrentWeek(nextWeek);
   };
+  const handleWeekend = () => {
+    // Check if the current day is a weekend (Saturday or Sunday)
+    // If it's a weekend, set the next week
+    if (isWeekend(new Date())) {
+      console.log(
+        isWeekend(new Date())
+          ? 'The WeekPicker detected it is weekend.'
+          : ' The WeekPicker detected it is NOT weekend.'
+      );
+      const nextWeek = new Date(currentWeek);
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      setCurrentWeek(nextWeek);
+    }
+  };
+
+  useEffect(() => {
+    handleWeekend();
+  }, []);
 
   // Calculate the start of the week (Monday)
   const startOfWeek = new Date(currentWeek.getTime());
@@ -70,8 +88,7 @@ const WeekPicker: React.FC<WeekPickerProps> = ({
           variant=""
           onClick={handleNextWeek}
         >
-          <CaretRightFill /> 
-          {/* TODO is missaligned */}
+          <CaretRightFill />
         </Button>
       </ButtonGroup>
     </Card>

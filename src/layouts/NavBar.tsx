@@ -1,6 +1,7 @@
+import ApiTester from 'components/management-components/ApiTester';
 import { useAppContext } from 'context/AppContext';
-import React from 'react';
-import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Container, Form, Image, Nav, Navbar } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import packageJson from '../../package.json';
 import logoText from '../assets/logoText.png';
@@ -13,7 +14,11 @@ const NavBar: React.FC = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+  const [insanity, setInsanity] = useState(false);
 
+  const handleSanityToggle = () => {
+    setInsanity(!insanity);
+  };
   const navigate = useNavigate();
 
   return (
@@ -29,10 +34,18 @@ const NavBar: React.FC = () => {
           }}
           className='d-flex align-items-center'
         >
-        <div className='secondary'>
+          <div className='secondary'>
             <Image src={logoText} width={250} className='p-0 m-0' />
           </div>
         </Navbar.Brand>
+        <Nav.Item className='p-2 d-flex align-items-center'>
+          <Form></Form>
+        </Nav.Item>
+        {insanity && (
+          <>
+            <Nav.Item></Nav.Item>
+          </>
+        )}
         <Navbar.Toggle />
         <Navbar.Collapse className='justify-content-end'>
           <Nav>
@@ -46,7 +59,6 @@ const NavBar: React.FC = () => {
                   className='me-2'
                   variant='outline-danger'
                   onClick={() => navigate('/management')}
-                  
                 >
                   Management
                 </Button>

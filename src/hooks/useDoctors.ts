@@ -6,7 +6,7 @@ import config from '../../config/config.json';
 export const useDoctors = () => {
   const { setDoctorList } = useAppContext();
   const [loadingDoctors, setLoadingDoctors] = useState(true);
-  const [errorDoctors, setErrorDoctors] = useState<string>(''); // Add type annotation
+  const [errorDoctors, setErrorDoctors] = useState<string>('');
 
   useEffect(() => {
     const fetchDoctors = async () => {

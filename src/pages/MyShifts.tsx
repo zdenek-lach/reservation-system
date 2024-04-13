@@ -3,9 +3,7 @@ import WeekPicker from 'components/WeekPicker';
 import ClinicSelector from 'components/management-components/ClinicSelector';
 import FooterManagement from 'components/management-components/FooterManagement';
 import PresetSelector from 'components/management-components/PresetSelector';
-import WeekGrid2, {
-	TimeSlot,
-} from 'components/management-components/WeekGrid2';
+import WeekGrid2 from 'components/management-components/WeekGrid2';
 import { Fragment, useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, Form, Row } from 'react-bootstrap';
 import { authHeader, fetchLoggedDoctor } from 'security/AuthService';
@@ -14,6 +12,7 @@ import { CenterSpinner } from 'styles/StyledComponentsLib';
 import Clinic from 'types/ClinicType';
 import Doctor from 'types/DoctorType';
 import config from '../../config/config.json';
+import { type Shift as TimeSlot } from '../types/ShiftType';
 
 const StyledContainer = styled(Container)`
 	margin-top: 20px;

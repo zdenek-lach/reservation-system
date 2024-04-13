@@ -20,6 +20,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import Management from './pages/Management';
 import { startRefreshing } from 'security/AuthService';
+import ShiftManagement from 'pages/ShiftManagement';
 export const App = () => {
   const { isLoggedIn, setIsLoggedIn, timerSet, setTimerSet } = useAppContext();
 
@@ -29,63 +30,131 @@ export const App = () => {
   }
 
   const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path='/' element={<RootLayout />} errorElement={<ErrorPage />}>
-        <Route index element={<HomePage />} />
-        <Route path='appointment-page' element={<AppointmentPage />} />
-        <Route path='login' element={<LoginPage />} />
+		createRoutesFromElements(
+			<Route
+				path='/'
+				element={<RootLayout />}
+				errorElement={<ErrorPage />}>
+				<Route
+					index
+					element={<HomePage />}
+				/>
+				<Route
+					path='appointment-page'
+					element={<AppointmentPage />}
+				/>
+				<Route
+					path='login'
+					element={<LoginPage />}
+				/>
 
-        <Route
-          path='management'
-          element={
-            isLoggedIn ? <Management /> : <Navigate to='/login' replace />
-          }
-        />
-        <Route
-          path='management/my-profile'
-          element={
-            isLoggedIn ? <MyProfile /> : <Navigate to='/login' replace />
-          }
-        />
-        <Route
-          path='management/my-shifts'
-          element={isLoggedIn ? <MyShifts /> : <Navigate to='/login' replace />}
-        />
-        <Route
-          path='management/my-reservations'
-          element={
-            isLoggedIn ? <MyReservations /> : <Navigate to='/login' replace />
-          }
-        />
-        <Route
-          path='management/reservation-management'
-          element={
-            isLoggedIn ? (
-              <ReservationManagement />
-            ) : (
-              <Navigate to='/login' replace />
-            )
-          }
-        />
-        <Route
-          path='management/employee-management'
-          element={
-            isLoggedIn ? (
-              <EmployeeManagement />
-            ) : (
-              <Navigate to='/login' replace />
-            )
-          }
-        />
-        <Route
-          path='management/global-settings'
-          element={
-            isLoggedIn ? <GlobalSettings /> : <Navigate to='/login' replace />
-          }
-        />
-      </Route>
-    )
-  );
+				<Route
+					path='management'
+					element={
+						isLoggedIn ? (
+							<Management />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/my-profile'
+					element={
+						isLoggedIn ? (
+							<MyProfile />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/my-shifts'
+					element={
+						isLoggedIn ? (
+							<MyShifts />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/my-reservations'
+					element={
+						isLoggedIn ? (
+							<MyReservations />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/reservation-management'
+					element={
+						isLoggedIn ? (
+							<ReservationManagement />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/employee-management'
+					element={
+						isLoggedIn ? (
+							<EmployeeManagement />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/shift-management'
+					element={
+						isLoggedIn ? (
+							<ShiftManagement />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+				<Route
+					path='management/global-settings'
+					element={
+						isLoggedIn ? (
+							<GlobalSettings />
+						) : (
+							<Navigate
+								to='/login'
+								replace
+							/>
+						)
+					}
+				/>
+			</Route>
+		)
+	);
 
   return (
     <>

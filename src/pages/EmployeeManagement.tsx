@@ -2,9 +2,6 @@ import axios from 'axios';
 
 import ClinicSelector from 'components/management-components/ClinicSelector';
 import FooterManagement from 'components/management-components/FooterManagement';
-import WeekGrid2, {
-	TimeSlot,
-} from 'components/management-components/WeekGrid2';
 import { useAppContext } from 'context/AppContext';
 import { useClinics } from 'hooks/useClinics';
 import { useDoctors } from 'hooks/useDoctors';
@@ -28,6 +25,7 @@ import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
 import DoctorWorkhours from 'types/DoctorWorkhoursType';
 import config from '../../config/config.json';
+import { Shift as TimeSlot } from '../types/ShiftType';
 import Doctor from './../types/DoctorType';
 
 const EmployeeManagement = () => {

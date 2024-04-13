@@ -223,7 +223,7 @@ const ReservationManagement = () => {
 	});
 
 	return (
-		<Fragment>
+		<>
 			<Container
 				style={{
 					backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -565,8 +565,8 @@ const ReservationManagement = () => {
 
 				<AddReservation managementMode={true} />
 			</Container>
-			<FooterManagement></FooterManagement>
-		</Fragment>
+			<FooterManagement />
+		</>
 	);
 };
 

@@ -6,7 +6,7 @@ import ClinicSelector from 'components/management-components/ClinicSelector';
 import EditReservation from 'components/management-components/EditReservation';
 import FooterManagement from 'components/management-components/FooterManagement';
 import { useAppContext } from 'context/AppContext';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, Form, Modal, Table } from 'react-bootstrap';
 import {
 	ArrowCounterclockwise,
@@ -26,7 +26,7 @@ const MyReservations = () => {
 
 	const [showInfoModal, setShowInfoModal] = useState(false);
 	const [loggedInDoctor, setLoggedInDoctor] = useState<Doctor | null>(null);
-
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
 	const [isWeekFilterEnabled, setIsWeekFilterEnabled] = useState(false);
 	const [loading, setLoading] = useState(true);
@@ -67,6 +67,13 @@ const MyReservations = () => {
 			.catch((error) => {
 				console.error(`Error deleting reservation ${reservation.id}:`, error);
 			});
+		// Close the modal
+		setShowDeleteModal(false);
+	};
+
+	const handleShowDeleteModal = (reservation: Reservation) => {
+		setSelectedReservation(reservation);
+		setShowDeleteModal(true);
 	};
 
 	const startOfWeek = (date: Date) => {
@@ -100,7 +107,7 @@ const MyReservations = () => {
 		return <CenterSpinner />;
 	}
 	return (
-		<Fragment>
+		<>
 			<Container
 				style={{
 					backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -226,7 +233,7 @@ const MyReservations = () => {
 											<Button
 												variant='danger'
 												size='lg'
-												onClick={() => handleDeleteReservation(reservation)}>
+												onClick={() => handleShowDeleteModal(reservation)}>
 												<Trash3Fill />
 											</Button>
 										</td>
@@ -292,9 +299,34 @@ const MyReservations = () => {
 						</Button>
 					</Modal.Footer>
 				</Modal>
+				<Modal
+					show={showDeleteModal}
+					onHide={() => setShowDeleteModal(false)}
+					// backdrop='static'
+					// keyboard={false}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>Potvrzení</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<h5>Jste si jistí, že chcete odebrat tuto rezervaci?</h5>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							variant='secondary'
+							onClick={() => setShowDeleteModal(false)}>
+							Ne
+						</Button>
+						<Button
+							variant='danger'
+							onClick={() => handleDeleteReservation(selectedReservation)}>
+							Ano
+						</Button>
+					</Modal.Footer>
+				</Modal>
 			</Container>
 			<FooterManagement />
-		</Fragment>
+		</>
 	);
 };
 

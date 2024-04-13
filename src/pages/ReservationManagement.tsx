@@ -542,8 +542,6 @@ const ReservationManagement = () => {
 				<Modal
 					show={showDeleteModal}
 					onHide={() => setShowDeleteModal(false)}
-					// backdrop='static'
-					// keyboard={false}
 				>
 					<Modal.Header closeButton>
 						<Modal.Title>Potvrzení</Modal.Title>

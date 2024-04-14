@@ -1,37 +1,34 @@
 import axios from 'axios';
 import { getFormattedDate } from 'components/WeekPicker';
+import ClinicSelector from 'components/management-components/ClinicSelector';
+import DoctorSelector from 'components/management-components/DoctorSelector';
 import { useClinics } from 'hooks/useClinics';
-import { useDoctors } from 'hooks/useDoctors';
 import { useEffect, useState } from 'react';
-import { Button, Container, Form, Table } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import {
+	ArrowCounterclockwise,
+	Pencil,
+	Trash3Fill,
+} from 'react-bootstrap-icons';
+import DatePicker from 'react-datepicker';
 import { authHeader } from 'security/AuthService';
 import Clinic from 'types/ClinicType';
-import { type Shift, type ShiftApi } from 'types/ShiftType';
+import type { ShiftApi } from 'types/ShiftType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
 
 const ShiftManagement = () => {
-	const [showEditModal, setShowEditModal] = useState(false);
-	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [loadingShifts, setLoadingShifts] = useState(true);
 	const [errorShifts, setErrorShifts] = useState<string>('');
-	// State variables for edited shift details
-	const [editedDate, setEditedDate] = useState('');
-	const [editedTime, setEditedTime] = useState('');
-	const [editedClinic, setEditedClinic] = useState<Clinic | null>(null);
-	const [editedDoctor, setEditedDoctor] = useState<Doctor | null>(null);
 	const [filterDoctor, setFilterDoctor] = useState<Doctor | null>(null);
 	const [filterClinic, setFilterClinic] = useState<Clinic | null>(null);
-	const [isWeekFilterEnabled, setIsWeekFilterEnabled] = useState(false);
-
-	const { loadingDoctors, errorDoctors } = useDoctors();
+	const [isFilterByDayEnabled, setIsFilterByDayEnabled] = useState(false);
 	const { loadingClinics, errorClinics } = useClinics();
-
-	const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
-
-	const [searchTerm, setSearchTerm] = useState('');
-
+	const [filteredShiftList, setFilteredShiftList] = useState<ShiftApi[]>([]);
+	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [selectedShift, setSelectedShift] = useState<ShiftApi | null>(null);
 	const [shiftList, setShiftList] = useState<ShiftApi[]>();
+	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
 		const fetchShifts = async () => {
@@ -42,6 +39,7 @@ const ShiftManagement = () => {
 					},
 				});
 				setShiftList(response.data);
+				setFilteredShiftList(response.data);
 				setLoadingShifts(false);
 			} catch (err: any) {
 				setErrorShifts(err.message);
@@ -52,71 +50,183 @@ const ShiftManagement = () => {
 		fetchShifts();
 	}, [setShiftList]);
 
+	const applyFilters = () => {
+		if (!shiftList) return;
+		let filtered = [...shiftList];
+
+		// Filter by search term
+		if (searchTerm) {
+			filtered = filtered.filter(
+				(shift) =>
+					shift.doctor.firstName
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase()) ||
+					shift.doctor.lastName
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase()) ||
+					shift.clinic.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					shift.id.toString().includes(searchTerm.toLowerCase())
+			);
+		}
+
+		// Filter by selected date
+		if (isFilterByDayEnabled) {
+			filtered = filtered.filter((shift) =>
+				shift.shifts.some(
+					(shiftDetail) =>
+						getFormattedDate(new Date(shiftDetail.date)) ===
+						getFormattedDate(new Date(selectedDate))
+				)
+			);
+		}
+
+		// Filter by selected doctor
+		if (filterDoctor) {
+			filtered = filtered.filter(
+				(shift) => shift.doctor.id === filterDoctor.id
+			);
+		}
+
+		// Filter by selected clinic
+		if (filterClinic) {
+			filtered = filtered.filter(
+				(shift) => shift.clinic.id === filterClinic.id
+			);
+		}
+
+		setFilteredShiftList(filtered);
+	};
+
+	useEffect(() => {
+		applyFilters();
+	}, [
+		searchTerm,
+		filterDoctor,
+		filterClinic,
+		selectedDate,
+		isFilterByDayEnabled,
+	]);
+
+	const handleDateChange = (date: any) => {
+		setSelectedDate(date);
+	};
 	return (
-		<Container>
-			<Form.Group>
-				<Form.Control
-					type='text'
-					placeholder='Search'
-					// Implement search functionality here
-				/>
-			</Form.Group>
-			<Table
-				striped
-				bordered
-				hover>
-				<thead>
-					<tr>
-						<th>Shift ID</th>
-						<th>Doctor</th>
-						<th>Clinic</th>
-						<th>Date</th>
-						<th>Time</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{shiftList &&
-						shiftList.flatMap((shift: ShiftApi) =>
-							shift.shifts.map((shiftDetail, index) => (
-								<tr key={`${shift.id}-${index}`}>
-									<td>{shift.id}</td>
-									<td>
-										{shift.doctor.title} {shift.doctor.firstName}{' '}
-										{shift.doctor.lastName}
-									</td>
-									<td>
-										{shift.clinic.name} {shift.clinic.location}
-									</td>
-									<td>
-										{shiftDetail?.day && getFormattedDate(shiftDetail.date)}
-									</td>
-									<td>{shiftDetail.time}</td>
-									<td>
-										<Button
-											variant='info'
-											size='lg'
-											className='mr-1 me-1'>
-											{/* Implement show info functionality here */}
-										</Button>
-										<Button
-											variant='warning'
-											size='lg'
-											className='mr-1 me-1'>
-											{/* Implement edit functionality here */}
-										</Button>
-										<Button
-											variant='danger'
-											size='lg'>
-											{/* Implement delete functionality here */}
-										</Button>
-									</td>
-								</tr>
-							))
-						)}
-				</tbody>
-			</Table>
-		</Container>
+		<>
+			<Container
+				style={{
+					backgroundColor: 'rgba(0, 0, 0, 0)',
+					padding: '30px',
+					alignContent: 'center',
+				}}>
+				<h1>Správa směn</h1>
+				<Row>
+					<Form.Control
+						type='text'
+						placeholder='Search'
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+				</Row>
+				<Row>
+					<Col
+						m={2}
+						className='align-self-center'>
+						<DoctorSelector setDoctorToThis={setFilterDoctor} />
+					</Col>
+					<Col
+						m={2}
+						className='align-self-center'>
+						<ClinicSelector
+							selectedClinic={filterClinic}
+							setSelectedClinic={setFilterClinic}
+						/>
+					</Col>
+					<Col
+						m={2}
+						className='align-self-center'>
+						<Form.Switch
+							label='Filtrovat konkrétní den'
+							onChange={() => setIsFilterByDayEnabled(!isFilterByDayEnabled)}
+							inline
+						/>
+					</Col>
+					{isFilterByDayEnabled && (
+						<Col
+							m={2}
+							className='align-self-center'>
+							<DatePicker
+								selected={selectedDate}
+								onChange={handleDateChange}
+								dateFormat='dd-MM-yyyy'
+							/>
+						</Col>
+					)}
+
+					<Col
+						m={2}
+						className='align-self-center'>
+						<Button
+							variant='danger'
+							onClick={() => {
+								setSearchTerm('');
+								setFilterDoctor(null);
+								setFilterClinic(null);
+								setSelectedDate(new Date());
+								setIsFilterByDayEnabled(false);
+							}}>
+							<ArrowCounterclockwise />
+						</Button>
+					</Col>
+				</Row>
+				<Table
+					striped
+					bordered
+					hover>
+					<thead>
+						<tr>
+							<th>Shift ID</th>
+							<th>Doctor</th>
+							<th>Clinic</th>
+							<th>Date</th>
+							<th>Time</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{filteredShiftList &&
+							filteredShiftList.flatMap((shift: ShiftApi) =>
+								shift.shifts.map((shiftDetail, index) => (
+									<tr key={`${shift.id}-${index}`}>
+										<td>{shift.id}</td>
+										<td>
+											{shift.doctor.title} {shift.doctor.firstName}{' '}
+											{shift.doctor.lastName}
+										</td>
+										<td>
+											{shift.clinic.name} {shift.clinic.location}
+										</td>
+										<td>{getFormattedDate(new Date(shiftDetail.date))}</td>
+										<td>{shiftDetail.time}</td>
+										<td>
+											<Button
+												variant='warning'
+												size='lg'
+												className='mr-1 me-1'>
+												<Pencil />
+											</Button>
+											<Button
+												variant='danger'
+												size='lg'>
+												<Trash3Fill />
+											</Button>
+										</td>
+									</tr>
+								))
+							)}
+					</tbody>
+				</Table>
+			</Container>
+		</>
 	);
 };
 

@@ -21,7 +21,7 @@
     "authApi": {
       "getToken": "https://rezervace.artromedi.cz:8080/api/token",
       "refreshToken": "https://rezervace.artromedi.cz:8080/api/token/refresh",
-      "changePassword": "https://rezervace.artromedi.cz:8080/api/edit/managementUser/",
+      "changePassword": "https://rezervace.artromedi.cz:8080/api/edit/changePassword",
       "loggedUser": "https://rezervace.artromedi.cz:8080/api/logged/user"
     },
     "shiftApi": {

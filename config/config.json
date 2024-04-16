@@ -1,53 +1,54 @@
 {
-	"api": {
-		"doctorsApi": {
-			"list": "http://127.0.0.1:8080/api/doctors",
-			"add": "http://127.0.0.1:8080/api/add/doctor",
-			"edit": "http://127.0.0.1:8080/api/edit/doctor",
-			"delete": "http://127.0.0.1:8080/api/delete/doctor"
-		},
-		"clinicsApi": {
-			"list": "http://127.0.0.1:8080/api/clinics",
-			"add": "http://127.0.0.1:8080/api/add/clinic",
-			"edit": "http://127.0.0.1:8080api/edit/clinic",
-			"delete": "http://127.0.0.1:8080/api/delete/clinic"
-		},
-		"reservationsApi": {
-			"list": "http://127.0.0.1:8080/api/reservations",
-			"add": "http://127.0.0.1:8080/api/add/reservation",
-			"edit": "http://127.0.0.1:8080/api/edit/reservation",
-			"delete": "http://127.0.0.1:8080/api/delete/reservation"
-		},
-		"authApi": {
-			"getToken": "http://127.0.0.1:8080/api/token",
-			"refreshToken": "http://127.0.0.1:8080/api/token/refresh",
-			"changePassword": "http://127.0.0.1:8080/api/edit/changePassword",
-			"loggedUser": "http://127.0.0.1:8080/api/logged/user"
-		},
-		"shiftApi": {
-			"add": "http://127.0.0.1:8080/api/add/shift",
-			"list": "http://127.0.0.1:8080/api/shift"
-		},
-		"presetsApi": {
-			"add": "http://127.0.0.1:8080/api/add/preset",
-			"edit": "http://127.0.0.1:8080/api/edit/preset",
-			"delete": "http://127.0.0.1:8080/api/delete/preset",
-			"list": "http://127.0.0.1:8080/api/presets"
-		}
-	},
-	"general": {
-		"toastTimeoutInSeconds": 4,
-		"colorPalette": 1,
-		"addWeekendsToList": true
-	},
-	"security": {
-		"refreshPeriodInSeconds": 60
-	},
-	"reservations": {
-		"reservationsPerTimeBlock": 5,
-		"extraReservationsPerTimeBlock": 0
-	},
-	"employees": {
-		"employeesCanEditReservations": true
-	}
+  "api": {
+    "doctorsApi": {
+      "list": "http://127.0.0.1:8080/api/doctors",
+      "add": "http://127.0.0.1:8080/api/add/doctor",
+      "edit": "http://127.0.0.1:8080/api/edit/doctor",
+      "delete": "http://127.0.0.1:8080/api/delete/doctor"
+    },
+    "clinicsApi": {
+      "list": "http://127.0.0.1:8080/api/clinics",
+      "add": "http://127.0.0.1:8080/api/add/clinic",
+      "edit": "http://127.0.0.1:8080api/edit/clinic",
+      "delete": "http://127.0.0.1:8080/api/delete/clinic"
+    },
+    "reservationsApi": {
+      "list": "http://127.0.0.1:8080/api/reservations",
+      "add": "http://127.0.0.1:8080/api/add/reservation",
+      "specialAdd": "http://127.0.0.1:8080/api/management/add/reservation",
+      "edit": "http://127.0.0.1:8080/api/edit/reservation",
+      "delete": "http://127.0.0.1:8080/api/delete/reservation"
+    },
+    "authApi": {
+      "getToken": "http://127.0.0.1:8080/api/token",
+      "refreshToken": "http://127.0.0.1:8080/api/token/refresh",
+      "changePassword": "http://127.0.0.1:8080/api/edit/changePassword",
+      "loggedUser": "http://127.0.0.1:8080/api/logged/user"
+    },
+    "shiftApi": {
+      "add": "http://127.0.0.1:8080/api/add/shift",
+      "list": "http://127.0.0.1:8080/api/shift"
+    },
+    "presetsApi": {
+      "add": "http://127.0.0.1:8080/api/add/preset",
+      "edit": "http://127.0.0.1:8080/api/edit/preset",
+      "delete": "http://127.0.0.1:8080/api/delete/preset",
+      "list": "http://127.0.0.1:8080/api/presets"
+    }
+  },
+  "general": {
+    "toastTimeoutInSeconds": 4,
+    "colorPalette": 1,
+    "addWeekendsToList": true
+  },
+  "security": {
+    "refreshPeriodInSeconds": 60
+  },
+  "reservations": {
+    "reservationsPerTimeBlock": 5,
+    "extraReservationsPerTimeBlock": 0
+  },
+  "employees": {
+    "employeesCanEditReservations": true
+  }
 }

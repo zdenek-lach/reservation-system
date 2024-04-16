@@ -80,7 +80,7 @@ const AddReservation: React.FC<AddReservationProps> = ({
         };
 
         const response = await axios.post(
-          config.api.reservationsApi.add,
+          config.api.reservationsApi.specialAdd,
           reservationToAdd,
           {
             headers: {

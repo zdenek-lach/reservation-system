@@ -16,6 +16,7 @@ import Clinic from 'types/ClinicType';
 import type { ShiftApi } from 'types/ShiftType';
 import config from '../../config/config.json';
 import Doctor from './../types/DoctorType';
+import React from 'react';
 
 const ShiftManagement = () => {
 	const [loadingShifts, setLoadingShifts] = useState(true);
@@ -194,35 +195,66 @@ const ShiftManagement = () => {
 					</thead>
 					<tbody>
 						{filteredShiftList &&
-							filteredShiftList.flatMap((shift: ShiftApi) =>
-								shift.shifts.map((shiftDetail, index) => (
-									<tr key={`${shift.id}-${index}`}>
-										<td>{shift.id}</td>
-										<td>
-											{shift.doctor.title} {shift.doctor.firstName}{' '}
-											{shift.doctor.lastName}
-										</td>
-										<td>
-											{shift.clinic.name} {shift.clinic.location}
-										</td>
-										<td>{getFormattedDate(new Date(shiftDetail.date))}</td>
-										<td>{shiftDetail.time}</td>
-										<td>
-											<Button
-												variant='warning'
-												size='lg'
-												className='mr-1 me-1'>
-												<Pencil />
-											</Button>
-											<Button
-												variant='danger'
-												size='lg'>
-												<Trash3Fill />
-											</Button>
-										</td>
-									</tr>
-								))
-							)}
+							filteredShiftList.flatMap((shift: ShiftApi) => {
+								// Get unique dates for the current shift
+								const uniqueDates = [
+									...new Set(
+										shift.shifts.map((shiftDetail) =>
+											getFormattedDate(new Date(shiftDetail.date))
+										)
+									),
+								];
+
+								return uniqueDates.map((date, index) => (
+									<React.Fragment key={`${shift.id}-${date}`}>
+										{/* Render a row for the date */}
+										{index === 0 && (
+											<tr>
+												<td rowSpan={uniqueDates.length}>{shift.id}</td>
+												<td colSpan={4}>
+													<strong>Date: {date}</strong>
+												</td>
+												<td></td>
+											</tr>
+										)}
+										{/* Render shift details for the current date */}
+										{shift.shifts
+											.filter(
+												(shiftDetail) =>
+													getFormattedDate(new Date(shiftDetail.date)) === date
+											)
+											.map((shiftDetail, idx) => (
+												<tr key={`${shift.id}-${date}-${idx}`}>
+													<td></td>
+													<td>
+														{shift.doctor.title} {shift.doctor.firstName}{' '}
+														{shift.doctor.lastName}
+													</td>
+													<td>
+														{shift.clinic.name} {shift.clinic.location}
+													</td>
+													<td>
+														{getFormattedDate(new Date(shiftDetail.date))}
+													</td>
+													<td>{shiftDetail.time}</td>
+													<td>
+														<Button
+															variant='warning'
+															size='lg'
+															className='mr-1 me-1'>
+															<Pencil />
+														</Button>
+														<Button
+															variant='danger'
+															size='lg'>
+															<Trash3Fill />
+														</Button>
+													</td>
+												</tr>
+											))}
+									</React.Fragment>
+								));
+							})}
 					</tbody>
 				</Table>
 			</Container>

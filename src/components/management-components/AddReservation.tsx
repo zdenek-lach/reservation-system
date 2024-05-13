@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAppContext } from 'context/AppContext';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,16 +13,22 @@ import config from '../../../config/config.json';
 import { getFormattedDate } from '../WeekPicker';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
+import Reservation from 'types/ReservationType';
+import { updateReservationList } from './EditReservation';
 
 interface AddReservationProps {
   managementMode?: Boolean | null;
   time?: string;
   date?: Date;
+  ReservationList?: Reservation[];
+  SetReservationList?: Dispatch<SetStateAction<Reservation[]>>;
 }
 const AddReservation: React.FC<AddReservationProps> = ({
   managementMode = false,
   time,
   date,
+  ReservationList,
+  SetReservationList,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
@@ -93,7 +99,32 @@ const AddReservation: React.FC<AddReservationProps> = ({
         if (response.status === 200) {
           // OK, inform user the action has been succesful
           console.log('Adding reservation was succesful');
+          setShowModal(false);
           setShowMessageToast(true);
+          const addedReservation = {
+            id: response.data['id'],
+            client: {
+              id: response.data['clientId'],
+              firstName: data.firstName,
+              lastName: data.lastName,
+              email: data.email,
+              phoneNumber: data.phone,
+            },
+            date: data.date,
+            time: data.time,
+            clinic: {
+              ...selectedClinic,
+            },
+            doctor: {
+              ...selectedDoctor,
+            },
+            note: data.comment,
+          };
+          updateReservationList(
+            addedReservation,
+            ReservationList,
+            SetReservationList
+          );
         } else {
           console.log('You have caused an error!');
         }

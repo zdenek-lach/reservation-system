@@ -18,6 +18,24 @@ interface EditReservationProps {
   ReservationList: Reservation[];
   SetReservationList: Dispatch<SetStateAction<Reservation[]>>;
 }
+
+export const updateReservationList = (
+  newReservation: Reservation,
+  ReservationList: Reservation[],
+  SetReservationList: Dispatch<SetStateAction<Reservation[]>>
+) => {
+  let changedItem = ReservationList.find(
+    (item) => item.id === newReservation.id
+  );
+  if (changedItem) {
+    ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
+    SetReservationList(ReservationList);
+  } else {
+    ReservationList.push(newReservation);
+    SetReservationList(ReservationList);
+  }
+};
+
 const EditReservation: React.FC<EditReservationProps> = ({
   Reservation,
   ReservationList,
@@ -54,16 +72,6 @@ const EditReservation: React.FC<EditReservationProps> = ({
     setSelectedTime(`${e.target.value}`);
   };
 
-  const updateReservationList = (newReservation: Reservation) => {
-    let changedItem = ReservationList.find(
-      (item) => item.id === newReservation.id
-    );
-    if (changedItem) {
-      ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
-      SetReservationList(ReservationList);
-    }
-  };
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (validateForm()) {
@@ -77,7 +85,7 @@ const EditReservation: React.FC<EditReservationProps> = ({
             email: newReservationData.email,
             phoneNumber: newReservationData.phone,
           },
-          date: Reservation.date,
+          date: selectedDate.toISOString().split('T')[0],
           time: selectedTime,
           clinic: {
             ...selectedClinic,
@@ -104,7 +112,11 @@ const EditReservation: React.FC<EditReservationProps> = ({
           console.log('Edit reservation was succesful');
           setShowMessageToast(true);
           setShowModal(false);
-          updateReservationList(updatedReservation);
+          updateReservationList(
+            updatedReservation,
+            ReservationList,
+            SetReservationList
+          );
         } else {
           console.log('You have caused an error!');
         }

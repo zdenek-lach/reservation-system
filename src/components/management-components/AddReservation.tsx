@@ -14,7 +14,6 @@ import { getFormattedDate } from '../WeekPicker';
 import ClinicSelector from './ClinicSelector';
 import DoctorSelector from './DoctorSelector';
 import Reservation from 'types/ReservationType';
-import { updateReservationList } from './EditReservation';
 
 interface AddReservationProps {
   managementMode?: Boolean | null;
@@ -22,6 +21,7 @@ interface AddReservationProps {
   date?: Date;
   ReservationList?: Reservation[];
   SetReservationList?: Dispatch<SetStateAction<Reservation[]>>;
+  onAddReservation?: () => void;
 }
 const AddReservation: React.FC<AddReservationProps> = ({
   managementMode = false,
@@ -59,6 +59,11 @@ const AddReservation: React.FC<AddReservationProps> = ({
   const handleTimeChange = (e: { target: { value: string } }) => {
     const hours = e.target.value.split(':')[0];
     setSelectedTime(`${hours}:00`);
+  };
+
+  const updateReservationList = (newReservation: Reservation) => {
+    ReservationList.push(newReservation);
+    SetReservationList(ReservationList);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -120,11 +125,9 @@ const AddReservation: React.FC<AddReservationProps> = ({
             },
             note: data.comment,
           };
-          updateReservationList(
-            addedReservation,
-            ReservationList,
-            SetReservationList
-          );
+          if (ReservationList && SetReservationList) {
+            updateReservationList(addedReservation);
+          }
         } else {
           console.log('You have caused an error!');
         }
@@ -173,7 +176,12 @@ const AddReservation: React.FC<AddReservationProps> = ({
 
   return (
     <>
-      <Button variant='danger' onClick={() => setShowModal(true)}>
+      <Button
+        variant='danger'
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
         Přidat novou rezervaci
       </Button>
 

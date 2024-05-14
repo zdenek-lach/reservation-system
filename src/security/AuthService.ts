@@ -70,6 +70,10 @@ export const startRefreshing = async function refreshAccessToken(
       return response.data;
     })
     .catch((error) => {
+      logout();
+      if (setIsLoggedIn != null) {
+        setIsLoggedIn(false);
+      }
       console.error(`Error while refreshing token:`, error);
     });
 };

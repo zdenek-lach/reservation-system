@@ -19,23 +19,6 @@ interface EditReservationProps {
   SetReservationList: Dispatch<SetStateAction<Reservation[]>>;
 }
 
-export const updateReservationList = (
-  newReservation: Reservation,
-  ReservationList: Reservation[],
-  SetReservationList: Dispatch<SetStateAction<Reservation[]>>
-) => {
-  let changedItem = ReservationList.find(
-    (item) => item.id === newReservation.id
-  );
-  if (changedItem) {
-    ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
-    SetReservationList(ReservationList);
-  } else {
-    ReservationList.push(newReservation);
-    SetReservationList(ReservationList);
-  }
-};
-
 const EditReservation: React.FC<EditReservationProps> = ({
   Reservation,
   ReservationList,
@@ -70,6 +53,16 @@ const EditReservation: React.FC<EditReservationProps> = ({
 
   const handleTimeChange = (e: { target: { value: string } }) => {
     setSelectedTime(`${e.target.value}`);
+  };
+
+  const updateReservationList = (newReservation: Reservation) => {
+    let changedItem = ReservationList.find(
+      (item) => item.id === newReservation.id
+    );
+    if (changedItem) {
+      ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
+      SetReservationList(ReservationList);
+    }
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -112,11 +105,7 @@ const EditReservation: React.FC<EditReservationProps> = ({
           console.log('Edit reservation was succesful');
           setShowMessageToast(true);
           setShowModal(false);
-          updateReservationList(
-            updatedReservation,
-            ReservationList,
-            SetReservationList
-          );
+          updateReservationList(updatedReservation);
         } else {
           console.log('You have caused an error!');
         }

@@ -15,15 +15,10 @@ import DoctorSelector from './DoctorSelector';
 
 interface EditReservationProps {
   Reservation: Reservation;
-  ReservationList: Reservation[];
-  SetReservationList: Dispatch<SetStateAction<Reservation[]>>;
 }
 
-const EditReservation: React.FC<EditReservationProps> = ({
-  Reservation,
-  ReservationList,
-  SetReservationList,
-}) => {
+const EditReservation: React.FC<EditReservationProps> = ({ Reservation }) => {
+  const { reservationsList, setReservationsList } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
     firstName: Reservation.client.firstName,
@@ -56,12 +51,14 @@ const EditReservation: React.FC<EditReservationProps> = ({
   };
 
   const updateReservationList = (newReservation: Reservation) => {
-    let changedItem = ReservationList.find(
+    let changedItem = reservationsList.find(
       (item) => item.id === newReservation.id
     );
     if (changedItem) {
-      ReservationList[ReservationList.indexOf(changedItem)] = newReservation;
-      SetReservationList(ReservationList);
+      let copyOfReservations = [...reservationsList];
+      copyOfReservations[copyOfReservations.indexOf(changedItem)] =
+        newReservation;
+      setReservationsList(copyOfReservations);
     }
   };
 

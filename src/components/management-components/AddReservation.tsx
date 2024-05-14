@@ -19,17 +19,13 @@ interface AddReservationProps {
   managementMode?: Boolean | null;
   time?: string;
   date?: Date;
-  ReservationList?: Reservation[];
-  SetReservationList?: Dispatch<SetStateAction<Reservation[]>>;
-  onAddReservation?: () => void;
 }
 const AddReservation: React.FC<AddReservationProps> = ({
   managementMode = false,
   time,
   date,
-  ReservationList,
-  SetReservationList,
 }) => {
+  const { reservationsList, setReservationsList } = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [newReservationData, setNewReservationData] = useState({
     firstName: '',
@@ -62,8 +58,9 @@ const AddReservation: React.FC<AddReservationProps> = ({
   };
 
   const updateReservationList = (newReservation: Reservation) => {
-    ReservationList.push(newReservation);
-    SetReservationList(ReservationList);
+    let copyOfReservations = [...reservationsList];
+    copyOfReservations.push(newReservation);
+    setReservationsList(copyOfReservations);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -125,7 +122,7 @@ const AddReservation: React.FC<AddReservationProps> = ({
             },
             note: data.comment,
           };
-          if (ReservationList && SetReservationList) {
+          if (reservationsList && reservationsList) {
             updateReservationList(addedReservation);
           }
         } else {

@@ -346,8 +346,6 @@ const ReservationManagement = () => {
                       </Button>
                       <EditReservation
                         Reservation={reservation as Reservation}
-                        ReservationList={reservationsList}
-                        SetReservationList={setReservationsList}
                       />
                       <Button
                         variant='danger'
@@ -548,11 +546,7 @@ const ReservationManagement = () => {
           </Modal.Footer>
         </Modal>
 
-        <AddReservation
-          managementMode={true}
-          ReservationList={reservationsList}
-          SetReservationList={setReservationsList}
-        />
+        <AddReservation managementMode={true} />
       </Container>
       <FooterManagement />
     </>

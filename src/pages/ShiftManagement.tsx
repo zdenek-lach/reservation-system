@@ -255,7 +255,15 @@ const ShiftManagement = () => {
 												<td colSpan={4}>
 													<strong>Date: {date}</strong>
 												</td>
-												<td></td>
+												<td>
+													{/* Render delete button only on the group line */}
+													<Button
+														variant='danger'
+														size='lg'
+														onClick={() => handleDeleteShift(shift.id)}>
+														<Trash3Fill />
+													</Button>
+												</td>
 											</tr>
 										)}
 										{/* Render shift details for the current date */}
@@ -278,25 +286,14 @@ const ShiftManagement = () => {
 														{getFormattedDate(new Date(shiftDetail.date))}
 													</td>
 													<td>{shiftDetail.time}</td>
-													<td>
+													{/* <td>
 														<Button
 															variant='warning'
 															size='lg'
 															className='mr-1 me-1'>
 															<Pencil />
 														</Button>
-														<Button
-															variant='danger'
-															size='lg'
-															onClick={() =>
-																handleDeleteShift(
-																	shiftDetail.date,
-																	shiftDetail.time
-																)
-															}>
-															<Trash3Fill />
-														</Button>
-													</td>
+													</td> */}
 												</tr>
 											))}
 									</React.Fragment>

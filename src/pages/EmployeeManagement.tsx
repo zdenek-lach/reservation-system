@@ -115,6 +115,7 @@ const EmployeeManagement = () => {
 				console.error('Error deleting doctor ${doctor.id}:', error);
 			});
 	};
+	
 	const fetchDoctors = async () => {
 		const getDoctorsUrl = config.api.doctorsApi.list;
 		try {

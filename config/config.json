@@ -27,7 +27,8 @@
     },
     "shiftApi": {
       "add": "http://127.0.0.1:8080/api/add/shift",
-      "list": "http://127.0.0.1:8080/api/shift"
+      "list": "http://127.0.0.1:8080/api/shift",
+      "delete": "http://127.0.0.1:8080/api/delete/shift"
     },
     "presetsApi": {
       "add": "http://127.0.0.1:8080/api/add/preset",

@@ -3,7 +3,7 @@ import { getFormattedDate } from 'components/WeekPicker';
 import ClinicSelector from 'components/management-components/ClinicSelector';
 import DoctorSelector from 'components/management-components/DoctorSelector';
 import { useClinics } from 'hooks/useClinics';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
 import {
   ArrowCounterclockwise,
@@ -165,8 +165,31 @@ const ShiftManagement = () => {
     return new Date(date.getTime() + (minutes - offsetTime) * 60000);
   }
 
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   const localizer = momentLocalizer(moment);
   let testData = [];
+  type DoctorColor = {
+    id: string;
+    color: string;
+  };
+  let doctorColors: DoctorColor[] = [];
+  const getColorForDoc = (id: any) => {
+    let color = doctorColors.find((doc) => doc.id == id)?.color;
+    if (color == undefined) {
+      color = getRandomColor();
+      doctorColors.push({ id: id, color: color });
+    }
+    return color;
+  };
+
   shiftList?.forEach((doctorGroup) => {
     const from: number = doctorGroup.timeFrom.split(
       ':'
@@ -182,9 +205,20 @@ const ShiftManagement = () => {
         doctorGroup.clinic.name,
       start: addMinutes(new Date(doctorGroup.date), from * 60, true),
       end: addMinutes(new Date(doctorGroup.date), to * 60, true),
-      color: 'red',
+      color: getColorForDoc(doctorGroup.doctor.id),
     });
   });
+
+  const eventPropGetter = useCallback(
+    (event: any, start: Date, end: Date, isSelected: boolean) => ({
+      ...{
+        style: {
+          backgroundColor: event.color,
+        },
+      },
+    }),
+    []
+  );
 
   return (
     <>
@@ -208,6 +242,7 @@ const ShiftManagement = () => {
           startAccessor='start'
           endAccessor='end'
           dayLayoutAlgorithm='no-overlap'
+          eventPropGetter={eventPropGetter}
         />
       </Container>
     </>

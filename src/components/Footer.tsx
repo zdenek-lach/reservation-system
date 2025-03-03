@@ -22,28 +22,28 @@ const Footer = () => {
       >
         <Row>
           <Col md={4}>
-            <h3>Artromedi s.r.o.</h3>
+            <h3>Ortopedická ordinace s.r.o.</h3>
             <ul className='list-unstyled'>
               <li>Odborná ortopedická ambulance</li>
-              <li>Žižkova 2379/54a</li>
-              <li>733 01 Karviná - Mizerov</li>
-              <li>IČO: 06694560</li>
-              <li>telefon: +420 732 896 726</li>
-              <li>e-mail: kontakt@artromedi.cz</li>
+              <li>Ulice</li>
+              <li>PSČ Město - oblast</li>
+              <li>IČO: XXXXXXXX</li>
+              <li>telefon: +420 XXX XXX XXX</li>
+              <li>e-mail: kontakt@ortoped.cz</li>
             </ul>
           </Col>
           <Col md={4}>
-            <h3>Ambulance Karviná</h3>
+            <h3>Ambulance Město1</h3>
             <ul className="list-unstyled">
-              <li>Žižkova 2379/54a</li>
-              <li>733 01 Karviná - Mizerov</li>
+              <li>Ulice</li>
+              <li>PSČ Město1</li>
             </ul>
           </Col>
           <Col md={4}>
-            <h3>Ambulance Český Těšín</h3>
+            <h3>Ambulance Město2</h3>
             <ul className="list-unstyled">
-              <li>Jablunkovská 1916/76a</li>
-              <li>737 01 Český Těšín</li>
+              <li>Ulice</li>
+              <li>PSČ Město2</li>
             </ul>
           </Col>
           

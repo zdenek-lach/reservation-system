@@ -1,3 +1,6 @@
+# TLDR what is this about
+This is my first project I've worked on for an extended period of time. It was a project built in collaboration with my friends (footer info), but it was later abandoned by the requestor-customer, thus there was no need to continue the development.
+
 # Reservation System
 
 Welcome to the Reservation System, a sleek, efficient, and intuitive reservation management application built with the power of React, TypeScript, and Vite. This application is designed to manage bookings effortlessly, keeping the gears of your business turning smoothly.
@@ -24,6 +27,6 @@ Then to start the project simply run:
 
 ### `npm start` or `npm run dev` if you're a developer (probably, most likely).
 
-Launches the application in development mode. Open http://localhost:3000 to view it in the browser.
+Launches the application in development mode. Open https://localhost:443/ to view it in the browser.
 
 Get ready to elevate your reservation game! 🚀

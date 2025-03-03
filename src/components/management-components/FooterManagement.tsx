@@ -24,12 +24,12 @@ const Footer = () => {
         <hr />
         <Row>
           <Col>
-          <p className='text-center'>Podpořte nás vývojáře tím, že nám koupíte kafe :)
+          <p className='text-center'>Podpořte mě tím, že mi koupíte kafe :)
             <Button
               variant='success'
               className='ms-1 me-1'
               size='sm'
-              href='https://www.buymeacoffee.com/jansichman'
+              // href='https://www.buymeacoffee.com/zdeneklach' unfortunately, due to legal reasons, I am not allowed to use this feature yet
             >
               Koupit!
             </Button>
@@ -38,7 +38,7 @@ const Footer = () => {
         </Row>
         <Row>
           <Col>
-            <p className="text-center">© {new Date().getFullYear()} Jan Šichman, Marek Lohn, Zdeněk Lach. Všechna práva vyhrazena.</p>
+            <p className="text-center">© {new Date().getFullYear()} FE code: Zdeněk Lach, BE code: Marek Lohn, ProductManagement: Jan Šichman. Všechna práva vyhrazena.</p>
           </Col>
         </Row>
       </Container>

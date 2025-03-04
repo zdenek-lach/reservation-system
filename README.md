@@ -1,4 +1,4 @@
-# TLDR what is this about
+# TLDR what this is about
 This is my first project I've worked on for an extended period of time. It was a project built in collaboration with my friends (footer info), but it was later abandoned by the requestor-customer, thus there was no need to continue the development.
 
 # Reservation System
